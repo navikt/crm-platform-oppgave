@@ -2,9 +2,9 @@
 
 Repository containing metadata and templates for submitting NAV Task to oppgave via API
 
-[![Build](https://github.com/navikt/cmr-platform-oppgave/workflows/%5BPUSH%5D%20Create%20Package/badge.svg)](https://github.com/navikt/cmr-platform-oppgave/actions?query=workflow%3Acreate)
-[![GitHub version](https://badgen.net/github/release/navikt/crm-platform-oppgave/stable)](https://github.com/navikt/cmr-platform-oppgave)
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/navikt/cmr-platform-oppgave/blob/master/LICENSE)
+[![Build](https://github.com/navikt/crm-platform-oppgave/workflows/%5BPUSH%5D%20Create%20Package/badge.svg)](https://github.com/navikt/crm-platform-oppgave/actions?query=workflow%3Acreate)
+[![GitHub version](https://badgen.net/github/release/navikt/crm-platform-oppgave/stable)](https://github.com/navikt/crm-platform-oppgave)
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/navikt/crm-platform-oppgave/blob/master/LICENSE)
 
 ## Dependencies
 
