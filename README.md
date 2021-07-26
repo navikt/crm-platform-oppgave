@@ -11,6 +11,8 @@ Repository containing metadata and templates for submitting NAV Task to oppgave 
 This package is dependant on the following packages
 
 -   [crm-platform-base](https://github.com/navikt/crm-platform-base)
+-   [crm-journal-utilities](https://github.com/navikt/crm-journal-utilities)
+-   [crm-platform-integration](https://github.com/navikt/crm-platform-integration)
 
 ## Installation
 
