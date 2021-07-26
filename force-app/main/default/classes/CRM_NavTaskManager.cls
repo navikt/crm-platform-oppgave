@@ -33,7 +33,8 @@ public with sharing class CRM_NavTaskManager {
             formatComment(taskRequest);
             CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
 
-            if (!hasPersonAccess(taskRequest.task)) {
+            //If user creating request does not have access to the person record, or does not posess a standard license the callout is done in System context
+            if (!hasPersonAccess(taskRequest.task) || !UserInfo.getUserType().equalsIgnoreCase('Standard')) {
                 oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
             }
             HttpResponse response = oppgaveService.postTask(createOppgaveRequest(taskRequest));
@@ -123,7 +124,8 @@ public with sharing class CRM_NavTaskManager {
             formatComment(taskRequest);
             CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
 
-            if (!hasPersonAccess(taskRequest.task)) {
+            //If user creating request does not have access to the person record, or does not posess a standard license the callout is done in System context
+            if (!hasPersonAccess(taskRequest.task) || !UserInfo.getUserType().equalsIgnoreCase('Standard')) {
                 oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
             }
             HttpResponse response = oppgaveService.editTask(createOppgaveRequest(taskRequest));
