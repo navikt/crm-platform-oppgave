@@ -1,68 +1,46 @@
 public with sharing class CRM_NavTaskWorkAllocationController {
-    /*private static NKS_NorgNavUnitService service {
-        get {
-            if (null == service) {
-                service = new NKS_NorgNavUnitService();
-            }
-            return service;
-        }
-        set;
-    }
-
     @AuraEnabled(cacheable=true)
-    public static NKS_NorgNavUnitService.WorkAllocationResponse getWorkAllocations(
+    public static List<NavUnit__c> getWorkAllocations(
         String personId,
         String themeGroupCode,
         String themeCode,
         String themeSubThemeCode,
         String taskType
     ) {
-        NKS_NavUnitPersonUtility utility = new NKS_NavUnitPersonUtility(service);
-
-        NKS_NorgNavUnitService.WorkAllocationResponse response = utility.getWorkAllocation(
-            personId,
+        Map<String, NavUnit__c> unitMap = new Map<String, NavUnit__c>();
+        Person__c p = String.isNotBlank(personId) ? getPerson(personId) : null;
+        List<NavUnitWorkAllocation> workAllocations = NorgNavUnits.getWorkAllocation(
+            p,
             themeGroupCode,
             themeCode,
             themeSubThemeCode,
             taskType
         );
-
-        setUnitId(response.units);
-
-        return response;
+        if (workAllocations != null && workAllocations.size() > 0) {
+            for (NavUnitWorkAllocation workAllocation : workAllocations) {
+                unitMap.put(workAllocation.enhetNr, null);
+            }
+            for (NavUnit__c sfUnit : [
+                SELECT Id, INT_UnitNumber__c
+                FROM NavUnit__c
+                WHERE INT_UnitNumber__c IN :unitMap.keySet()
+            ]) {
+                unitMap.put(sfUnit.INT_UnitNumber__c, sfUnit);
+            }
+        }
+        return unitMap.values();
     }
-
-    private static void setUnitId(List<NKS_NavUnitWorkAllocation> responseUnits) {
-        Map<String, NKS_NavUnitWorkAllocation> unitMap = new Map<String, NKS_NavUnitWorkAllocation>();
-
-        for (NKS_NavUnitWorkAllocation unit : responseUnits) {
-            unitMap.put(unit.enhetNr, unit);
-        }
-
-        for (NavUnit__c sfUnit : [
-            SELECT Id, INT_UnitNumber__c
-            FROM NavUnit__c
-            WHERE INT_UnitNumber__c IN :unitMap.keySet()
-        ]) {
-            NKS_NavUnitWorkAllocation unit = unitMap.get(sfUnit.INT_UnitNumber__c);
-
-            unit.sfId = null == unit ? '' : sfUnit.Id;
-        }
-    }*/
 
     @AuraEnabled(cacheable=true)
     public static String getUserNavUnitId(String userUnitNumber) {
         return [SELECT Id FROM NavUnit__c WHERE INT_UnitNumber__c = :userUnitNumber]?.Id;
     }
 
-    @AuraEnabled(cacheable=true)
-    public static void getWorkAllocations(
-        String personId,
-        String themeGroupCode,
-        String themeCode,
-        String themeSubThemeCode,
-        String taskType
-    ) {
-        //Dummy void function until dependency is updated with needed metadata
+    private static Person__c getPerson(Id personId) {
+        return [
+            SELECT Id, INT_IsNavEmployee__c, INT_Confidential__c, INT_DistrictNumber__c, INT_MunicipalityNumber__c
+            FROM Person__c
+            WHERE Id = :personId
+        ][0];
     }
 }

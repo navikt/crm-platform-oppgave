@@ -168,14 +168,10 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
             themeSubThemeCode: this.subTheme,
             taskType: this.taskType
         };
-
         try {
             const data = await getWorkAllocations(input);
-            this.result = data;
-            this.errorMessage = data.errorMessage;
-
-            if (true === data.success && 1 <= data.units.length) {
-                this.selectedId = data.units[0].sfId;
+            if (data && 1 <= data.length) {
+                this.selectedId = data[0].Id;
             }
             this.isSearching = false;
         } catch (error) {
