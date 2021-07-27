@@ -1,6 +1,6 @@
 @IsTest
 private with sharing class CRM_NavTaskWorkAllocationControllerTest {
-    /* @isTest
+    @isTest
     static void getWorkAllocations_Success() {
         String unitJSON =
             '[' +
@@ -25,7 +25,6 @@ private with sharing class CRM_NavTaskWorkAllocationControllerTest {
             '	}' +
             ']';
         Test.setMock(HttpCalloutMock.class, new SingleRequestMock(200, 'OK', unitJSON, null));
-
         Person__c p = (Person__c) CRM_OPPGAVE_TestDataFactory.createRecord(
             new Person__c(
                 Name = '1234567890',
@@ -44,9 +43,7 @@ private with sharing class CRM_NavTaskWorkAllocationControllerTest {
             new NavUnit__c(Name = 'Test Unit2', INT_UnitNumber__c = '4321'),
             true
         );
-
-        NKS_NorgNavUnitService.WorkAllocationResponse result;
-
+        List<NavUnit__c> result;
         Test.startTest();
         result = CRM_NavTaskWorkAllocationController.getWorkAllocations(
             p.Id,
@@ -56,14 +53,10 @@ private with sharing class CRM_NavTaskWorkAllocationControllerTest {
             'taskType'
         );
         Test.stopTest();
-
-        System.assertEquals(true, result.success, 'Excpected a successful result');
-        System.assertEquals(true, String.isBlank(result.errorMessage), 'Excpected blank value in error message');
-        System.assertNotEquals(null, result.units, 'Did not eexcpect the result NULL in units.');
-        System.assertEquals(1, result.units.size(), 'Expected one unit');
-        System.assertEquals(unit1.Id, result.units[0].sfId, 'Expected to the sf id populated with the correct Id');
+        System.assertNotEquals(null, result, 'Excpected a successful result');
+        System.assertEquals(1, result.size(), 'Expected one unit');
+        System.assertEquals(unit1.Id, result[0].Id, 'Expected to the sf id populated with the correct Id');
     }
-
     @isTest
     static void getWorkAllocations_NoPerson() {
         String unitJSON =
@@ -89,7 +82,6 @@ private with sharing class CRM_NavTaskWorkAllocationControllerTest {
             '	}' +
             ']';
         Test.setMock(HttpCalloutMock.class, new SingleRequestMock(200, 'OK', unitJSON, null));
-
         NavUnit__c unit1 = (NavUnit__c) CRM_OPPGAVE_TestDataFactory.createRecord(
             new NavUnit__c(Name = 'Test Unit', INT_UnitNumber__c = '1234'),
             true
@@ -98,9 +90,7 @@ private with sharing class CRM_NavTaskWorkAllocationControllerTest {
             new NavUnit__c(Name = 'Test Unit2', INT_UnitNumber__c = '4321'),
             true
         );
-
-        NKS_NorgNavUnitService.WorkAllocationResponse result;
-
+        List<NavUnit__c> result;
         Test.startTest();
         result = CRM_NavTaskWorkAllocationController.getWorkAllocations(
             null,
@@ -110,22 +100,16 @@ private with sharing class CRM_NavTaskWorkAllocationControllerTest {
             'taskType'
         );
         Test.stopTest();
-
-        System.assertEquals(true, result.success, 'Excpected a successful result');
-        System.assertEquals(true, String.isBlank(result.errorMessage), 'Excpected blank value in error message');
-        System.assertNotEquals(null, result.units, 'Did not eexcpect the result NULL in units.');
-        System.assertEquals(1, result.units.size(), 'Expected one unit');
-        System.assertEquals(unit1.Id, result.units[0].sfId, 'Expected to the sf id populated with the correct Id');
+        System.assertNotEquals(null, result, 'Excpected a successful result');
+        System.assertEquals(1, result.size(), 'Expected one unit');
+        System.assertEquals(unit1.Id, result[0].Id, 'Expected to the sf id populated with the correct Id');
     }
-
     @isTest
     static void testGetUserNavUnitId() {
         CRM_OPPGAVE_TestDataFactory.createRecord(new NavUnit__c(INT_UnitNumber__c = '0701'));
-
         Test.startTest();
         String unitId = CRM_NavTaskWorkAllocationController.getUserNavUnitId('0701');
         Test.stopTest();
-
         System.assert(String.isNotBlank(unitId));
-    }*/
+    }
 }
