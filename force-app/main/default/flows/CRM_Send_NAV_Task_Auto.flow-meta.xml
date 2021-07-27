@@ -21,7 +21,7 @@
         <inputParameters>
             <name>assignToUnitNumber</name>
             <value>
-                <elementReference>NAV_Task.CRM_NavUnit__r.INT_UnitNumber__c</elementReference>
+                <elementReference>Assign_To_Unit</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -39,7 +39,7 @@
         <inputParameters>
             <name>subthemeCode</name>
             <value>
-                <elementReference>NAV_Task.NKS_Subtheme__r.CRM_Code__c</elementReference>
+                <elementReference>Subtheme_Code</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -87,6 +87,20 @@
     </actionCalls>
     <apiVersion>52.0</apiVersion>
     <description>Autolaunched flow for dispatching NAV Task to the oppgave API</description>
+    <formulas>
+        <description>Formula field to define the NAV unit the task is to be assigned to. If blank, standard arbeidsfordeling will be performed by API</description>
+        <name>Assign_To_Unit</name>
+        <dataType>String</dataType>
+        <expression>IF(NOT(ISBLANK({!NAV_Task.CRM_NavUnit__c})),
+{!NAV_Task.CRM_NavUnit__r.INT_UnitNumber__c},
+null)</expression>
+    </formulas>
+    <formulas>
+        <description>Formula for better handling of nulls for subtheme code.</description>
+        <name>Subtheme_Code</name>
+        <dataType>String</dataType>
+        <expression>{!NAV_Task.NKS_Subtheme__r.CRM_Code__c}</expression>
+    </formulas>
     <interviewLabel>Autolaunched flow for dispatching NAV Task to the oppgave API {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Send NAV Task Auto</label>
     <processMetadataValues>
