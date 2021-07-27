@@ -23,6 +23,7 @@ public with sharing class CRM_DueDateUtility {
                     SELECT CRM_Business_Days__c
                     FROM NAV_Task_Due_Date__mdt
                     WHERE CRM_Theme_Code__c = :theme AND CRM_Task_Type__c = :taskType
+                    LIMIT 1
                 ];
             } catch (QueryException e) {
                 LoggerUtility logger = new LoggerUtility('Oppgave');
