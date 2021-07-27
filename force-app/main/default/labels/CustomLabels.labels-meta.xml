@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>CRM_Nav_Task_Work_Allocation_Delegate_to_Self</fullName>
+        <categories>NAV Unit, NAV Task, UI, nksNavTaskWorkAllocation</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Nav Task Work Allocation Delegate to Self</shortDescription>
+        <value>Send til meg</value>
+    </labels>
+    <labels>
+        <fullName>CRM_Nav_Task_Work_Allocation_Validation_Error</fullName>
+        <categories>NAV Unit, NAV Task, UI, nksNavTaskWorkAllocation</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Nav Task Work Allocation Validation Error</shortDescription>
+        <value>Må fylles ut. Legg inn enheten oppgaven skal tildeles.</value>
+    </labels>
+    <labels>
+        <fullName>CRM_NAV_Task_Type_Validation_Error</fullName>
+        <categories>NAV Task, UI, nksNavTaskWorkAllocation</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>NAV Task Type Validation Error</shortDescription>
+        <value>Oppgavetype er påkrevd</value>
+    </labels>
+</CustomLabels>
