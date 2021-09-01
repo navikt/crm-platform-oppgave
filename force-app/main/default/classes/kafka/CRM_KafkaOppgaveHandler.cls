@@ -320,6 +320,7 @@ public class CRM_KafkaOppgaveHandler implements IKafkaMessageConsumer {
      * @param errList [List<Database.Error>]
      * @param message
      **/
+    @testVisible
     private void setMessageError(List<Database.Error> errList, KafkaMessage__c message) {
         String errorMsg = '';
         for (Database.Error err : errList) {

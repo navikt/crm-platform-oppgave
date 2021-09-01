@@ -96,6 +96,8 @@ public class CRM_KafkaOppgaveHandler_Test {
 
         Test.startTest();
         handler.processMessages(messages);
+        handler.getProcessedMessages();
+        handler.setMessageError(new List<Database.Error>(), messages[0]);
         Test.stopTest();
 
         System.debug([SELECT Log_Message__c, Pay_Load__c FROM Application_Log__c]);
