@@ -51,6 +51,23 @@ public class CRM_KafkaOppgaveHandler implements IKafkaMessageConsumer {
         return retList;
     }
 
+    /**
+     * @description: Returns a list of all the messages where processing has failed
+     * @author Stian Ruud Schikora | 08-03-2021
+     * @return List<KafkaMessage__c>
+     **/
+    public List<KafkaMessage__c> getFailedMessages() {
+        List<KafkaMessage__c> retList = new List<KafkaMessage__c>();
+        for (List<KafkaMessage__c> msgList : this.messageMap.values()) {
+            for (KafkaMessage__c kfMsg : msgList) {
+                if (kfMsg.CRM_Status__c == KafkaMessageService.STATUS_ERROR)
+                    retList.addAll(msgList);
+            }
+        }
+
+        return retList;
+    }
+
     public void processMessages(List<KafkaMessage__c> messages) {
         List<NavTask__c> tasksToUpsert = new List<NavTask__c>();
         Map<Decimal, NavTask__c> existingTaskMap = new Map<Decimal, NavTask__c>();
@@ -61,6 +78,7 @@ public class CRM_KafkaOppgaveHandler implements IKafkaMessageConsumer {
             SELECT Id, INT_External_Reference__c, NKS_Comments__c, NKS_Task_Version__c
             FROM NavTask__c
             WHERE INT_External_Reference__c IN :kafkaTaskMap.keySet()
+            FOR UPDATE
         ]) {
             existingTaskMap.put(navTask.INT_External_Reference__c, navTask);
         }

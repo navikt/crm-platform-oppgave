@@ -1,5 +1,5 @@
 public without sharing class CRM_KafkaOppgaveEventHandler {
-    private static LoggerUtility logger = new LoggerUtility();
+    private static LoggerUtility logger = new LoggerUtility('Oppgave');
     /**
      * @description: Converts the platform events into KafkaMessage__c and calls for processing using the KafkaOppgaveHandler
      * @author Stian Ruud Schikora | 08-03-2021
@@ -7,10 +7,16 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
      **/
     public static void processOppgaveEvents(List<Kafka_Oppgave_Event__e> kfOppgEvents) {
         CRM_KafkaOppgaveHandler messageHandler = new CRM_KafkaOppgaveHandler();
-        messageHandler.processMessages(doEventTransform(kfOppgEvents));
+        try {
+            messageHandler.processMessages(doEventTransform(kfOppgEvents));
+        } catch (Exception ex) {
+            logger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
+        }
 
-        List<KafkaMessage__c> processedMessages = messageHandler.getProcessedMessages();
-        handleProcessedMessages(processedMessages);
+        List<KafkaMessage__c> failedMessages = messageHandler.getFailedMessages();
+        handleFailedMessages(failedMessages);
+
+        logger.publish();
     }
 
     /**
@@ -28,11 +34,11 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
     /**
      * @description: Stores the processed KafkaMessage__c records
      * @author Stian Ruud Schikora | 08-03-2021
-     * @param processedMessages
+     * @param failedMessages
      **/
-    private static void handleProcessedMessages(List<KafkaMessage__c> processedMessages) {
+    private static void handleFailedMessages(List<KafkaMessage__c> failedMessages) {
         try {
-            insert processedMessages;
+            insert failedMessages;
         } catch (Exception ex) {
             logger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
         }
