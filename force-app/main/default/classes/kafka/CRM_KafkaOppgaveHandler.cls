@@ -61,7 +61,7 @@ public class CRM_KafkaOppgaveHandler implements IKafkaMessageConsumer {
         for (List<KafkaMessage__c> msgList : this.messageMap.values()) {
             for (KafkaMessage__c kfMsg : msgList) {
                 if (kfMsg.CRM_Status__c == KafkaMessageService.STATUS_ERROR)
-                    retList.addAll(msgList);
+                    retList.add(kfMsg);
             }
         }
 
