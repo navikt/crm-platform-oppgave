@@ -252,6 +252,9 @@ public class CRM_KafkaOppgaveHandler implements IKafkaMessageConsumer {
             navTask.NKS_Subtheme__c = this.commonCodeMap.containsKey('Behandlingstema' + kafkaOppgave.behandlingstema)
                 ? this.commonCodeMap.get('Behandlingstema' + kafkaOppgave.behandlingstema).Id
                 : null;
+            navTask.CRM_Subtype__c = this.commonCodeMap.containsKey('Behandlingstype' + kafkaOppgave.behandlingstype)
+                ? this.commonCodeMap.get('Behandlingstype' + kafkaOppgave.behandlingstype).Id
+                : null;
             navTask.CRM_DueDate__c = String.isNotBlank(kafkaOppgave.fristFerdigstillelse)
                 ? Date.valueOf(kafkaOppgave.fristFerdigstillelse)
                 : null;
