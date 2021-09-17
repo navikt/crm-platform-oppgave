@@ -110,6 +110,27 @@ public without sharing class CRM_NavTaskOppgaveService {
     }
 
     /**
+     * @description: Calls oppgave API to retrieve all gjelder values
+     * @author mamikals | 15-09-2021
+     * @return HttpResponse
+     **/
+    public HttpResponse getGjelderValues() {
+        Map<String, String> httpHeaders = new Map<String, String>{
+            'Content-Type' => 'application/json',
+            'accept' => 'application/json'
+        };
+
+        ApiController apiCtrl = new ApiController();
+        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVE_GJELDER');
+        apiCtrl.addServiceAuthHeader('Oppgave');
+        apiCtrl.setHeaders(httpHeaders);
+
+        addXCorrelation(apiCtrl);
+        apiCtrl.doCallout();
+        return apiCtrl.getResponse();
+    }
+
+    /**
      * @description: Adds the required X-Correlation header to the API request
      * @author Stian Ruud Schikora | 11-27-2020
      * @param apiCtrl
