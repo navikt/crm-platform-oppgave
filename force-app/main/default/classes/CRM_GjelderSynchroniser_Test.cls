@@ -38,6 +38,8 @@ public class CRM_GjelderSynchroniser_Test {
         Test.setMock(HttpCalloutMock.class, new SingleRequestMock(200, 'OK', testJson, null));
 
         CRM_GjelderSynchroniser sync = new CRM_GjelderSynchroniser();
+        LoggerUtility logger = new LoggerUtility();
+        sync.setLogger(logger);
 
         Test.startTest();
         sync.doSync();

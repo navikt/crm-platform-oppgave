@@ -40,7 +40,7 @@ public with sharing class CRM_GjelderSynchroniser {
             FROM Common_Code__c
             WHERE CRM_Code_Set__c = 'Tema'
         ];
-        Map<String, String> themeMap = new Map<String, String>();
+        themeMap = new Map<String, String>();
         for (Common_Code__c theme : usedThemeList) {
             themeMap.put(theme.CRM_Code__c, theme.CRM_UniqueKey__c);
         }
