@@ -5,6 +5,8 @@ public with sharing class CRM_GjelderSynchroniser {
     private List<Common_Code__c> behandlingsList;
     private Map<String, Object> gjelderMap;
     private Common_Code__C currentGjelder;
+    private Map<String, String> themeMap;
+    private LoggerUtility logger;
 
     public CRM_GjelderSynchroniser() {
         checkService();
@@ -12,6 +14,10 @@ public with sharing class CRM_GjelderSynchroniser {
 
     public CRM_GjelderSynchroniser(CRM_NavTaskOppgaveService service) {
         this.service = service;
+    }
+
+    public void setLogger(LoggerUtility logger) {
+        this.logger = logger;
     }
 
     private void checkService() {
@@ -25,12 +31,9 @@ public with sharing class CRM_GjelderSynchroniser {
         return service.getGjelderValues();
     }
 
-    public void doSync() {
+    private Map<String, Object> initSync() {
         HttpResponse response = getResponse();
         Map<String, Object> parsedJson = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
-        // Map<String, Object> parsedJson = (Map<String, Object>) JSON.deserializeUntyped(
-        //     '{"PEN":[],"RVE": [{"behandlingstema": null,"behandlingstemaTerm": null,"behandlingstype": "ae0004","behandlingstypeTerm": "Behandle vedtak"}],"REK": [{"behandlingstema": null,"behandlingstemaTerm": null,"behandlingstype": "ae0004","behandlingstypeTerm": "Behandle vedtak"},{"behandlingstema": null,"behandlingstemaTerm": null,"behandlingstype": "ae0007","behandlingstypeTerm": "Utbetaling"},{"behandlingstema": null,"behandlingstemaTerm": null,"behandlingstype": "ae0116","behandlingstypeTerm": "Meldekort"}],"AAP": [{"behandlingstema": "ab0241","behandlingstemaTerm": "Dagliglivet","behandlingstype": "ae0106","behandlingstypeTerm": "Utland"}]}'
-        // );
 
         List<Common_Code__c> usedThemeList = [
             SELECT CRM_Code__c, CRM_UniqueKey__c
@@ -45,10 +48,16 @@ public with sharing class CRM_GjelderSynchroniser {
         behandlingsList = new List<Common_Code__c>();
         processed = new Set<String>();
 
+        return parsedJson;
+    }
+
+    public void doSync() {
+        Map<String, Object> parsedJson = initSync();
         for (String theme : parsedJson.keySet()) {
             List<Object> currentTheme = (List<Object>) parsedJson.get(theme);
             if (!themeMap.keySet().contains(theme)) {
-                //Checks if the theme is in Salesforce, and skips it if not.
+                logger.Error('Missing theme: ' + theme, null, CRM_ApplicationDomain.Domain.NKS);
+                logger.publish();
                 continue;
             }
             for (Integer i = 0; i < currentTheme.size(); i++) {
@@ -79,12 +88,9 @@ public with sharing class CRM_GjelderSynchroniser {
         String subcode = (String) gjelderMap.get(codeSet.toLowerCase());
         String term = (String) gjelderMap.get(codeSet.toLowerCase() + 'Term');
 
-        // Har brukt if else her, men switch case lengre nede. Er det noe vits i å bruke switch case?
-        // Og hvis ikke, hvordan gjør vi error handeling? Og er det egenltig en bedre måte å gjøre dette på?
-        // Kanskje en elif?
         if (codeSet == 'Behandlingstema') {
             currentGjelder.CRM_Subtheme__r = new Common_Code__c(CRM_UniqueKey__c = codeSet + subcode);
-        } else {
+        } else if (codeSet == 'Behandlingstype') {
             currentGjelder.CRM_Subtype__r = new Common_Code__c(CRM_UniqueKey__c = codeSet + subcode);
         }
 
@@ -102,23 +108,16 @@ public with sharing class CRM_GjelderSynchroniser {
             processed.add(codeSet + subcode);
         }
 
-        switch on codeSet {
-            when 'Behandlingstema' {
-                currentGjelder.CRM_Code__c += 'TM' + subcode;
-                currentGjelder.Name += term;
+        if (codeSet == 'Behandlingstema') {
+            currentGjelder.CRM_Code__c += 'TM' + subcode;
+            currentGjelder.Name += term;
+        } else if (codeSet == 'Behandlingstype') {
+            currentGjelder.CRM_Code__c += 'TY' + subcode;
+            if (currentGjelder.Name != '') {
+                currentGjelder.Name += ' - ';
             }
-            when 'Behandlingstype' {
-                currentGjelder.CRM_Code__c += 'TY' + subcode;
-                if (currentGjelder.Name != '') {
-                    currentGjelder.Name += ' - ';
-                }
-                currentGjelder.Name += term;
-                currentGjelder.Name = currentGjelder.Name.abbreviate(80);
-            }
-            when else {
-                // Hvordan logger vi errors? Lol
-                currentGjelder.Name = 'An error has occurred';
-            }
+            currentGjelder.Name += term;
+            currentGjelder.Name = currentGjelder.Name.abbreviate(80);
         }
     }
 }
