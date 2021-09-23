@@ -93,7 +93,7 @@ public class CRM_KafkaOppgaveHandler implements IKafkaMessageConsumer {
             CRM_KafkaOppgave taskToConvert = kafkaTasks.get(kafkaTasks.size() - 1).versjon >= existingTaskVersion
                 ? kafkaTasks.get(kafkaTasks.size() - 1)
                 : null;
-            if (tasksToConvert != null)
+            if (taskToConvert != null)
                 tasksToConvert.add(taskToConvert);
         }
 
@@ -201,13 +201,6 @@ public class CRM_KafkaOppgaveHandler implements IKafkaMessageConsumer {
                 convertedTask = convertToNavTask(kafkaOppgave);
             } catch (Exception ex) {
                 //If conversion throws exception, add error to related kafka messages
-                logger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
-                logger.error(
-                    'NAV Task conversion error for ID: ' + String.valueOf(kafkaOppgave.id),
-                    null,
-                    CRM_ApplicationDomain.Domain.NKS
-                );
-                logger.publish();
                 for (KafkaMessage__c message : getRelatedMessages(String.valueOf(kafkaOppgave.id))) {
                     String errorMsg =
                         'Exception: ' +
