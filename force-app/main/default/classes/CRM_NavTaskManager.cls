@@ -20,6 +20,32 @@ public with sharing class CRM_NavTaskManager {
     }
 
     /**
+     * @description: Method to trigger a new post of a previously failed NAV Task
+     * @author Stian Ruud Schikora | 09-23-2021
+     * @param tasksIdsToRerun
+     **/
+    public static void rerunFailedTasks(Set<String> tasksIdsToRerun) {
+        if (tasksIdsToRerun.size() > Limits.getLimitFutureCalls())
+            throw new LimitException('List size exceeds future call limit');
+
+        for (String taskId : tasksIdsToRerun) {
+            rerunFailedTask(taskId);
+        }
+    }
+
+    /**
+     * @description: Invokes flow in future context as every interview performs callout followed by DML
+     * @author Stian Ruud Schikora | 09-23-2021
+     * @param taskId
+     **/
+    @future
+    private static void rerunFailedTask(String taskId) {
+        Map<String, Object> flowInputs = new Map<String, Object>{ 'recordId' => taskId };
+        Flow.Interview flow = Flow.Interview.createInterview('CRM_Retry_NAV_Task_Post', flowInputs);
+        flow.start();
+    }
+
+    /**
      * @description: Performs a callout to Oppgave for delegating a NAV task to an external system
      * Task is updated with the external reference and the NAV unit number the task was delegated to
      * @author Stian Ruud Schikora | 11-03-2020
