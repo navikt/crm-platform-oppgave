@@ -5,6 +5,7 @@ public without sharing class CRM_NavTaskOppgaveService {
     }
     private LoggerUtility logger = new LoggerUtility('Oppgave');
     private Context context;
+    private String transactionId;
 
     public CRM_NavTaskOppgaveService() {
     }
@@ -123,6 +124,7 @@ public without sharing class CRM_NavTaskOppgaveService {
             CRM_ApplicationDomain.Domain.NKS
         );
         apiCtrl.addHeader('X-Correlation-ID', requestId); //Adds the unique transaction ID to the request
+        this.transactionId = requestId;
         logger.publish();
     }
 
@@ -132,7 +134,7 @@ public without sharing class CRM_NavTaskOppgaveService {
      * @return String
      **/
     public String getTransactionId() {
-        return this.logger.peek() != null ? this.logger.peek().UUID__c : null;
+        return this.transactionId;
     }
 
     private class MissingParameterException extends Exception {
