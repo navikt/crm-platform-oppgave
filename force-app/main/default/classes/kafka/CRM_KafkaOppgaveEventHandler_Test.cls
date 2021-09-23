@@ -44,4 +44,39 @@ public class CRM_KafkaOppgaveEventHandler_Test {
 
         System.assertEquals(1, [SELECT COUNT() FROM NavTask__c WHERE INT_External_Reference__c = :testOppgave.Id]);
     }
+
+    @isTest
+    static void testSubmitToAsync() {
+        CRM_KafkaOppgave.LegacyIdent idt = new CRM_KafkaOppgave.LegacyIdent();
+        idt.identType = 'AKTOERID';
+        idt.verdi = '123456789';
+
+        CRM_KafkaOppgave testOppgave = new CRM_KafkaOppgave();
+        testOppgave.id = 53336;
+        testOppgave.tildeltEnhetsnr = '2990';
+        testOppgave.tilordnetRessurs = 'Z994995';
+        testOppgave.tema = 'BAR';
+        testOppgave.oppgavetype = 'KONT_BRUK';
+        testOppgave.versjon = 1;
+        testOppgave.beskrivelse = 'TEST DESCRIPTION';
+        testOppgave.fristFerdigstillelse = '2021-01-14';
+        testOppgave.opprettetTidspunkt = '2021-01-12';
+        testOppgave.prioritet = 'NORM';
+        testOppgave.status = 'AAPNET';
+        testOppgave.ident = idt;
+
+        Test.startTest();
+        CRM_KafkaOppgaveEventHandler.submitToAsyncProcess(
+            new List<KafkaMessage__c>{
+                new KafkaMessage__c(
+                    CRM_Value__c = EncodingUtil.base64Encode(Blob.valueOf(JSON.serialize(testOppgave))),
+                    CRM_Key__c = String.valueOf(testOppgave.Id),
+                    CRM_Topic__c = 'aapen-oppgave-dev-syntetisk'
+                )
+            }
+        );
+        Test.stopTest();
+
+        System.assertEquals(1, [SELECT COUNT() FROM KafkaMessage__c]);
+    }
 }

@@ -139,6 +139,28 @@ public class CRM_NavTaskManager_Test {
         System.assert([SELECT COUNT() FROM Application_Log__c WHERE Log_Level__c = 'Error'] == 1);
     }
 
+    @isTest
+    static void testRerunFailedTasks() {
+        CRM_NavTaskManager.OppgaveResponse resp = new CRM_NavTaskManager.OppgaveResponse();
+        resp.id = 123456789;
+        resp.tildeltEnhetsnr = '4100';
+        CRM_OPPGAVE_TestDataFactory.createRecord(new Person__c(INT_ActorId__c = '1234567891012'));
+        Account personAcc = [SELECT Id FROM Account WHERE CRM_Person__r.INT_ActorId__c = '1234567891012' LIMIT 1];
+        NavUnit__c nUnit = [SELECT Id FROM NavUnit__c LIMIT 1];
+        NavTask__c task = getTask();
+        task.CRM_Account__c = personAcc.Id;
+        task.CRM_NavUnit__c = nUnit.Id;
+        update task;
+
+        Test.setMock(HttpCalloutMock.class, new SingleRequestMock(200, 'OK', JSON.serialize(resp), null));
+
+        Test.startTest();
+        CRM_NavTaskManager.rerunFailedTasks(new Set<String>{ task.Id });
+        Test.stopTest();
+
+        System.assertEquals(1, [SELECT COUNT() FROM NavTask__c WHERE INT_External_Reference__c = 123456789]);
+    }
+
     private static NavTask__c getTask() {
         return [
             SELECT
