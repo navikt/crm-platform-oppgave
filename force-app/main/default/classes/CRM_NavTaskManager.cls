@@ -30,13 +30,17 @@ public with sharing class CRM_NavTaskManager {
         NavTask__c task = taskRequest.task;
 
         try {
-            formatComment(taskRequest);
+            //formatComment(taskRequest); Moving comment formating to flow
             CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
-
-            //If user creating request does not have access to the person record, or does not posess a standard license the callout is done in System context
-            if (!hasPersonAccess(taskRequest.task) || !UserInfo.getUserType().equalsIgnoreCase('Standard')) {
+            if (taskRequest.POST_AS_SYSTEM == true) {
                 oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
+            } else {
+                //If user creating request does not have access to the person record, or does not posess a standard license the callout is done in System context
+                if (!hasPersonAccess(taskRequest.task) || !UserInfo.getUserType().equalsIgnoreCase('Standard')) {
+                    oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
+                }
             }
+
             HttpResponse response = oppgaveService.postTask(createOppgaveRequest(taskRequest));
             Integer statusCode = response.getStatusCode();
 
@@ -123,11 +127,15 @@ public with sharing class CRM_NavTaskManager {
         try {
             formatComment(taskRequest);
             CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
-
-            //If user creating request does not have access to the person record, or does not posess a standard license the callout is done in System context
-            if (!hasPersonAccess(taskRequest.task) || !UserInfo.getUserType().equalsIgnoreCase('Standard')) {
+            if (taskRequest.POST_AS_SYSTEM == true) {
                 oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
+            } else {
+                //If user creating request does not have access to the person record, or does not posess a standard license the callout is done in System context
+                if (!hasPersonAccess(taskRequest.task) || !UserInfo.getUserType().equalsIgnoreCase('Standard')) {
+                    oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
+                }
             }
+
             HttpResponse response = oppgaveService.editTask(createOppgaveRequest(taskRequest));
             Integer statusCode = response.getStatusCode();
 
@@ -243,6 +251,10 @@ public with sharing class CRM_NavTaskManager {
         public String assignToUnitNumber;
         @invocableVariable
         public String createdByUnitNumber;
+        @invocableVariable(
+            label='Default POST is done in user context as long as user has person record access, this value allows to force system-system post'
+        )
+        public Boolean POST_AS_SYSTEM = false;
 
         public NavTaskRequest() {
             this.requestType = null;

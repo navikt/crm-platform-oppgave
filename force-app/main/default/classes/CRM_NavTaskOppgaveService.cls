@@ -123,6 +123,7 @@ public without sharing class CRM_NavTaskOppgaveService {
             CRM_ApplicationDomain.Domain.NKS
         );
         apiCtrl.addHeader('X-Correlation-ID', requestId); //Adds the unique transaction ID to the request
+        logger.publish();
     }
 
     /**
