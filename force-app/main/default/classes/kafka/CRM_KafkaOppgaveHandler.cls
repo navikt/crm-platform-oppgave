@@ -20,7 +20,7 @@ public class CRM_KafkaOppgaveHandler implements IKafkaMessageConsumer {
         for (Common_Code__c comCode : [
             SELECT Id, Name, CRM_Code__c, CRM_Code_Set__c
             FROM Common_Code__c
-            WHERE CRM_Code_Set__c IN ('Tema', 'Behandlingstema', 'Behandlingstype', 'Oppgavetyper')
+            WHERE CRM_Code_Set__c IN ('Tema', 'Behandlingstema', 'Behandlingstyper', 'Oppgavetyper')
         ]) {
             commonCodeMap.put(comCode.CRM_Code_Set__c + comCode.CRM_Code__c, comCode);
         }
