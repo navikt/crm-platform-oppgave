@@ -93,11 +93,11 @@ public class CRM_KafkaOppgaveHandler_Test {
             )
             .Id;
         behandlingsTypeId = CRM_OPPGAVE_TestDataFactory.createRecord(
-                new Common_Code__c(Name = 'Veteran sak', CRM_Code__c = 'ae0117', CRM_Code_set__c = 'Behandlingstype')
+                new Common_Code__c(Name = 'Veteran sak', CRM_Code__c = 'ae0117', CRM_Code_set__c = 'Behandlingstyper')
             )
             .Id;
         beggeTemaId = CRM_OPPGAVE_TestDataFactory.createRecord(
-                new Common_Code__c(Name = 'Nasjonal', CRM_Code__c = 'ae0118', CRM_Code_set__c = 'Behandlingstype')
+                new Common_Code__c(Name = 'Nasjonal', CRM_Code__c = 'ae0118', CRM_Code_set__c = 'Behandlingstyper')
             )
             .Id;
         beggeTypeId = CRM_OPPGAVE_TestDataFactory.createRecord(

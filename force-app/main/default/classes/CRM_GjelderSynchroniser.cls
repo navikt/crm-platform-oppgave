@@ -66,6 +66,10 @@ public with sharing class CRM_GjelderSynchroniser {
                     CRM_Code_Set__c = 'Gjelder',
                     CRM_Parent_Code__r = new Common_Code__c(CRM_UniqueKey__c = themeMap.get(theme))
                 );
+
+                // A gjelder is essentially a relation between a theme and subtheme and/or subtype.
+                // So to create a unique "code" for gjelder, we combine the codes of the children/parent.
+                // It will look like <ThemeCode>+TM<SubthemeCode>+TY<SubtypeCode>
                 currentGjelder.CRM_Code__c = theme;
                 currentGjelder.Name = '';
 
@@ -74,7 +78,7 @@ public with sharing class CRM_GjelderSynchroniser {
                 }
 
                 if (gjelderMap.get('behandlingstype') != null) {
-                    createSubCode('Behandlingstype');
+                    createSubCode('Behandlingstyper');
                 }
                 currentGjelder.CRM_UniqueKey__c = 'Gjelder' + currentGjelder.CRM_Code__c;
                 gjelderList.add(currentGjelder);
@@ -85,12 +89,12 @@ public with sharing class CRM_GjelderSynchroniser {
     }
 
     private void createSubCode(String codeSet) {
-        String subcode = (String) gjelderMap.get(codeSet.toLowerCase());
-        String term = (String) gjelderMap.get(codeSet.toLowerCase() + 'Term');
+        String subcode = (String) gjelderMap.get(codeSet.substring(0,15).toLowerCase());
+        String term = (String) gjelderMap.get(codeSet.substring(0,15).toLowerCase() + 'Term');
 
         if (codeSet == 'Behandlingstema') {
             currentGjelder.CRM_Subtheme__r = new Common_Code__c(CRM_UniqueKey__c = codeSet + subcode);
-        } else if (codeSet == 'Behandlingstype') {
+        } else if (codeSet == 'Behandlingstyper') {
             currentGjelder.CRM_Subtype__r = new Common_Code__c(CRM_UniqueKey__c = codeSet + subcode);
         }
 
@@ -111,7 +115,7 @@ public with sharing class CRM_GjelderSynchroniser {
         if (codeSet == 'Behandlingstema') {
             currentGjelder.CRM_Code__c += 'TM' + subcode;
             currentGjelder.Name += term;
-        } else if (codeSet == 'Behandlingstype') {
+        } else if (codeSet == 'Behandlingstyper') {
             currentGjelder.CRM_Code__c += 'TY' + subcode;
             if (currentGjelder.Name != '') {
                 currentGjelder.Name += ' - ';
