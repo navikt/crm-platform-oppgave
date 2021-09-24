@@ -54,6 +54,7 @@ public with sharing class CRM_GjelderSynchroniser {
     public void doSync() {
         Map<String, Object> parsedJson = initSync();
         for (String theme : parsedJson.keySet()) {
+            System.debug(theme);
             List<Object> currentTheme = (List<Object>) parsedJson.get(theme);
             if (!themeMap.keySet().contains(theme)) {
                 logger.Error('Missing theme: ' + theme, null, CRM_ApplicationDomain.Domain.NKS);
