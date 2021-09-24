@@ -270,6 +270,8 @@ public with sharing class CRM_NavTaskManager {
         @invocableVariable
         public String subthemeCode;
         @invocableVariable
+        public String subtypeCode;
+        @invocableVariable
         public String taskTypeCode;
         @invocableVariable
         public String actorId;

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>GET_OPPGAVE_GJELDER</label>
+    <protected>false</protected>
+    <values>
+        <field>API_Base_Configuration__c</field>
+        <value xsi:type="xsd:string">Oppgave_API</value>
+    </values>
+    <values>
+        <field>HTTP_Method__c</field>
+        <value xsi:type="xsd:string">GET</value>
+    </values>
+    <values>
+        <field>Has_Path_Parameters__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>Mock_Response__c</field>
+        <value xsi:type="xsd:string">{
+  &quot;200&quot;: {
+    &quot;headers&quot;: null,
+    &quot;body&quot;: {
+      &quot;PEN&quot;: [
+        {
+          &quot;behandlingstema&quot;: null,
+          &quot;behandlingstemaTerm&quot;: null,
+          &quot;behandlingstype&quot;: &quot;ae0117&quot;,
+          &quot;behandlingstypeTerm&quot;: &quot;Veteran sak&quot;
+        },
+        {
+          &quot;behandlingstema&quot;: &quot;ab0011&quot;,
+          &quot;behandlingstemaTerm&quot;: &quot;Gjenlevendepensjon&quot;,
+          &quot;behandlingstype&quot;: &quot;ae0104&quot;,
+          &quot;behandlingstypeTerm&quot;: &quot;Bosatt Norge&quot;
+        }
+      ],
+      &quot;INF&quot;: [
+        {
+          &quot;behandlingstema&quot;: null,
+          &quot;behandlingstemaTerm&quot;: null,
+          &quot;behandlingstype&quot;: &quot;ae0004&quot;,
+          &quot;behandlingstypeTerm&quot;: &quot;Behandle vedtak&quot;
+        }
+      ],
+      &quot;RVE&quot;: [
+        {
+          &quot;behandlingstema&quot;: null,
+          &quot;behandlingstemaTerm&quot;: null,
+          &quot;behandlingstype&quot;: &quot;ae0004&quot;,
+          &quot;behandlingstypeTerm&quot;: &quot;Behandle vedtak&quot;
+        }
+      ],
+      &quot;REK&quot;: [
+        {
+          &quot;behandlingstema&quot;: null,
+          &quot;behandlingstemaTerm&quot;: null,
+          &quot;behandlingstype&quot;: &quot;ae0004&quot;,
+          &quot;behandlingstypeTerm&quot;: &quot;Behandle vedtak&quot;
+        },
+        {
+          &quot;behandlingstema&quot;: null,
+          &quot;behandlingstemaTerm&quot;: null,
+          &quot;behandlingstype&quot;: &quot;ae0007&quot;,
+          &quot;behandlingstypeTerm&quot;: &quot;Utbetaling&quot;
+        },
+        {
+          &quot;behandlingstema&quot;: null,
+          &quot;behandlingstemaTerm&quot;: null,
+          &quot;behandlingstype&quot;: &quot;ae0116&quot;,
+          &quot;behandlingstypeTerm&quot;: &quot;Meldekort&quot;
+        }
+      ],
+      &quot;AAP&quot;: [
+        {
+          &quot;behandlingstema&quot;: &quot;ab0241&quot;,
+          &quot;behandlingstemaTerm&quot;: &quot;Dagliglivet&quot;,
+          &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+          &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+        }
+      ]
+    }
+  },
+  &quot;401&quot;: {
+    &quot;headers&quot;: null,
+    &quot;body&quot;: null
+  },
+  &quot;404&quot;: {
+    &quot;headers&quot;: null,
+    &quot;body&quot;: null
+  },
+  &quot;500&quot;: {
+    &quot;headers&quot;: null,
+    &quot;body&quot;: null
+  }
+}</value>
+    </values>
+    <values>
+        <field>Service_Path__c</field>
+        <value xsi:type="xsd:string">/oppgave/api/v1/kodeverk/gjelder</value>
+    </values>
+</CustomMetadata>

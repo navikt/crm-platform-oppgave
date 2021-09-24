@@ -1,0 +1,24 @@
+{
+    "records": [
+        {
+            "attributes": {
+                "type": "Common_Code__c",
+                "referenceId": "BehandleVedtakRef"
+            },
+            "Name": "Behandle vedtak",
+            "CRM_Code__c": "ae0004",
+            "CRM_Active__c": true,
+            "CRM_Code_Set__c": "Behandlingstyper"
+        },
+        {
+            "attributes": {
+                "type": "Common_Code__c",
+                "referenceId": "KlageRef"
+            },
+            "Name": "Klage",
+            "CRM_Code__c": "ae0058",
+            "CRM_Active__c": true,
+            "CRM_Code_Set__c": "Behandlingstyper"
+        }
+    ]
+}

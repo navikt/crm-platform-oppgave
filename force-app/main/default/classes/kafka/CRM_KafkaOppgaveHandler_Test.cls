@@ -1,3 +1,11 @@
+/**
+ * @description       :
+ * @author            : mamikals
+ * @group             :
+ * @last modified on  : 09-15-2021
+ * @last modified by  : mamikals
+ **/
+
 @isTest
 public class CRM_KafkaOppgaveHandler_Test {
     static CRM_KafkaOppgaveHandler handler = new CRM_KafkaOppgaveHandler();
@@ -6,6 +14,13 @@ public class CRM_KafkaOppgaveHandler_Test {
     static CRM_KafkaOppgave errorTest;
     static CRM_KafkaOppgave invalidNavUnitTest;
     static CRM_KafkaOppgave updateTest;
+    static CRM_KafkaOppgave behandlingstemaTest;
+    static CRM_KafkaOppgave behandlingstypeTest;
+    static CRM_KafkaOppgave beggeTest;
+    static String behandlingsTemaId;
+    static String behandlingsTypeId;
+    static String beggeTemaId;
+    static String beggeTypeId;
 
     private static void makeMocks() {
         CRM_KafkaOppgave.LegacyIdent idt = new CRM_KafkaOppgave.LegacyIdent();
@@ -44,6 +59,19 @@ public class CRM_KafkaOppgaveHandler_Test {
 
         updateTest = testOppgave.clone();
         updateTest.id = 53339;
+
+        behandlingstemaTest = testOppgave.clone();
+        behandlingstemaTest.id = 53340;
+        behandlingstemaTest.behandlingstema = 'ab0401';
+
+        behandlingstypeTest = testOppgave.clone();
+        behandlingstemaTest.id = 53341;
+        behandlingstypeTest.behandlingstype = 'ae0117';
+
+        beggeTest = testOppgave.clone();
+        beggeTest.id = 53342;
+        beggeTest.behandlingstema = 'ab0011';
+        beggeTest.behandlingstype = 'ae0118';
     }
     @TestSetup
     static void makeData() {
@@ -56,6 +84,30 @@ public class CRM_KafkaOppgaveHandler_Test {
             new Common_Code__c(CRM_Code__c = 'KONT_BRUK', Name = 'Kontakt Bruker', CRM_Code_Set__c = 'Oppgavetyper')
         );
         CRM_OPPGAVE_TestDataFactory.createRecord(new NavTask__c(Name = 'TEST TASK', INT_External_Reference__c = 53339));
+        behandlingsTemaId = CRM_OPPGAVE_TestDataFactory.createRecord(
+                new Common_Code__c(
+                    Name = 'Individuelle tiltak',
+                    CRM_Code__c = 'ab0401',
+                    CRM_Code_set__c = 'Behandlingstema'
+                )
+            )
+            .Id;
+        behandlingsTypeId = CRM_OPPGAVE_TestDataFactory.createRecord(
+                new Common_Code__c(Name = 'Veteran sak', CRM_Code__c = 'ae0117', CRM_Code_set__c = 'Behandlingstyper')
+            )
+            .Id;
+        beggeTemaId = CRM_OPPGAVE_TestDataFactory.createRecord(
+                new Common_Code__c(Name = 'Nasjonal', CRM_Code__c = 'ae0118', CRM_Code_set__c = 'Behandlingstyper')
+            )
+            .Id;
+        beggeTypeId = CRM_OPPGAVE_TestDataFactory.createRecord(
+                new Common_Code__c(
+                    Name = 'Gjenlevendepensjon',
+                    CRM_Code__c = 'ab0011',
+                    CRM_Code_set__c = 'Behandlingstema'
+                )
+            )
+            .Id;
     }
 
     @isTest
@@ -93,6 +145,24 @@ public class CRM_KafkaOppgaveHandler_Test {
                 CRM_Value__c = EncodingUtil.base64Encode(Blob.valueOf(JSON.serialize(updateTest)))
             )
         );
+        messages.add(
+            new KafkaMessage__c(
+                CRM_Key__c = '53340',
+                CRM_Value__c = EncodingUtil.base64Encode(Blob.valueOf(JSON.serialize(behandlingstemaTest)))
+            )
+        );
+        messages.add(
+            new KafkaMessage__c(
+                CRM_Key__c = '53341',
+                CRM_Value__c = EncodingUtil.base64Encode(Blob.valueOf(JSON.serialize(behandlingstypeTest)))
+            )
+        );
+        messages.add(
+            new KafkaMessage__c(
+                CRM_Key__c = '53342',
+                CRM_Value__c = EncodingUtil.base64Encode(Blob.valueOf(JSON.serialize(beggeTest)))
+            )
+        );
 
         Test.startTest();
         handler.processMessages(messages);
@@ -105,5 +175,11 @@ public class CRM_KafkaOppgaveHandler_Test {
         System.assert([SELECT COUNT() FROM NavTask__c] != 0);
         System.assert([SELECT COUNT() FROM NavTask__c WHERE CRM_NavUnit__c = NULL] == 1);
         System.assert([SELECT COUNT() FROM NavTask__c WHERE Name = 'Kontakt Bruker'] != 0);
+
+        System.assert([SELECT COUNT() FROM NavTask__c WHERE NKS_Subtheme__c = :behandlingsTemaId] != 0);
+        System.assert([SELECT COUNT() FROM NavTask__c WHERE CRM_Subtype__c = :behandlingsTypeId] != 0);
+        System.assert(
+            [SELECT COUNT() FROM NavTask__c WHERE NKS_Subtheme__c = :beggeTemaId AND CRM_Subtype__c = :beggeTypeId] != 0
+        );
     }
 }

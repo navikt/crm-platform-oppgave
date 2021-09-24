@@ -43,6 +43,7 @@ public class CRM_OppgaveRequest {
         id = taskRequest.requestType == 'EDIT' ? Integer.valueOf(task.INT_External_Reference__c) : null;
         tema = taskRequest.themeCode;
         behandlingstema = taskRequest.subthemeCode;
+        behandlingstype = taskRequest.subtypeCode;
         saksreferanse = task.NKS_NAV_Case_Reference__c;
         if (String.isNotBlank(task.NKS_Henvendelse_BehandlingsId__c)) {
             metadata = new OppgaveMetadata(task.NKS_Henvendelse_BehandlingsId__c);
