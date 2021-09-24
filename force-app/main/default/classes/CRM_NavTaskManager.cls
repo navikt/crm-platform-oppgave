@@ -20,6 +20,32 @@ public with sharing class CRM_NavTaskManager {
     }
 
     /**
+     * @description: Method to trigger a new post of a previously failed NAV Task
+     * @author Stian Ruud Schikora | 09-23-2021
+     * @param tasksIdsToRerun
+     **/
+    public static void rerunFailedTasks(Set<String> tasksIdsToRerun) {
+        if (tasksIdsToRerun.size() > Limits.getLimitFutureCalls())
+            throw new LimitException('List size exceeds future call limit');
+
+        for (String taskId : tasksIdsToRerun) {
+            rerunFailedTask(taskId);
+        }
+    }
+
+    /**
+     * @description: Invokes flow in future context as every interview performs callout followed by DML
+     * @author Stian Ruud Schikora | 09-23-2021
+     * @param taskId
+     **/
+    @future
+    private static void rerunFailedTask(String taskId) {
+        Map<String, Object> flowInputs = new Map<String, Object>{ 'recordId' => taskId };
+        Flow.Interview flow = Flow.Interview.createInterview('CRM_Retry_NAV_Task_Post', flowInputs);
+        flow.start();
+    }
+
+    /**
      * @description: Performs a callout to Oppgave for delegating a NAV task to an external system
      * Task is updated with the external reference and the NAV unit number the task was delegated to
      * @author Stian Ruud Schikora | 11-03-2020
@@ -30,13 +56,17 @@ public with sharing class CRM_NavTaskManager {
         NavTask__c task = taskRequest.task;
 
         try {
-            formatComment(taskRequest);
+            //formatComment(taskRequest); Moving comment formating to flow
             CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
-
-            //If user creating request does not have access to the person record, or does not posess a standard license the callout is done in System context
-            if (!hasPersonAccess(taskRequest.task) || !UserInfo.getUserType().equalsIgnoreCase('Standard')) {
+            if (taskRequest.POST_AS_SYSTEM == true) {
                 oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
+            } else {
+                //If user creating request does not have access to the person record, or does not posess a standard license the callout is done in System context
+                if (!hasPersonAccess(taskRequest.task) || !UserInfo.getUserType().equalsIgnoreCase('Standard')) {
+                    oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
+                }
             }
+
             HttpResponse response = oppgaveService.postTask(createOppgaveRequest(taskRequest));
             Integer statusCode = response.getStatusCode();
 
@@ -123,11 +153,15 @@ public with sharing class CRM_NavTaskManager {
         try {
             formatComment(taskRequest);
             CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
-
-            //If user creating request does not have access to the person record, or does not posess a standard license the callout is done in System context
-            if (!hasPersonAccess(taskRequest.task) || !UserInfo.getUserType().equalsIgnoreCase('Standard')) {
+            if (taskRequest.POST_AS_SYSTEM == true) {
                 oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
+            } else {
+                //If user creating request does not have access to the person record, or does not posess a standard license the callout is done in System context
+                if (!hasPersonAccess(taskRequest.task) || !UserInfo.getUserType().equalsIgnoreCase('Standard')) {
+                    oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
+                }
             }
+
             HttpResponse response = oppgaveService.editTask(createOppgaveRequest(taskRequest));
             Integer statusCode = response.getStatusCode();
 
@@ -245,6 +279,10 @@ public with sharing class CRM_NavTaskManager {
         public String assignToUnitNumber;
         @invocableVariable
         public String createdByUnitNumber;
+        @invocableVariable(
+            label='Default POST is done in user context as long as user has person record access, this value allows to force system-system post'
+        )
+        public Boolean POST_AS_SYSTEM = false;
 
         public NavTaskRequest() {
             this.requestType = null;

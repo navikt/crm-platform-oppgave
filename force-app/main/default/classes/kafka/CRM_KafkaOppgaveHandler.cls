@@ -93,7 +93,7 @@ public class CRM_KafkaOppgaveHandler implements IKafkaMessageConsumer {
             CRM_KafkaOppgave taskToConvert = kafkaTasks.get(kafkaTasks.size() - 1).versjon >= existingTaskVersion
                 ? kafkaTasks.get(kafkaTasks.size() - 1)
                 : null;
-            if (tasksToConvert != null)
+            if (taskToConvert != null)
                 tasksToConvert.add(taskToConvert);
         }
 
