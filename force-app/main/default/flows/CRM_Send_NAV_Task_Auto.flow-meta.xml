@@ -5,7 +5,7 @@
         <name>Post_NAV_Task</name>
         <label>Post NAV Task</label>
         <locationX>176</locationX>
-        <locationY>398</locationY>
+        <locationY>1070</locationY>
         <actionName>CRM_NavTaskManager</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -43,6 +43,12 @@
             </value>
         </inputParameters>
         <inputParameters>
+            <name>subtypeCode</name>
+            <value>
+                <elementReference>Subtype_Code</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
             <name>task</name>
             <value>
                 <elementReference>NAV_Task</elementReference>
@@ -67,7 +73,7 @@
         <name>Set_Task_Due_Date</name>
         <label>Set Task Due Date</label>
         <locationX>176</locationX>
-        <locationY>278</locationY>
+        <locationY>950</locationY>
         <actionName>CRM_DueDateUtility</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -86,6 +92,84 @@
         </outputParameters>
     </actionCalls>
     <apiVersion>52.0</apiVersion>
+    <assignments>
+        <name>Set_Subtheme_Null</name>
+        <label>Set Subtheme Null</label>
+        <locationX>264</locationX>
+        <locationY>398</locationY>
+        <assignmentItems>
+            <assignToReference>NAV_Task.NKS_Subtheme__c</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <connector>
+            <targetReference>Validate_Subtype</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_Subtype_Null</name>
+        <label>Set Subtype Null</label>
+        <locationX>264</locationX>
+        <locationY>734</locationY>
+        <assignmentItems>
+            <assignToReference>NAV_Task.CRM_Subtype__c</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <connector>
+            <targetReference>Set_Task_Due_Date</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <description>Subtheme is not required, so validate that it has been set from parent calling this flow.</description>
+        <name>Validate_Subtheme</name>
+        <label>Validate Subtheme</label>
+        <locationX>176</locationX>
+        <locationY>278</locationY>
+        <defaultConnector>
+            <targetReference>Set_Subtheme_Null</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Subtheme Not Set</defaultConnectorLabel>
+        <rules>
+            <name>Subtheme_Was_Set</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>NAV_Task.NKS_Subtheme__c</leftValueReference>
+                <operator>WasSet</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Validate_Subtype</targetReference>
+            </connector>
+            <label>Subtheme Was Set</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Subtheme is not required, so validate that it has been set from parent calling this flow.</description>
+        <name>Validate_Subtype</name>
+        <label>Validate Subtype</label>
+        <locationX>176</locationX>
+        <locationY>614</locationY>
+        <defaultConnector>
+            <targetReference>Set_Subtype_Null</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Subtype Not Set</defaultConnectorLabel>
+        <rules>
+            <name>Subtype_Was_Set</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>NAV_Task.CRM_Subtype__c</leftValueReference>
+                <operator>WasSet</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Task_Due_Date</targetReference>
+            </connector>
+            <label>Subtype Was Set</label>
+        </rules>
+    </decisions>
     <description>Autolaunched flow for dispatching NAV Task to the oppgave API</description>
     <formulas>
         <description>Formula field to define the NAV unit the task is to be assigned to. If blank, standard arbeidsfordeling will be performed by API</description>
@@ -99,7 +183,18 @@ null)</expression>
         <description>Formula for better handling of nulls for subtheme code.</description>
         <name>Subtheme_Code</name>
         <dataType>String</dataType>
-        <expression>{!NAV_Task.NKS_Subtheme__r.CRM_Code__c}</expression>
+        <expression>IF(ISBLANK({!NAV_Task.NKS_Subtheme__c}),
+null,
+{!NAV_Task.NKS_Subtheme__r.CRM_Code__c}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>Subtype_Code</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK({!NAV_Task.CRM_Subtype__c}),
+null,
+{!NAV_Task.CRM_Subtype__r.CRM_Code__c}
+)</expression>
     </formulas>
     <interviewLabel>Autolaunched flow for dispatching NAV Task to the oppgave API {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Send NAV Task Auto</label>
@@ -126,7 +221,7 @@ null)</expression>
         <name>Insert_NAV_Task</name>
         <label>Insert NAV Task</label>
         <locationX>176</locationX>
-        <locationY>518</locationY>
+        <locationY>1190</locationY>
         <inputReference>Post_NAV_Task.task</inputReference>
     </recordCreates>
     <recordLookups>
@@ -137,7 +232,7 @@ null)</expression>
         <locationY>158</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Set_Task_Due_Date</targetReference>
+            <targetReference>Validate_Subtheme</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
