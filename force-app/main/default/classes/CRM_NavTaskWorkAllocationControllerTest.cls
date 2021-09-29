@@ -50,6 +50,7 @@ private with sharing class CRM_NavTaskWorkAllocationControllerTest {
             'themeGroupCode',
             'themeCode',
             'themeSubThemeCode',
+            'themeSubTypeCode',
             'taskType'
         );
         Test.stopTest();
@@ -97,6 +98,7 @@ private with sharing class CRM_NavTaskWorkAllocationControllerTest {
             'themeGroupCode',
             'themeCode',
             'themeSubThemeCode',
+            'themeSubTypeCode',
             'taskType'
         );
         Test.stopTest();

@@ -5,16 +5,20 @@ public with sharing class CRM_NavTaskWorkAllocationController {
         String themeGroupCode,
         String themeCode,
         String themeSubThemeCode,
+        String themeSubTypeCode,
         String taskType
     ) {
         Map<String, NavUnit__c> unitMap = new Map<String, NavUnit__c>();
         Person__c p = String.isNotBlank(personId) ? getPerson(personId) : null;
+        NavUnitWorkAllocationInput input = new NavUnitWorkAllocationInput();
+        input.temagruppe = themeGroupCode;
+        input.tema = themeCode;
+        input.behandlingstema = themeSubThemeCode;
+        input.behandlingstype = themeSubTypeCode;
+        input.oppgavetype = taskType;
         List<NavUnitWorkAllocation> workAllocations = NorgNavUnits.getWorkAllocation(
             p,
-            themeGroupCode,
-            themeCode,
-            themeSubThemeCode,
-            taskType
+            input
         );
         if (workAllocations != null && workAllocations.size() > 0) {
             for (NavUnitWorkAllocation workAllocation : workAllocations) {

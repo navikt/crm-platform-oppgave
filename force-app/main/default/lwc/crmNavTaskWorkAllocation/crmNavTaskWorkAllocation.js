@@ -27,6 +27,7 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
     @api themeGroup;
     @api theme;
     @api subTheme;
+    @api subType;
     alwaysShow = false;
     @track result;
     isSearching;
@@ -118,7 +119,7 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
     //Lightning message service subscribe
     subscribeToMessageChannel() {
         if (!this.subscription) {
-            this.subscription = subscribe(this.messageContext, crmSingleValueUpdate, (message) =>
+            this.subscription = subscribe(this.messageContext, crmSingleValueUpdate, message =>
                 this.handleMessage(message)
             );
         }
@@ -140,13 +141,18 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
                 this.themeGroup = value;
                 this.theme = null;
                 this.subTheme = null;
+                this.subType = null;
                 break;
             case 'themeCode':
                 this.theme = value;
                 this.subTheme = null;
+                this.subType = null;
                 break;
             case 'subThemeCode':
                 this.subTheme = value;
+                break;
+            case 'subTypeCode':
+                this.subType = value;
                 break;
             case 'tasktype':
                 this.taskType = value;
@@ -166,6 +172,7 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
             themeGroupCode: this.themeGroup,
             themeCode: this.theme,
             themeSubThemeCode: this.subTheme,
+            themeSubTypeCode: this.subType,
             taskType: this.taskType
         };
         try {
