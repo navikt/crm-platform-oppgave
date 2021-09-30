@@ -120,8 +120,17 @@ public without sharing class CRM_NavTaskOppgaveService {
             'Content-Type' => 'application/json',
             'accept' => 'application/json'
         };
-
+        
         ApiController apiCtrl = new ApiController();
+        //If no person access, callout is performed in system mode
+        switch on this.context {
+            when SYSTEM_CONTEXT {
+                apiCtrl.setSystemContext();
+            }
+            when else {
+                //No context change
+            }
+        }
         apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVE_GJELDER');
         apiCtrl.addServiceAuthHeader('Oppgave');
         apiCtrl.setHeaders(httpHeaders);

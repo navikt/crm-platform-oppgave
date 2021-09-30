@@ -58,7 +58,6 @@ public with sharing class CRM_GjelderSynchroniser {
             List<Object> currentTheme = (List<Object>) parsedJson.get(theme);
             if (!themeMap.keySet().contains(theme)) {
                 logger.Error('Missing theme: ' + theme, null, CRM_ApplicationDomain.Domain.NKS);
-                logger.publish();
                 continue;
             }
             for (Integer i = 0; i < currentTheme.size(); i++) {
@@ -85,6 +84,8 @@ public with sharing class CRM_GjelderSynchroniser {
                 gjelderList.add(currentGjelder);
             }
         }
+        logger.publish();
+        
         upsert behandlingsList Common_Code__c.CRM_UniqueKey__c;
         upsert gjelderList Common_Code__c.CRM_UniqueKey__c;
     }
