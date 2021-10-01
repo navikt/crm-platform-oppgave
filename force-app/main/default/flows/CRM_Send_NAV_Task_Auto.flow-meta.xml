@@ -1,11 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
+        <name>Format_date_time</name>
+        <label>Format date time</label>
+        <locationX>176</locationX>
+        <locationY>278</locationY>
+        <actionName>CRM_FlowUtils</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Apply_header_to_comment</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>format</name>
+            <value>
+                <stringValue>dd.MM.yyyy HH:mm</stringValue>
+            </value>
+        </inputParameters>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
         <description>Posts the NAV Task</description>
         <name>Post_NAV_Task</name>
         <label>Post NAV Task</label>
         <locationX>176</locationX>
-        <locationY>1070</locationY>
+        <locationY>1310</locationY>
         <actionName>CRM_NavTaskManager</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -73,7 +92,7 @@
         <name>Set_Task_Due_Date</name>
         <label>Set Task Due Date</label>
         <locationX>176</locationX>
-        <locationY>950</locationY>
+        <locationY>1190</locationY>
         <actionName>CRM_DueDateUtility</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -93,10 +112,26 @@
     </actionCalls>
     <apiVersion>52.0</apiVersion>
     <assignments>
+        <name>Apply_header_to_comment</name>
+        <label>Apply header to comment</label>
+        <locationX>176</locationX>
+        <locationY>398</locationY>
+        <assignmentItems>
+            <assignToReference>NAV_Task.NKS_Comments__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CommentHeaderFormula</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Validate_Subtheme</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Set_Subtheme_Null</name>
         <label>Set Subtheme Null</label>
         <locationX>264</locationX>
-        <locationY>398</locationY>
+        <locationY>638</locationY>
         <assignmentItems>
             <assignToReference>NAV_Task.NKS_Subtheme__c</assignToReference>
             <operator>Assign</operator>
@@ -109,7 +144,7 @@
         <name>Set_Subtype_Null</name>
         <label>Set Subtype Null</label>
         <locationX>264</locationX>
-        <locationY>734</locationY>
+        <locationY>974</locationY>
         <assignmentItems>
             <assignToReference>NAV_Task.CRM_Subtype__c</assignToReference>
             <operator>Assign</operator>
@@ -118,12 +153,19 @@
             <targetReference>Set_Task_Due_Date</targetReference>
         </connector>
     </assignments>
+    <constants>
+        <name>EmptyString</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue/>
+        </value>
+    </constants>
     <decisions>
         <description>Subtheme is not required, so validate that it has been set from parent calling this flow.</description>
         <name>Validate_Subtheme</name>
         <label>Validate Subtheme</label>
         <locationX>176</locationX>
-        <locationY>278</locationY>
+        <locationY>518</locationY>
         <defaultConnector>
             <targetReference>Set_Subtheme_Null</targetReference>
         </defaultConnector>
@@ -149,7 +191,7 @@
         <name>Validate_Subtype</name>
         <label>Validate Subtype</label>
         <locationX>176</locationX>
-        <locationY>614</locationY>
+        <locationY>854</locationY>
         <defaultConnector>
             <targetReference>Set_Subtype_Null</targetReference>
         </defaultConnector>
@@ -178,6 +220,14 @@
         <expression>IF(NOT(ISBLANK({!NAV_Task.CRM_NavUnit__c})),
 {!NAV_Task.CRM_NavUnit__r.INT_UnitNumber__c},
 null)</expression>
+    </formulas>
+    <formulas>
+        <name>CommentHeaderFormula</name>
+        <dataType>String</dataType>
+        <expression>IF( ISBLANK({!$User.CRM_NAV_Ident__c}),
+&apos;--- &apos; + {!Format_date_time},
+&apos;--- &apos; + {!Format_date_time} +&apos; (&apos; + {!$User.FirstName} + &apos; &apos; + {!$User.LastName} + &apos;, &apos; + {!Created_By_Unit_Number} + &apos;) ---&apos;
+) + {!Newline} + {!NAV_Task.NKS_Comments__c}</expression>
     </formulas>
     <formulas>
         <description>Formula for better handling of nulls for subtheme code.</description>
@@ -221,7 +271,7 @@ null,
         <name>Insert_NAV_Task</name>
         <label>Insert NAV Task</label>
         <locationX>176</locationX>
-        <locationY>1190</locationY>
+        <locationY>1430</locationY>
         <inputReference>Post_NAV_Task.task</inputReference>
     </recordCreates>
     <recordLookups>
@@ -232,7 +282,7 @@ null,
         <locationY>158</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Validate_Subtheme</targetReference>
+            <targetReference>Format_date_time</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -253,7 +303,13 @@ null,
             <targetReference>Get_Account</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
+    <textTemplates>
+        <name>Newline</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{!EmptyString}
+{!EmptyString}</text>
+    </textTemplates>
     <variables>
         <description>Unit number initiating the create request</description>
         <name>Created_By_Unit_Number</name>
