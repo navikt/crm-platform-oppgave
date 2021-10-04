@@ -1,0 +1,24 @@
+{
+    "records": [
+        {
+            "attributes": {
+                "type": "Common_Code__c",
+                "referenceId": "PermitteringRef"
+            },
+            "Name": "Permittering",
+            "CRM_Code__c": "ae0234",
+            "CRM_Active__c": true,
+            "CRM_Code_Set__c": "Behandlingstema"
+        },
+        {
+            "attributes": {
+                "type": "Common_Code__c",
+                "referenceId": "SubDagpengerRef"
+            },
+            "Name": "Dagpenger",
+            "CRM_Code__c": "ae0158",
+            "CRM_Active__c": true,
+            "CRM_Code_Set__c": "Behandlingstema"
+        }
+    ]
+}
