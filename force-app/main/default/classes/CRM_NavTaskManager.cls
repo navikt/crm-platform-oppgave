@@ -56,7 +56,6 @@ public with sharing class CRM_NavTaskManager {
         NavTask__c task = taskRequest.task;
 
         try {
-            formatComment(taskRequest);
             CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
             if (taskRequest.POST_AS_SYSTEM == true) {
                 oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
@@ -120,27 +119,6 @@ public with sharing class CRM_NavTaskManager {
     }
 
     /**
-     * @description: Introduce default comment formating equal to other NAV systems
-     * @author Stian Ruud Schikora | 07-06-2021
-     * @param taskRequest
-     **/
-    private static void formatComment(NavTaskRequest taskRequest) {
-        String navIdent = [SELECT Id, CRM_NAV_Ident__c FROM User WHERE Id = :UserInfo.getUserId()]?.CRM_NAV_Ident__c;
-
-        String commentHeader =
-            '--- ' +
-            Datetime.now().format('dd.MM.yyyy HH:mm') +
-            ' ' +
-            UserInfo.getName() +
-            ' (' +
-            navIdent +
-            ', ' +
-            taskRequest.createdByUnitNumber +
-            ') ---';
-        taskRequest.task.NKS_Comments__c = commentHeader + '\n' + taskRequest.task.NKS_Comments__c;
-    }
-
-    /**
      * @description: Performs callout to oppgave API to perform a patch edit of a previously
      * submitted NAV task. Throws an OppgaveException if the callout is unsuccessful
      * @author Stian Ruud Schikora | 11-15-2020
@@ -151,7 +129,6 @@ public with sharing class CRM_NavTaskManager {
         NavTask__c task = taskRequest.task;
 
         try {
-            formatComment(taskRequest);
             CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
             if (taskRequest.POST_AS_SYSTEM == true) {
                 oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
