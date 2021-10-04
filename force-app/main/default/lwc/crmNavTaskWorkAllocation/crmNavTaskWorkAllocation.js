@@ -1,7 +1,7 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import crmSingleValueUpdate from '@salesforce/messageChannel/crmSingleValueUpdate__c';
 import getWorkAllocations from '@salesforce/apex/CRM_NavTaskWorkAllocationController.getWorkAllocations';
-import getUserNavUnit from '@salesforce/apex/CRM_NavTaskWorkAllocationController.getUserNavUnitId';
+import getUserNavUnit from '@salesforce/apex/CRM_NavTaskWorkAllocationController.getUserNavUnit';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import ID_FIELD from '@salesforce/schema/NavUnit__c.Id';
 import NAME_FIELD from '@salesforce/schema/NavUnit__c.Name';
@@ -32,7 +32,10 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
     @track result;
     isSearching;
     errorMessage;
+    selectedLabel;
     selectedId;
+    selectedManualSearchId;
+    allocationSuggestionList;
     runningUserUnitNumber;
     runningUserIdent;
     delegateToSelf = false;
@@ -51,13 +54,23 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
 
     @api
     get selectedUnitName() {
-        let value = getFieldValue(this.navUnit.data, NAME_FIELD);
+        let value =
+            this.selectedLabel === 'delegateSelf'
+                ? this.userNavUnit.data.Name
+                : this.selectedLabel === 'other'
+                ? getFieldValue(this.manualSearchNavUnit.data, NAME_FIELD)
+                : getFieldValue(this.navUnit.data, NAME_FIELD);
         return value ? value : '';
     }
 
     @api
     get selectedUnitId() {
-        let value = getFieldValue(this.navUnit.data, ID_FIELD);
+        let value =
+            this.selectedLabel === 'delegateSelf'
+                ? this.userNavUnit.data.Id
+                : this.selectedLabel === 'other'
+                ? getFieldValue(this.manualSearchNavUnit.data, ID_FIELD)
+                : getFieldValue(this.navUnit.data, ID_FIELD);
         return value ? value : '';
     }
 
@@ -67,7 +80,12 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
 
     @api
     get selectedUnitNumber() {
-        let value = getFieldValue(this.navUnit.data, UNIT_NUMBER_FIELD);
+        let value =
+            this.selectedLabel === 'delegateSelf'
+                ? this.userNavUnit.data.INT_UnitNumber__c
+                : this.selectedLabel === 'other'
+                ? getFieldValue(this.manualSearchNavUnit.data, UNIT_NUMBER_FIELD)
+                : getFieldValue(this.navUnit.data, UNIT_NUMBER_FIELD);
         return value ? value : '';
     }
 
@@ -84,6 +102,20 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
         return this.showContent && null != this.theme && null != this.taskType && this.delegateToSelf === false;
     }
 
+    get navUnits() {
+        let temp = [];
+        if (this.allocationSuggestionList && this.allocationSuggestionList.length > 0) {
+            temp = this.allocationSuggestionList.map(navUnit => {
+                return { label: navUnit.Name, value: navUnit.Id };
+            });
+        }
+        if (!this.hideDelegateToSelf) {
+            temp.push({ label: 'Send til meg', value: 'delegateSelf' });
+        }
+        temp.push({ label: 'Annen:', value: 'other' });
+        return temp;
+    }
+
     @wire(MessageContext)
     messageContext;
 
@@ -92,6 +124,12 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
         fields: [ID_FIELD, NAME_FIELD, UNIT_NUMBER_FIELD]
     })
     navUnit;
+
+    @wire(getRecord, {
+        recordId: '$selectedManualSearchId',
+        fields: [ID_FIELD, NAME_FIELD, UNIT_NUMBER_FIELD]
+    })
+    manualSearchNavUnit;
 
     @wire(getRecord, {
         recordId: USER_ID,
@@ -178,7 +216,8 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
         try {
             const data = await getWorkAllocations(input);
             if (data && 1 <= data.length) {
-                this.selectedId = data[0].Id;
+                this.selectedId = this.selectedLabel = data[0].Id;
+                this.allocationSuggestionList = data;
             }
             this.isSearching = false;
         } catch (error) {
@@ -188,23 +227,44 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
     }
 
     @wire(getUserNavUnit, { userUnitNumber: '$runningUserUnitNumber' })
-    userNavUnitId;
+    userNavUnit;
 
     onChange(event) {
         let ids = event.detail.value;
-        this.selectedId = ids && 1 === ids.length ? ids[0] : null;
+        this.delegateToSelf = ids === 'delegateSelf';
+        this.selectedLabel = ids;
+        this.selectedId = this.delegateToSelf
+            ? this.userNavUnit.data.Id
+            : ids === 'other'
+            ? this.selectedManualSearchId
+            : ids
+            ? ids
+            : null;
     }
 
-    delegationChange(event) {
-        this.delegateToSelf = event.target.checked;
-
-        this.selectedId = this.delegateToSelf === true ? this.userNavUnitId.data : null;
+    onManualSearchChange(event) {
+        let ids = event.detail.value;
+        this.delegateToSelf = false;
+        if (ids && ids.length === 1) {
+            this.selectedLabel = 'other';
+            this.selectedManualSearchId = ids[0];
+        } else {
+            this.selectedManualSearchId = null;
+        }
     }
 
     @api
     validate() {
         //Theme and theme group must be set
-        if (false == this.showContent || (this.selectedId && this.navUnit)) {
+        // return { isValid: true };
+        if (
+            false == this.showContent ||
+            (this.selectedId &&
+                this.navUnit &&
+                (this.selectedLabel !== 'other' || this.selectedLabel !== 'delegateSelf')) ||
+            (this.selectedLabel === 'other' && this.selectedManualSearchId && this.navUnit) ||
+            (this.selectedLabel === 'delegateSelf' && this.selectedId && this.userNavUnit)
+        ) {
             return { isValid: true };
         } else {
             return {
