@@ -109,7 +109,7 @@
         <allowPause>true</allowPause>
         <fields>
             <name>Dummy_display</name>
-            <fieldText>&lt;p&gt;Id: {!Allocation.selectedUnitId}&lt;/p&gt;&lt;p&gt;Name: {!Allocation.selectedUnitName}&lt;/p&gt;&lt;p&gt;Number: {!Allocation.selectedUnitNumber}&lt;/p&gt;&lt;p&gt;Er deligert: {!Allocation.assignedResource}&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;Id: {!Allocation.selectedUnitId}&lt;/p&gt;&lt;p&gt;Name: {!Allocation.selectedUnitName}&lt;/p&gt;&lt;p&gt;Number: {!Allocation.selectedUnitNumber}&lt;/p&gt;&lt;p&gt;Er deligert: {!Allocation.assignedResource}&lt;/p&gt;&lt;p&gt;Oppgavetype: {!TaskType.selectedTaskType}&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
