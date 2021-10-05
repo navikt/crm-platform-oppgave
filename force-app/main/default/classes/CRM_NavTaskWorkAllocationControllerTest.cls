@@ -107,11 +107,11 @@ private with sharing class CRM_NavTaskWorkAllocationControllerTest {
         System.assertEquals(unit1.Id, result[0].Id, 'Expected to the sf id populated with the correct Id');
     }
     @isTest
-    static void testGetUserNavUnitId() {
+    static void testGetUserNavUnit() {
         CRM_OPPGAVE_TestDataFactory.createRecord(new NavUnit__c(INT_UnitNumber__c = '0701'));
         Test.startTest();
-        String unitId = CRM_NavTaskWorkAllocationController.getUserNavUnitId('0701');
+        NavUnit__c navUnit = CRM_NavTaskWorkAllocationController.getUserNavUnit('0701');
         Test.stopTest();
-        System.assert(String.isNotBlank(unitId));
+        System.assert(navUnit.INT_UnitNumber__c == '0701');
     }
 }
