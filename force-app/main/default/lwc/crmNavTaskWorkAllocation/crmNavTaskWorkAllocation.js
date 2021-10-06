@@ -106,7 +106,7 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
         let temp = [];
         if (this.allocationSuggestionList && this.allocationSuggestionList.length > 0) {
             temp = this.allocationSuggestionList.map(navUnit => {
-                return { label: navUnit.Name, value: navUnit.Id };
+                return { label: navUnit.Name + ' (' + navUnit.INT_UnitNumber__c + ')', value: navUnit.Id };
             });
         }
         if (!this.hideDelegateToSelf) {
