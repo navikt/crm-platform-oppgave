@@ -439,8 +439,8 @@ TODAY())</expression>
             <name>Task_Priority</name>
             <choiceReferences>Priority_Picklist</choiceReferences>
             <dataType>String</dataType>
-            <fieldText>Priroritet</fieldText>
-            <fieldType>DropdownBox</fieldType>
+            <fieldText>Prioritet</fieldText>
+            <fieldType>RadioButtons</fieldType>
             <isRequired>true</isRequired>
         </fields>
         <fields>
