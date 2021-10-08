@@ -31,7 +31,7 @@ private with sharing class CRM_NavTaskWorkAllocationControllerTest {
                 INT_LastName__c = 'Potter',
                 INT_IsNavEmployee__c = false,
                 INT_Confidential__c = 'UGRADERT',
-                INT_MunicipalityNumber__c = '1234'
+                INT_GTMunicipalityNumber__c = '1234'
             ),
             true
         );
