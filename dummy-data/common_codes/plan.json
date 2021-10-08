@@ -3,6 +3,13 @@
         "sobject": "Common_Code__c",
         "saveRefs": true,
         "resolveRefs": true,
-        "files": ["theme_groups.json", "themes.json"]
+        "files": [
+            "theme_groups.json",
+            "themes.json",
+            "subthemes.json",
+            "subtypes.json",
+            "gjelder.json",
+            "tasktypes.json"
+        ]
     }
 ]

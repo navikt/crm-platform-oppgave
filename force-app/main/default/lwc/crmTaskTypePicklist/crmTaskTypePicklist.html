@@ -1,6 +1,6 @@
 <template>
     <template if:true={showcomponent}>
-        <lightning-combobox
+        <lightning-radio-group
             name="TaskType"
             label="Oppgavetype"
             options={tasktypes}
@@ -9,6 +9,6 @@
             value={tasktype}
             onchange={handleTaskTypeChange}
         >
-        </lightning-combobox>
+        </lightning-radio-group>
     </template>
 </template>

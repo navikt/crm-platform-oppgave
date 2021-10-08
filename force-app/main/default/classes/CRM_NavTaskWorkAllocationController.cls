@@ -1,4 +1,4 @@
-public with sharing class CRM_NavTaskWorkAllocationController {
+public without sharing class CRM_NavTaskWorkAllocationController {
     @AuraEnabled(cacheable=true)
     public static List<NavUnit__c> getWorkAllocations(
         String personId,
@@ -25,7 +25,7 @@ public with sharing class CRM_NavTaskWorkAllocationController {
                 unitMap.put(workAllocation.enhetNr, null);
             }
             for (NavUnit__c sfUnit : [
-                SELECT Id, INT_UnitNumber__c
+                SELECT Id, INT_UnitNumber__c, Name
                 FROM NavUnit__c
                 WHERE INT_UnitNumber__c IN :unitMap.keySet()
             ]) {
@@ -36,8 +36,8 @@ public with sharing class CRM_NavTaskWorkAllocationController {
     }
 
     @AuraEnabled(cacheable=true)
-    public static String getUserNavUnitId(String userUnitNumber) {
-        return [SELECT Id FROM NavUnit__c WHERE INT_UnitNumber__c = :userUnitNumber]?.Id;
+    public static NavUnit__c getUserNavUnit(String userUnitNumber) {
+        return [SELECT Id, Name, INT_UnitNumber__c FROM NavUnit__c WHERE INT_UnitNumber__c = :userUnitNumber LIMIT 1][0];
     }
 
     private static Person__c getPerson(Id personId) {

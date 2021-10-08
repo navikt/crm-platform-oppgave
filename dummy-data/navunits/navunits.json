@@ -1,0 +1,36 @@
+{
+    "records": [
+        {
+            "attributes": {
+                "type": "NavUnit__c",
+                "referenceId": "NavUnitRef1"
+            },
+            "Name": "NAV Test",
+            "INT_UnitNumber__c": "0701"
+        },
+        {
+            "attributes": {
+                "type": "NavUnit__c",
+                "referenceId": "NavUnitRefMusikk"
+            },
+            "Name": "NAV Musikk",
+            "INT_UnitNumber__c": "0702"
+        },
+        {
+            "attributes": {
+                "type": "NavUnit__c",
+                "referenceId": "NavUnitRefKunst"
+            },
+            "Name": "NAV Kunst",
+            "INT_UnitNumber__c": "0703"
+        },
+        {
+            "attributes": {
+                "type": "NavUnit__c",
+                "referenceId": "NavUnitRefGaming"
+            },
+            "Name": "NAV Gaming",
+            "INT_UnitNumber__c": "0704"
+        }
+    ]
+}
