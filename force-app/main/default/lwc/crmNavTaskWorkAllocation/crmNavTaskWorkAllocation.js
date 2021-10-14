@@ -176,7 +176,7 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
 
         switch (fieldName) {
             case 'themeGroupCode':
-                this.themeGroup = value;
+                this.themeGroup = null;
                 this.theme = null;
                 this.subTheme = null;
                 this.subType = null;
