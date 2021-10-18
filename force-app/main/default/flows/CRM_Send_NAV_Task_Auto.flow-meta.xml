@@ -66,7 +66,10 @@
                 <elementReference>NAV_Task.NKS_Theme__r.CRM_Code__c</elementReference>
             </value>
         </inputParameters>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <outputParameters>
+            <assignToReference>NAV_Task</assignToReference>
+            <name>task</name>
+        </outputParameters>
     </actionCalls>
     <actionCalls>
         <description>Sets the due date for the task based on configured theme and task type combinations</description>
@@ -222,7 +225,7 @@ null,
         <label>Insert NAV Task</label>
         <locationX>176</locationX>
         <locationY>1190</locationY>
-        <inputReference>Post_NAV_Task.task</inputReference>
+        <inputReference>NAV_Task</inputReference>
     </recordCreates>
     <recordLookups>
         <description>Queries the related account of the NAV Task</description>
