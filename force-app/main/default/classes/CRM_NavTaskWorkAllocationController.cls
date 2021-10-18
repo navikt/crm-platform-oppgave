@@ -42,7 +42,7 @@ public without sharing class CRM_NavTaskWorkAllocationController {
 
     private static Person__c getPerson(Id personId) {
         return [
-            SELECT Id, INT_IsNavEmployee__c, INT_Confidential__c, CRM_GT__c
+            SELECT Id, INT_IsNavEmployee__c, INT_Confidential__c, CRM_GT__c, INT_DistrictNumber__c, INT_MunicipalityNumber__c
             FROM Person__c
             WHERE Id = :personId
         ][0];
