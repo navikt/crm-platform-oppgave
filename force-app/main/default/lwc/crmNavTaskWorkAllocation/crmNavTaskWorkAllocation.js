@@ -102,6 +102,10 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
         return this.showContent && null != this.theme && null != this.taskType && this.delegateToSelf === false;
     }
 
+    get isUnavailable() {
+        return this.isSearching || this.isSearching == null || this.theme == null || this.taskType == null;
+    }
+
     get navUnits() {
         let temp = [];
         if (this.allocationSuggestionList && this.allocationSuggestionList.length > 0) {
@@ -176,6 +180,7 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
 
         switch (fieldName) {
             case 'themeGroupCode':
+                this.allocationSuggestionList = null;
                 this.themeGroup = null;
                 this.theme = null;
                 this.subTheme = null;
