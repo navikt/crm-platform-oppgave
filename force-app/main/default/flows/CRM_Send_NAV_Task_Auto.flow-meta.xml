@@ -67,6 +67,10 @@
             </value>
         </inputParameters>
         <outputParameters>
+            <assignToReference>SUCCESSFUL_POST</assignToReference>
+            <name>success</name>
+        </outputParameters>
+        <outputParameters>
             <assignToReference>NAV_Task</assignToReference>
             <name>task</name>
         </outputParameters>
@@ -273,5 +277,16 @@ null,
         <isInput>true</isInput>
         <isOutput>true</isOutput>
         <objectType>NavTask__c</objectType>
+    </variables>
+    <variables>
+        <description>Defines if the API post was successful. If not a NAV task is created without an external reference</description>
+        <name>SUCCESSFUL_POST</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
     </variables>
 </Flow>
