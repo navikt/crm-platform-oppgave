@@ -17,7 +17,7 @@
                 role="inputOnly"
             />
             <property name="selectedTaskType" label="Selected Task Type" type="String" />
-            <property name="selectedTaskTypeId" label="Selected Task Type" type="String" />
+            <property name="selectedTaskTypeId" label="Selected Task Type (ID)" type="String" />
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>
