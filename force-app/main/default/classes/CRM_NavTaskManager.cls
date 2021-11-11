@@ -151,7 +151,6 @@ public with sharing class CRM_NavTaskManager {
         NavTask__c task = taskRequest.task;
 
         try {
-            formatComment(taskRequest);
             CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
             if (taskRequest.POST_AS_SYSTEM == true) {
                 oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
