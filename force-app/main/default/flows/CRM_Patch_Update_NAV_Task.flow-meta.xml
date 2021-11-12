@@ -173,6 +173,24 @@
         <picklistField>CRM_Priority__c</picklistField>
         <picklistObject>NavTask__c</picklistObject>
     </dynamicChoiceSets>
+    <formulas>
+        <description>Subtheme is not required, so formula to handle if the lookup is null</description>
+        <name>NAV_TASK_SUBTHEME_CODE</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK({!Get_NAV_Task.NKS_Subtheme__c}),
+null,
+{!Get_NAV_Task.NKS_Subtheme__r.CRM_Code__c}
+)</expression>
+    </formulas>
+    <formulas>
+        <description>Subtype is not required, so formula to handle if the lookup is null</description>
+        <name>NAV_TASK_SUBTYPE_CODE</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK({!Get_NAV_Task.CRM_Subtype__c}),
+null,
+{!Get_NAV_Task.CRM_Subtype__r.CRM_Code__c}
+)</expression>
+    </formulas>
     <interviewLabel>SEND NAV TASK TEMPLATE {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Patch Update NAV Task</label>
     <processMetadataValues>
@@ -354,7 +372,7 @@
             <inputParameters>
                 <name>theme</name>
                 <value>
-                    <elementReference>Get_NAV_Task.NKS_Themeformula__c</elementReference>
+                    <elementReference>Get_NAV_Task.NKS_Theme__r.CRM_Code__c</elementReference>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -379,6 +397,18 @@
                 <name>disableConditionalRendering</name>
                 <value>
                     <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>subTheme</name>
+                <value>
+                    <elementReference>NAV_TASK_SUBTHEME_CODE</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>subType</name>
+                <value>
+                    <elementReference>NAV_TASK_SUBTYPE_CODE</elementReference>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
