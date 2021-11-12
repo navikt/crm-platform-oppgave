@@ -109,7 +109,7 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
     get navUnits() {
         let temp = [];
         if (this.allocationSuggestionList && this.allocationSuggestionList.length > 0) {
-            temp = this.allocationSuggestionList.map(navUnit => {
+            temp = this.allocationSuggestionList.map((navUnit) => {
                 return { label: navUnit.Name + ' (' + navUnit.INT_UnitNumber__c + ')', value: navUnit.Id };
             });
         }
@@ -148,6 +148,9 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
 
     connectedCallback() {
         this.subscribeToMessageChannel();
+        if (this.canSearch) {
+            this.findAllocation();
+        }
     }
 
     disconnectedCallback() {
@@ -161,7 +164,7 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
     //Lightning message service subscribe
     subscribeToMessageChannel() {
         if (!this.subscription) {
-            this.subscription = subscribe(this.messageContext, crmSingleValueUpdate, message =>
+            this.subscription = subscribe(this.messageContext, crmSingleValueUpdate, (message) =>
                 this.handleMessage(message)
             );
         }
@@ -221,7 +224,14 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
         try {
             const data = await getWorkAllocations(input);
             if (data && 1 <= data.length) {
-                this.selectedId = this.selectedLabel = data[0].Id;
+                if (!this.selectedId) {
+                    this.selectedId = this.selectedLabel = data[0].Id;
+                } else if (!data.find((element) => element.Id == this.selectedId)) {
+                    this.selectedManualSearchId = this.selectedId;
+                    this.selectedLabel = 'other';
+                } else {
+                    this.selectedLabel = this.selectedId;
+                }
                 this.allocationSuggestionList = data;
             }
             this.isSearching = false;

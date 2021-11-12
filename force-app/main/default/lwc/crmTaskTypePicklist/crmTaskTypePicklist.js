@@ -39,6 +39,10 @@ export default class NksTaskTypePicklist extends LightningElement {
         return this.tasktype;
     }
 
+    set selectedTaskTypeId(taskId) {
+        this.tasktype = taskId;
+    }
+
     handleTaskTypeChange(event) {
         this.tasktype = event.detail.value;
         this.publishFieldChange('tasktype', this.selectedTaskType);
