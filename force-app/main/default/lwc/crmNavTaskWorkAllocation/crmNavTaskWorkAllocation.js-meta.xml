@@ -11,7 +11,8 @@
         <targetConfig targets="lightning__FlowScreen">
             <property name="personId" label="Input: Person Id" type="String" role="inputOnly" />
             <property name="taskType" label="Input: Task Type" type="String" role="inputOnly" />
-            <property name="subTheme" label="Input: Sub Theme Code" type="String" role="inputOnly" />
+            <property name="subTheme" label="Input: Subtheme Code" type="String" role="inputOnly" />
+            <property name="subType" label="Input: Subtype Code" type="String" role="inputOnly" />
             <property name="theme" label="Input: Theme Code" type="String" role="inputOnly" />
             <property name="themeGroup" label="Input: Theme Group Code" type="String" role="inputOnly" />
             <property name="disableConditionalRendering" label="Input: Disable conditional rendering" type="Boolean" role="inputOnly" default="false" />
