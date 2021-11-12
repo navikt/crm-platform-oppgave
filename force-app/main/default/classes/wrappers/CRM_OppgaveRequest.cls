@@ -29,7 +29,7 @@ public class CRM_OppgaveRequest {
         NavTask__c task = taskRequest.task;
 
         DateTime dueDate = task.CRM_DueDate__c;
-        fristFerdigstillelse = dueDate.format('yyyy-MM-dd');
+        fristFerdigstillelse = dueDate != null ? dueDate.format('yyyy-MM-dd') : null;
         journalpostId = task.INT_Journal_Entry_Id__c;
         prioritet = String.valueOf(task.CRM_Priority__c); //Using String.valueOf() as there is an issue when this is passed from a flow pickslit: https://trailblazer.salesforce.com/issues_view?id=a1p3A0000003fH1QAI
         aktoerId = taskRequest.actorId;
