@@ -224,14 +224,7 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
         try {
             const data = await getWorkAllocations(input);
             if (data && 1 <= data.length) {
-                if (!this.selectedId) {
-                    this.selectedId = this.selectedLabel = data[0].Id;
-                } else if (!data.find((element) => element.Id == this.selectedId)) {
-                    this.selectedManualSearchId = this.selectedId;
-                    this.selectedLabel = 'other';
-                } else {
-                    this.selectedLabel = this.selectedId;
-                }
+                this.selectedId = this.selectedLabel = data[0].Id;
                 this.allocationSuggestionList = data;
             }
             this.isSearching = false;
