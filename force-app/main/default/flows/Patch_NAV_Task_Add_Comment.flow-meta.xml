@@ -233,7 +233,7 @@
         </fields>
         <fields>
             <name>Comment</name>
-            <fieldText>Comment</fieldText>
+            <fieldText>Kommentar</fieldText>
             <fieldType>LargeTextArea</fieldType>
             <isRequired>true</isRequired>
         </fields>
