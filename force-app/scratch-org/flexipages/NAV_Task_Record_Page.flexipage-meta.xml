@@ -9,6 +9,9 @@
                         <valueListItems>
                             <value>NavTask__c.CRM_Edit_NAV_Task</value>
                         </valueListItems>
+                        <valueListItems>
+                            <value>NavTask__c.CRM_Remove_Assignee</value>
+                        </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -32,6 +35,7 @@
                     <value>3</value>
                 </componentInstanceProperties>
                 <componentName>force:highlightsPanel</componentName>
+                <identifier>force_highlightsPanel</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>
@@ -54,6 +58,7 @@
                     <value>true</value>
                 </componentInstanceProperties>
                 <componentName>force:relatedListContainer</componentName>
+                <identifier>force_relatedListContainer</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>
@@ -64,6 +69,7 @@
         <itemInstances>
             <componentInstance>
                 <componentName>force:detailPanel</componentName>
+                <identifier>force_detailPanel</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>
@@ -82,6 +88,7 @@
                     <value>Standard.Tab.relatedLists</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
+                <identifier>relatedListsTab</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -99,6 +106,7 @@
                     <value>Standard.Tab.detail</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
+                <identifier>detailTab</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>
@@ -113,6 +121,7 @@
                     <value>maintabs</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:tabset</componentName>
+                <identifier>flexipage_tabset</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>
@@ -122,17 +131,26 @@
     <flexiPageRegions>
         <itemInstances>
             <fieldInstance>
+                <fieldItem>Record.NKS_Assignee__c</fieldItem>
+                <identifier>RecordNKS_Assignee_cField1</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
                 <fieldItem>Record.CRM_Account__c</fieldItem>
+                <identifier>RecordCRM_Account_cField1</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldItem>Record.NKS_Comments__c</fieldItem>
+                <identifier>RecordNKS_Comments_cField2</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldItem>Record.CRM_DueDate__c</fieldItem>
+                <identifier>RecordCRM_DueDate_cField1</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-a6e1e717-247f-4f70-92bd-a888380debb1</name>
@@ -142,36 +160,43 @@
         <itemInstances>
             <fieldInstance>
                 <fieldItem>Record.NKS_Theme__c</fieldItem>
+                <identifier>RecordNKS_Theme_cField1</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldItem>Record.NKS_Subtheme__c</fieldItem>
+                <identifier>RecordNKS_Subtheme_cField1</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldItem>Record.CRM_Subtype__c</fieldItem>
+                <identifier>RecordCRM_Subtype_cField1</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldItem>Record.NKS_TaskType__c</fieldItem>
+                <identifier>RecordNKS_TaskType_cField1</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldItem>Record.CRM_Priority__c</fieldItem>
+                <identifier>RecordCRM_Priority_cField1</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldItem>Record.CRM_NavUnit__c</fieldItem>
+                <identifier>RecordCRM_NavUnit_cField1</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldItem>Record.NKS_Status__c</fieldItem>
+                <identifier>RecordNKS_Status_cField1</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-663e179b-56bc-4b53-9b43-ee337fc10d55</name>
@@ -185,6 +210,7 @@
                     <value>Facet-a6e1e717-247f-4f70-92bd-a888380debb1</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column1</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -194,6 +220,7 @@
                     <value>Facet-663e179b-56bc-4b53-9b43-ee337fc10d55</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column2</identifier>
             </componentInstance>
         </itemInstances>
         <name>Facet-bb1ce3df-922a-45dc-bb4f-5c8dbb05e49a</name>
@@ -215,6 +242,7 @@
                     <value>Patch_NAV_Task_Add_Comment</value>
                 </componentInstanceProperties>
                 <componentName>flowruntime:interview</componentName>
+                <identifier>flowruntime_interview1</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -228,6 +256,7 @@
                     <value>Section</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection1</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>
