@@ -134,6 +134,13 @@
                 <elementReference>Get_NAV_Task.NKS_Task_Version__c</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PATCH_NAV_TASK.NKS_Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Task_Status</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Process_NAV_task</targetReference>
         </connector>
@@ -165,6 +172,14 @@
         </rules>
     </decisions>
     <description>Screen flow for updating a NAV task via API</description>
+    <dynamicChoiceSets>
+        <name>NAV_Task_Statuses</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>NKS_Status__c</picklistField>
+        <picklistObject>NavTask__c</picklistObject>
+    </dynamicChoiceSets>
     <dynamicChoiceSets>
         <name>Priority_Picklist</name>
         <dataType>Picklist</dataType>
@@ -414,6 +429,17 @@ null,
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <fields>
+            <name>Task_Status</name>
+            <choiceReferences>NAV_Task_Statuses</choiceReferences>
+            <dataType>String</dataType>
+            <defaultValue>
+                <elementReference>Get_NAV_Task.NKS_Status__c</elementReference>
+            </defaultValue>
+            <fieldText>Status</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <isRequired>false</isRequired>
         </fields>
         <nextOrFinishButtonLabel>Oppdater</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>
