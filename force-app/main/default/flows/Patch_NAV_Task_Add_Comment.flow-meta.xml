@@ -125,7 +125,8 @@
         <locationX>182</locationX>
         <locationY>758</locationY>
         <defaultConnector>
-            <targetReference>Error_Screen</targetReference>
+            <isGoTo>true</isGoTo>
+            <targetReference>Add_Comment_Screen</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Update Failed</defaultConnectorLabel>
         <rules>
@@ -216,29 +217,29 @@
             <targetReference>Format_datetime</targetReference>
         </connector>
         <fields>
+            <name>Comment_Failed_Text</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;color: rgb(234, 0, 30);&quot;&gt;Failed to add comment&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Update_Success</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <booleanValue>false</booleanValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
             <name>Comment</name>
             <fieldText>Comment</fieldText>
             <fieldType>LargeTextArea</fieldType>
             <isRequired>true</isRequired>
         </fields>
+        <nextOrFinishButtonLabel>Legg til kommentar</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>
         <showHeader>false</showHeader>
-    </screens>
-    <screens>
-        <name>Error_Screen</name>
-        <label>Error Screen</label>
-        <locationX>314</locationX>
-        <locationY>878</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
-        <fields>
-            <name>Comment_Failed_Text</name>
-            <fieldText>&lt;p&gt;Failed to add comment&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
     </screens>
     <start>
         <locationX>56</locationX>

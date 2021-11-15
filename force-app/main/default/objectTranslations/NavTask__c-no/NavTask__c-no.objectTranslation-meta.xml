@@ -5,4 +5,9 @@
         <label>Endre oppgave</label>
         <name>CRM_Edit_NAV_Task</name>
     </quickActions>
+    <quickActions>
+        <aspect>Master</aspect>
+        <label>Send til enhetsbenken</label>
+        <name>CRM_Remove_Assignee</name>
+    </quickActions>
 </CustomObjectTranslation>
