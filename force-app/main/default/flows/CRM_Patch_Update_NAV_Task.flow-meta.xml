@@ -336,7 +336,7 @@ null,
             <inputParameters>
                 <name>theme</name>
                 <value>
-                    <elementReference>Get_NAV_Task.NKS_Themeformula__c</elementReference>
+                    <elementReference>Get_NAV_Task.NKS_Theme__r.CRM_Code__c</elementReference>
                 </value>
             </inputParameters>
             <inputParameters>
