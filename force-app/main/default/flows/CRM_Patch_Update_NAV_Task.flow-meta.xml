@@ -259,7 +259,7 @@ null,
         </fields>
         <fields>
             <name>Error_Screen_Message</name>
-            <fieldText>&lt;p&gt;Det oppsto en feil ved oppdatering av NAV oppgaven.&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;Det oppsto en feil ved oppdatering av oppgaven.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
@@ -418,6 +418,7 @@ null,
         <showFooter>true</showFooter>
         <showHeader>false</showHeader>
     </screens>
+    <sourceTemplate>CRM_SEND_NAV_TASK_REQUEST_TEMPLATE</sourceTemplate>
     <start>
         <locationX>56</locationX>
         <locationY>0</locationY>

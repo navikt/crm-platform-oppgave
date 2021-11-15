@@ -218,7 +218,7 @@
         </connector>
         <fields>
             <name>Comment_Failed_Text</name>
-            <fieldText>&lt;p&gt;Failed to add comment&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;color: rgb(234, 0, 30);&quot;&gt;Failed to add comment&lt;/span&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <visibilityRule>
                 <conditionLogic>and</conditionLogic>
