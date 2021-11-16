@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CRM_GjelderFormula__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(NOT(ISBLANK(NKS_Subtheme__c)),
+			NKS_Subtheme__r.Name + IF(NOT(ISBLANK(CRM_Subtype__c)), &apos; - &apos; + CRM_Subtype__r.Name, &apos;&apos;),
+			CRM_Subtype__r.Name
+			)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Gjelder</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>
