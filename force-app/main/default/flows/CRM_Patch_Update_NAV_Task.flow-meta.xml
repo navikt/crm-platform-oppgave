@@ -371,7 +371,10 @@ null,
             <isRequired>true</isRequired>
             <validationRule>
                 <errorMessage>&lt;p&gt;Du kan ikke sette frist tilbake i tid.&lt;/p&gt;</errorMessage>
-                <formulaExpression>{!Task_Due_Date} &gt; {!$Flow.CurrentDate}</formulaExpression>
+                <formulaExpression>IF({!Task_Due_Date} != {!Get_NAV_Task.CRM_DueDate__c},
+{!Task_Due_Date} &gt; {!$Flow.CurrentDate},
+true
+)</formulaExpression>
             </validationRule>
         </fields>
         <fields>
