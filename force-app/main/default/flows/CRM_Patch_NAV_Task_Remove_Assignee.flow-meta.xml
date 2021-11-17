@@ -185,7 +185,7 @@
         </fields>
         <fields>
             <name>Error_Screen_Message</name>
-            <fieldText>&lt;p&gt;Det oppsto en feil ved oppdatering av oppgaven.&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;Det oppsto en feil ved oppdatering av oppgaven. En utvikler har fått beskjed og vil feilsøke dette. Hvis problemet vedvarer kan du forsøke å oppdatere den direkte i Gosys.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
