@@ -218,7 +218,7 @@
         </connector>
         <fields>
             <name>Comment_Failed_Text</name>
-            <fieldText>&lt;p&gt;&lt;span style=&quot;color: rgb(234, 0, 30);&quot;&gt;Failed to add comment&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;color: rgb(234, 0, 30);&quot;&gt;Opprettelse av ny kommentar feilet. &lt;/span&gt;&lt;span style=&quot;color: rgb(234, 0, 30); background-color: rgb(255, 255, 255);&quot;&gt;En utvikler har fått beskjed og vil feilsøke dette. Hvis problemet vedvarer kan du forsøke å legge til kommentaren direkte i Gosys.&lt;/span&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <visibilityRule>
                 <conditionLogic>and</conditionLogic>
