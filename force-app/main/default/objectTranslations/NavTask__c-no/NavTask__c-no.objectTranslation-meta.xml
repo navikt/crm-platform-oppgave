@@ -7,7 +7,7 @@
     </quickActions>
     <quickActions>
         <aspect>Master</aspect>
-        <label>Send til enhetsbenken</label>
+        <label>Send til fellesbenken</label>
         <name>CRM_Remove_Assignee</name>
     </quickActions>
 </CustomObjectTranslation>

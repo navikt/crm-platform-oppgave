@@ -1,4 +1,39 @@
 public with sharing class CRM_DueDateUtility {
+    //Defining map to handle bulk requests
+    private static Map<Id, String> commonCodeMap {
+        get {
+            if (commonCodeMap == null) {
+                commonCodeMap = new Map<Id, String>();
+                for (Common_Code__c comCode : [
+                    SELECT Id, CRM_Code__c
+                    FROM Common_Code__c
+                    WHERE CRM_Code_Set__c IN ('Tema', 'Oppgavetyper')
+                ]) {
+                    commonCodeMap.put(comCode.Id, comCode.CRM_Code__c);
+                }
+            }
+            return commonCodeMap;
+        }
+        private set {
+        }
+    }
+
+    private static Map<String, NAV_Task_Due_Date__mdt> dueDateMap {
+        get {
+            if (dueDateMap == null) {
+                dueDateMap = new Map<String, NAV_Task_Due_Date__mdt>();
+                for (NAV_Task_Due_Date__mdt dueDate : [
+                    SELECT CRM_Business_Days__c, CRM_Theme_Code__c, CRM_Task_Type__c
+                    FROM NAV_Task_Due_Date__mdt
+                ]) {
+                    dueDateMap.put(dueDate.CRM_Theme_Code__c + '_' + dueDate.CRM_Task_Type__c, dueDate);
+                }
+            }
+            return dueDateMap;
+        }
+        private set {
+        }
+    }
     /**
      * Method to populate a due date, based on both theme, and task type
      * Calculate number of days from mdt, and will not set on holidays
@@ -7,38 +42,32 @@ public with sharing class CRM_DueDateUtility {
      */
     @invocableMethod(label='get Due Date' category='Oppgave')
     public static List<Date> setDueDate(List<NavTask__c> taskList) {
-        NavTask__c task = taskList.get(0);
+        List<Date> dateList = new List<Date>();
         List<Holiday> holidays = [SELECT ActivityDate FROM Holiday];
         List<Date> holidayDateList = new List<Date>();
         for (Holiday h : holidays) {
             holidayDateList.add(h.ActivityDate);
         }
 
-        String theme = [SELECT CRM_Code__c FROM Common_Code__c WHERE Id = :task.NKS_Theme__c]?.CRM_Code__c;
-        String taskType = [SELECT CRM_Code__c FROM Common_Code__c WHERE Id = :task.NKS_TaskType__c]?.CRM_Code__c;
-        if (theme != null && taskType != null) {
+        for (NavTask__c task : taskList) {
+            String theme = commonCodeMap.containsKey(task.NKS_Theme__c) ? commonCodeMap.get(task.NKS_Theme__c) : null;
+            String taskType = commonCodeMap.containsKey(task.NKS_TaskType__c)
+                ? commonCodeMap.get(task.NKS_TaskType__c)
+                : null;
             NAV_Task_Due_Date__mdt duedateRecord;
-            try {
-                duedateRecord = [
-                    SELECT CRM_Business_Days__c
-                    FROM NAV_Task_Due_Date__mdt
-                    WHERE CRM_Theme_Code__c = :theme AND CRM_Task_Type__c = :taskType
-                    LIMIT 1
-                ];
-            } catch (QueryException e) {
+            if (dueDateMap.containsKey(theme + '_' + taskType)) {
+                duedateRecord = dueDateMap.get(theme + '_' + taskType);
+            } else {
                 LoggerUtility logger = new LoggerUtility('Oppgave');
                 logger.warning('Error retrieving duedate rule themecode = ' + theme + 'TaskType = ' + taskType, null);
-                logger.exception(e);
                 logger.publish();
             }
 
             Date today = Date.today();
-            Integer numberofBusinessdays;
-            if (duedateRecord != null) {
-                numberofBusinessdays = Integer.valueOf(duedateRecord.CRM_Business_Days__c);
-            } else {
-                numberofBusinessdays = 2; // If no valid configuration default to 2 days
-            }
+            //Number of business days defaults to 2 if nothing else is defined
+            Integer numberofBusinessdays = duedateRecord != null
+                ? Integer.valueOf(duedateRecord.CRM_Business_Days__c)
+                : 2;
 
             Boolean valid = false;
             Integer businessdaysbetween = 0;
@@ -58,8 +87,8 @@ public with sharing class CRM_DueDateUtility {
                     newDueDate = newDueDate.addDays(1);
                 }
             }
-            return new List<Date>{ newDueDate };
+            dateList.add(newDueDate);
         }
-        return null;
+        return dateList;
     }
 }
