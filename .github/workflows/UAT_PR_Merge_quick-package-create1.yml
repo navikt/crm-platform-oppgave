@@ -96,6 +96,20 @@ jobs:
           echo "::set-output name=installOutput::$(cat output | jq '.message')"
           if [ $(cat output | jq '.status') == "0" ]; then
             echo "::set-output name=successfullyInstalled::true"
+          else
+            echo
+            echo FAILED TO INSTALL PACKAGE IN UAT SANDBOX
+            echo
+
+            exit 125
+          fi
+
+      # Deploy unpackagable content
+      - name: Deploy unpackagable content
+        run: |
+          if [ -d "./force-app/unpackagable-with-auto-deploy" ]; then
+            echo "Starting deployment of ./force-app/unpackagable-with-auto-deploy"
+            sfdx force:source:deploy -p ./force-app/unpackagable-with-auto-deploy -l RunLocalTests
           fi
     outputs:
       successfullyInstalled: ${{ steps.integration-installation.outputs.successfullyInstalled }}
