@@ -36,7 +36,7 @@ public class CRM_OppgaveRequest {
         oppgavetype = taskRequest.taskTypeCode;
         aktivDato = Datetime.now().format('yyyy-MM-dd');
         beskrivelse = task.NKS_Comments__c;
-        tildeltEnhetsnr = taskRequest.assignToUnitNumber;
+        tildeltEnhetsnr = String.isNotBlank(taskRequest.assignToUnitNumber) ? taskRequest.assignToUnitNumber : null; //Handling blank assigned to for automatic delegation
         tilordnetRessurs = task.NKS_Assignee__c; //NKS -205 support for delegating NAV task to oneself in GoSys
         opprettetAvEnhetsnr = String.isNotBlank(taskRequest.createdByUnitNumber) ? taskRequest.createdByUnitNumber : null;
         versjon = taskRequest.requestType == 'EDIT' ? Integer.valueOf(task.NKS_Task_Version__c) : null;
