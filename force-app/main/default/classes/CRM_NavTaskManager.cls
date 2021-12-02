@@ -1,4 +1,4 @@
-public with sharing class CRM_NavTaskManager {
+public without sharing class CRM_NavTaskManager {
     private static LoggerUtility logger = new LoggerUtility('Oppgave');
 
     @InvocableMethod(label='Process NAV task' category='Task Handling')
