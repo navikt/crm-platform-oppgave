@@ -36,9 +36,6 @@ public class CRM_GjelderSynchroniser_Test {
     @isTest
     static void testDoSync() {
         ApiMock.setTestMock('GET_OPPGAVE_GJELDER', 200, 'OK');
-        // CRM_GjelderSynchroniser sync = new CRM_GjelderSynchroniser();
-        // LoggerUtility logger = new LoggerUtility();
-        // sync.setLogger(logger);
 
         Test.startTest();
         CRM_GjelderSynchroniser.doSync();
