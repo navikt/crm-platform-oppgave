@@ -25,7 +25,7 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
 
     private void checkService() {
         if (service == null) {
-            service = new CRM_NavTaskOppgaveService();
+            service = new CRM_NavTaskOppgaveService(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
         }
     }
 
