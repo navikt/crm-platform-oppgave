@@ -1,5 +1,4 @@
 public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
-    CRM_NavTaskOppgaveService service;
     private Set<String> processed;
     private List<Common_Code__c> gjelderList;
     private List<Common_Code__c> behandlingsList;
@@ -11,31 +10,19 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
     private List<Common_Code__c> potentialSubList;
     private LoggerUtility logger;
 
-    public CRM_GjelderSynchroniser() {
-        checkService();
-    }
-
-    public CRM_GjelderSynchroniser(CRM_NavTaskOppgaveService service) {
-        this.service = service;
-    }
 
     public void setLogger(LoggerUtility logger) {
         this.logger = logger;
     }
 
-    private void checkService() {
-        if (service == null) {
-            service = new CRM_NavTaskOppgaveService(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
+    private void checkLogger() {
+        if(logger == null){
+            setLogger(new LoggerUtility());
         }
     }
 
-    public HttpResponse getResponse() {
-        checkService();
-        return service.getGjelderValues();
-    }
-
-    private Map<String, Object> initSync() {
-        HttpResponse response = getResponse();
+    private Map<String, Object> initSync(HttpResponse response) {
+        checkLogger();
         if(response.getStatusCode() != 200 && response.getStatusCode() != 201) {
             return null;
         }
@@ -67,15 +54,13 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
 
     @future(callout=true)
     public static void doSync() {
+        CRM_NavTaskOppgaveService service = new CRM_NavTaskOppgaveService(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
         CRM_GjelderSynchroniser sync = new CRM_GjelderSynchroniser();
-        LoggerUtility logger = new LoggerUtility();
-        sync.setLogger(Logger);
-        sync.startSync();
+        sync.startSync(service.getGjelderValues());
     }
 
-    public void startSync() {
-        Map<String, Object> parsedJson = initSync();
-        System.debug(parsedJson);
+    public void startSync(HttpResponse resp) {
+        Map<String, Object> parsedJson = initSync(resp);
         for (String theme : parsedJson.keySet()) {
             List<Object> currentTheme = (List<Object>) parsedJson.get(theme);
             if (!themeMap.keySet().contains(theme)) {
