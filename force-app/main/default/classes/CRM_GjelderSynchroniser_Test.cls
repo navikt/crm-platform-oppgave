@@ -36,9 +36,9 @@ public class CRM_GjelderSynchroniser_Test {
     @isTest
     static void testDoSync() {
         ApiMock.setTestMock('GET_OPPGAVE_GJELDER', 200, 'OK');
-
+        CRM_GjelderSynchroniser sync = new CRM_GjelderSynchroniser();
         Test.startTest();
-        CRM_GjelderSynchroniser.doSync();
+        sync.doSync();
         Test.stopTest();
 
         System.assert([SELECT Id FROM Common_Code__c WHERE CRM_Code_Set__c = 'Gjelder'].size() > 0);
