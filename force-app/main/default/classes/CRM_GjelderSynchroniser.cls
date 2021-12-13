@@ -52,8 +52,12 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
         return parsedJson;
     }
 
+    public void doSync() {
+        executeSync();
+    }
+
     @future(callout=true)
-    public static void doSync() {
+    public static void executeSync() {
         CRM_NavTaskOppgaveService service = new CRM_NavTaskOppgaveService(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
         CRM_GjelderSynchroniser sync = new CRM_GjelderSynchroniser();
         sync.startSync(service.getGjelderValues());
