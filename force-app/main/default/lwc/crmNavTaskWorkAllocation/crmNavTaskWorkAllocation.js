@@ -2,6 +2,7 @@ import { LightningElement, api, track, wire } from 'lwc';
 import crmSingleValueUpdate from '@salesforce/messageChannel/crmSingleValueUpdate__c';
 import getWorkAllocations from '@salesforce/apex/CRM_NavTaskWorkAllocationController.getWorkAllocations';
 import getUserNavUnit from '@salesforce/apex/CRM_NavTaskWorkAllocationController.getUserNavUnit';
+import checkPersonAccess from '@salesforce/apex/CRM_NavTaskManager.getPersonAccess';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import ID_FIELD from '@salesforce/schema/NavUnit__c.Id';
 import NAME_FIELD from '@salesforce/schema/NavUnit__c.Name';
@@ -46,6 +47,9 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
             this.alwaysShow = true;
         }
     }
+
+    @wire(checkPersonAccess, { personId: '$personId' })
+    hasPersonAccess;
 
     @api
     get disableConditionalRendering() {
@@ -103,7 +107,13 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
     }
 
     get isUnavailable() {
-        return this.isSearching || this.isSearching == null || this.theme == null || this.taskType == null;
+        return (
+            this.isSearching ||
+            this.isSearching == null ||
+            this.theme == null ||
+            this.taskType == null ||
+            !this.hasPersonAccess
+        );
     }
 
     get navUnits() {
