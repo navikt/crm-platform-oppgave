@@ -110,8 +110,17 @@ public without sharing class CRM_NavTaskManager {
         Id userId = UserInfo.getUserId();
         Id personId = [SELECT Id, CRM_Person__c FROM Account WHERE Id = :task.CRM_Account__c]?.CRM_Person__c;
 
+        return getPersonAccess(personId);
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static Boolean getPersonAccess(String personId) {
         Boolean access = personId != null
-            ? [SELECT RecordId, HasReadAccess FROM UserRecordAccess WHERE UserId = :userId AND RecordId = :personId]
+            ? [
+                  SELECT RecordId, HasReadAccess
+                  FROM UserRecordAccess
+                  WHERE UserId = :UserInfo.getUserId() AND RecordId = :personId
+              ]
               .HasReadAccess
             : false;
 
