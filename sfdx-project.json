@@ -5,11 +5,11 @@
             "default": true,
             "package": "crm-platform-oppgave",
             "versionName": "ver 0.1",
-            "versionNumber": "0.14.0.NEXT",
+            "versionNumber": "0.17.0.NEXT",
             "dependencies": [
                 {
                     "package": "crm-platform-base",
-                    "versionNumber": "0.123.0.LATEST"
+                    "versionNumber": "0.128.0.LATEST"
                 },
                 {
                     "package": "crm-journal-utilities",
@@ -17,7 +17,7 @@
                 },
                 {
                     "package": "crm-platform-integration",
-                    "versionNumber": "0.61.0.LATEST"
+                    "versionNumber": "0.69.0.LATEST"
                 }
             ]
         }

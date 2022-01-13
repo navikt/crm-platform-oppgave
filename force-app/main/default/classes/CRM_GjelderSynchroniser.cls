@@ -1,38 +1,31 @@
-public with sharing class CRM_GjelderSynchroniser {
-    CRM_NavTaskOppgaveService service;
+public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
     private Set<String> processed;
     private List<Common_Code__c> gjelderList;
     private List<Common_Code__c> behandlingsList;
     private Map<String, Object> gjelderMap;
     private Common_Code__C currentGjelder;
     private Map<String, String> themeMap;
+    private Set<String> keyString;
+    private Map<String, Common_Code__c> keyMap;
+    private List<Common_Code__c> potentialSubList;
     private LoggerUtility logger;
 
-    public CRM_GjelderSynchroniser() {
-        checkService();
-    }
-
-    public CRM_GjelderSynchroniser(CRM_NavTaskOppgaveService service) {
-        this.service = service;
-    }
 
     public void setLogger(LoggerUtility logger) {
         this.logger = logger;
     }
 
-    private void checkService() {
-        if (service == null) {
-            service = new CRM_NavTaskOppgaveService();
+    private void checkLogger() {
+        if(logger == null){
+            setLogger(new LoggerUtility());
         }
     }
 
-    public HttpResponse getResponse() {
-        checkService();
-        return service.getGjelderValues();
-    }
-
-    private Map<String, Object> initSync() {
-        HttpResponse response = getResponse();
+    private Map<String, Object> initSync(HttpResponse response) {
+        checkLogger();
+        if(response.getStatusCode() != 200 && response.getStatusCode() != 201) {
+            return null;
+        }
         Map<String, Object> parsedJson = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
 
         List<Common_Code__c> usedThemeList = [
@@ -47,14 +40,32 @@ public with sharing class CRM_GjelderSynchroniser {
         gjelderList = new List<Common_Code__c>();
         behandlingsList = new List<Common_Code__c>();
         processed = new Set<String>();
+        potentialSubList = new List<Common_Code__c>();
+
+        keyString = new Set<String>();
+        keyMap = new Map<String, Common_Code__C>();
+        for(Common_Code__c gjelder : [SELECT CRM_Code__c, CRM_UniqueKey__c, Id, Name FROM Common_Code__c WHERE CRM_Code_Set__c ='Gjelder']) {
+            keyMap.put(gjelder.CRM_UniqueKey__c, gjelder);
+            keyString.add(gjelder.CRM_UniqueKey__c);
+        }
 
         return parsedJson;
     }
 
     public void doSync() {
-        Map<String, Object> parsedJson = initSync();
+        executeSync();
+    }
+
+    @future(callout=true)
+    public static void executeSync() {
+        CRM_NavTaskOppgaveService service = new CRM_NavTaskOppgaveService(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
+        CRM_GjelderSynchroniser sync = new CRM_GjelderSynchroniser();
+        sync.startSync(service.getGjelderValues());
+    }
+
+    public void startSync(HttpResponse resp) {
+        Map<String, Object> parsedJson = initSync(resp);
         for (String theme : parsedJson.keySet()) {
-            System.debug(theme);
             List<Object> currentTheme = (List<Object>) parsedJson.get(theme);
             if (!themeMap.keySet().contains(theme)) {
                 logger.Error('Missing theme: ' + theme, null, CRM_ApplicationDomain.Domain.NKS);
@@ -66,6 +77,7 @@ public with sharing class CRM_GjelderSynchroniser {
                     CRM_Code_Set__c = 'Gjelder',
                     CRM_Parent_Code__r = new Common_Code__c(CRM_UniqueKey__c = themeMap.get(theme))
                 );
+                potentialSubList.clear();
 
                 // A gjelder is essentially a relation between a theme and subtheme and/or subtype.
                 // So to create a unique "code" for gjelder, we combine the codes of the children/parent.
@@ -81,13 +93,26 @@ public with sharing class CRM_GjelderSynchroniser {
                     createSubCode('Behandlingstyper');
                 }
                 currentGjelder.CRM_UniqueKey__c = 'Gjelder' + currentGjelder.CRM_Code__c;
-                gjelderList.add(currentGjelder);
+
+                // If we cannot add this, the gjelder is not new
+                if(!keyString.add(currentGjelder.CRM_UniqueKey__c)) {
+                    // If the name is not the same, we assume that it has changed
+                    if(currentGjelder.Name != keyMap.get(currentGjelder.CRM_UniqueKey__c).Name) {
+                        gjelderList.add(currentGjelder);
+                        behandlingsList.addAll(potentialSubList);
+                    }
+                    keyMap.remove(currentGjelder.CRM_UniqueKey__c);
+                } else {
+                    gjelderList.add(currentGjelder);
+                    behandlingsList.addAll(potentialSubList);
+                }
             }
         }
         logger.publish();
         
         upsert behandlingsList Common_Code__c.CRM_UniqueKey__c;
         upsert gjelderList Common_Code__c.CRM_UniqueKey__c;
+        delete keyMap.values();
     }
 
     private void createSubCode(String codeSet) {
@@ -110,7 +135,7 @@ public with sharing class CRM_GjelderSynchroniser {
                 CRM_Active__c = true,
                 CRM_Code_Set__c = codeSet
             );
-            behandlingsList.add(subCommonCode);
+            potentialSubList.add(subCommonCode);
             processed.add(codeSet + subcode);
         }
 

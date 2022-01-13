@@ -1,4 +1,4 @@
-public with sharing class CRM_DueDateUtility {
+public without sharing class CRM_DueDateUtility {
     //Defining map to handle bulk requests
     private static Map<Id, String> commonCodeMap {
         get {

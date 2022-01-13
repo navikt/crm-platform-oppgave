@@ -161,6 +161,10 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
         return null != this.personId && ((null != this.theme && null != this.taskType) || this.alwaysShow === true);
     }
 
+    get required() {
+        return this.selectedLabel === 'other' || this.selectedLabel === 'delegateSelf';
+    }
+
     //Lightning message service subscribe
     subscribeToMessageChannel() {
         if (!this.subscription) {
@@ -266,10 +270,7 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
         //Theme and theme group must be set
         // return { isValid: true };
         if (
-            false == this.showContent ||
-            (this.selectedId &&
-                this.navUnit &&
-                (this.selectedLabel !== 'other' || this.selectedLabel !== 'delegateSelf')) ||
+            !this.required ||
             (this.selectedLabel === 'other' && this.selectedManualSearchId && this.navUnit) ||
             (this.selectedLabel === 'delegateSelf' && this.selectedId && this.userNavUnit)
         ) {
