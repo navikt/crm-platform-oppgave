@@ -49,7 +49,13 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
     }
 
     @wire(checkPersonAccess, { personId: '$personId' })
-    hasPersonAccess;
+    hasPersonAccessResponse;
+
+    get hasPersonAccess() {
+        if (this.hasPersonAccessResponse) {
+            return this.hasPersonAccessResponse.data;
+        }
+    }
 
     @api
     get disableConditionalRendering() {
@@ -103,7 +109,13 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
     }
 
     get canSearch() {
-        return this.showContent && null != this.theme && null != this.taskType && this.delegateToSelf === false;
+        return (
+            this.showContent &&
+            null != this.theme &&
+            null != this.taskType &&
+            this.delegateToSelf === false &&
+            this.hasPersonAccess
+        );
     }
 
     get isUnavailable() {
