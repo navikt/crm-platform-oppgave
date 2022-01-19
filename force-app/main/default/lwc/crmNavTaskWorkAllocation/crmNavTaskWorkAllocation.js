@@ -2,6 +2,7 @@ import { LightningElement, api, track, wire } from 'lwc';
 import crmSingleValueUpdate from '@salesforce/messageChannel/crmSingleValueUpdate__c';
 import getWorkAllocations from '@salesforce/apex/CRM_NavTaskWorkAllocationController.getWorkAllocations';
 import getUserNavUnit from '@salesforce/apex/CRM_NavTaskWorkAllocationController.getUserNavUnit';
+import checkPersonAccess from '@salesforce/apex/CRM_NavTaskManager.getPersonAccess';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import ID_FIELD from '@salesforce/schema/NavUnit__c.Id';
 import NAME_FIELD from '@salesforce/schema/NavUnit__c.Name';
@@ -44,6 +45,15 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
     set disableConditionalRendering(value) {
         if (value && (value === true || value.toLowerCase() === 'true')) {
             this.alwaysShow = true;
+        }
+    }
+
+    @wire(checkPersonAccess, { personId: '$personId' })
+    hasPersonAccessResponse;
+
+    get hasPersonAccess() {
+        if (this.hasPersonAccessResponse) {
+            return this.hasPersonAccessResponse.data;
         }
     }
 
@@ -99,11 +109,23 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
     }
 
     get canSearch() {
-        return this.showContent && null != this.theme && null != this.taskType && this.delegateToSelf === false;
+        return (
+            this.showContent &&
+            null != this.theme &&
+            null != this.taskType &&
+            this.delegateToSelf === false &&
+            this.hasPersonAccess
+        );
     }
 
     get isUnavailable() {
-        return this.isSearching || this.isSearching == null || this.theme == null || this.taskType == null;
+        return (
+            this.isSearching ||
+            this.isSearching == null ||
+            this.theme == null ||
+            this.taskType == null ||
+            !this.hasPersonAccess
+        );
     }
 
     get navUnits() {
@@ -159,6 +181,10 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
 
     get showContent() {
         return null != this.personId && ((null != this.theme && null != this.taskType) || this.alwaysShow === true);
+    }
+
+    get required() {
+        return this.selectedLabel === 'other' || this.selectedLabel === 'delegateSelf';
     }
 
     //Lightning message service subscribe
@@ -266,10 +292,7 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
         //Theme and theme group must be set
         // return { isValid: true };
         if (
-            false == this.showContent ||
-            (this.selectedId &&
-                this.navUnit &&
-                (this.selectedLabel !== 'other' || this.selectedLabel !== 'delegateSelf')) ||
+            !this.required ||
             (this.selectedLabel === 'other' && this.selectedManualSearchId && this.navUnit) ||
             (this.selectedLabel === 'delegateSelf' && this.selectedId && this.userNavUnit)
         ) {
