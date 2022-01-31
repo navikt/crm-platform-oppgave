@@ -4,7 +4,7 @@
     <protected>false</protected>
     <values>
         <field>CRM_Business_Days__c</field>
-        <value xsi:type="xsd:int">3</value>
+        <value xsi:type="xsd:int">2</value>
     </values>
     <values>
         <field>CRM_Task_Type__c</field>
