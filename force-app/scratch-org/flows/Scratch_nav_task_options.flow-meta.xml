@@ -92,6 +92,12 @@
                     <booleanValue>false</booleanValue>
                 </value>
             </inputParameters>
+            <inputParameters>
+                <name>disableConditionalRendering</name>
+                <value>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -122,5 +128,5 @@
             <targetReference>Get_dummy_person</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
 </Flow>

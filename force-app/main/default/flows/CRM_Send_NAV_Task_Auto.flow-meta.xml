@@ -28,7 +28,7 @@
         <actionName>CRM_NavTaskManager</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Insert_NAV_Task</targetReference>
+            <targetReference>Get_Existing_NAV_Task</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -168,6 +168,28 @@
         </value>
     </constants>
     <decisions>
+        <name>Check_Task_Creation</name>
+        <label>Check Task Creation</label>
+        <locationX>176</locationX>
+        <locationY>1550</locationY>
+        <defaultConnector>
+            <targetReference>Insert_NAV_Task</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Do Insert</defaultConnectorLabel>
+        <rules>
+            <name>Already_Inserted</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Existing_NAV_Task.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Already Inserted</label>
+        </rules>
+    </decisions>
+    <decisions>
         <description>Subtheme is not required, so validate that it has been set from parent calling this flow.</description>
         <name>Validate_Subtheme</name>
         <label>Validate Subtheme</label>
@@ -277,8 +299,8 @@ null,
     <recordCreates>
         <name>Insert_NAV_Task</name>
         <label>Insert NAV Task</label>
-        <locationX>176</locationX>
-        <locationY>1430</locationY>
+        <locationX>264</locationX>
+        <locationY>1670</locationY>
         <inputReference>NAV_Task</inputReference>
     </recordCreates>
     <recordLookups>
@@ -301,6 +323,29 @@ null,
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Test to run a query to see if the kafka processor has created the NAV task already.</description>
+        <name>Get_Existing_NAV_Task</name>
+        <label>Get Existing NAV Task</label>
+        <locationX>176</locationX>
+        <locationY>1430</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Task_Creation</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>INT_External_Reference__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>NAV_Task.INT_External_Reference__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>NavTask__c</object>
+        <queriedFields>Id</queriedFields>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>
