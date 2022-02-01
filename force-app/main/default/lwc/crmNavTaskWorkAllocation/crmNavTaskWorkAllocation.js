@@ -184,7 +184,7 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
     }
 
     get required() {
-        return this.selectedLabel === 'other' || this.selectedLabel === 'delegateSelf';
+        return this.hasPersonAccess;
     }
 
     //Lightning message service subscribe
@@ -293,6 +293,7 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
         // return { isValid: true };
         if (
             !this.required ||
+            (this.required && this.selectedId) ||
             (this.selectedLabel === 'other' && this.selectedManualSearchId && this.navUnit) ||
             (this.selectedLabel === 'delegateSelf' && this.selectedId && this.userNavUnit)
         ) {
