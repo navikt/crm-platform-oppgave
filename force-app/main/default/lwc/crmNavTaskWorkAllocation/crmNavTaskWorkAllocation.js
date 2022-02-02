@@ -184,7 +184,7 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
     }
 
     get required() {
-        return this.hasPersonAccess;
+        return this.hasPersonAccess && this.showContent;
     }
 
     //Lightning message service subscribe
