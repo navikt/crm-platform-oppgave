@@ -3,7 +3,7 @@
     <actionCalls>
         <name>Format_date_time</name>
         <label>Format date time</label>
-        <locationX>380</locationX>
+        <locationX>248</locationX>
         <locationY>278</locationY>
         <actionName>CRM_FlowUtils</actionName>
         <actionType>apex</actionType>
@@ -23,7 +23,7 @@
         <description>Posts the NAV Task</description>
         <name>Post_NAV_Task</name>
         <label>Post NAV Task</label>
-        <locationX>380</locationX>
+        <locationX>248</locationX>
         <locationY>1310</locationY>
         <actionName>CRM_NavTaskManager</actionName>
         <actionType>apex</actionType>
@@ -47,6 +47,12 @@
             <name>createdByUnitNumber</name>
             <value>
                 <elementReference>Created_By_Unit_Number</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>POST_AS_SYSTEM</name>
+            <value>
+                <elementReference>SYSTEM_CONTEXT</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -98,7 +104,7 @@
         <description>Sets the due date for the task based on configured theme and task type combinations</description>
         <name>Set_Task_Due_Date</name>
         <label>Set Task Due Date</label>
-        <locationX>380</locationX>
+        <locationX>248</locationX>
         <locationY>1190</locationY>
         <actionName>CRM_DueDateUtility</actionName>
         <actionType>apex</actionType>
@@ -121,7 +127,7 @@
     <assignments>
         <name>Apply_header_to_comment</name>
         <label>Apply header to comment</label>
-        <locationX>380</locationX>
+        <locationX>248</locationX>
         <locationY>398</locationY>
         <assignmentItems>
             <assignToReference>NAV_Task.NKS_Comments__c</assignToReference>
@@ -137,7 +143,7 @@
     <assignments>
         <name>Set_Subtheme_Null</name>
         <label>Set Subtheme Null</label>
-        <locationX>468</locationX>
+        <locationX>336</locationX>
         <locationY>638</locationY>
         <assignmentItems>
             <assignToReference>NAV_Task.NKS_Subtheme__c</assignToReference>
@@ -150,7 +156,7 @@
     <assignments>
         <name>Set_Subtype_Null</name>
         <label>Set Subtype Null</label>
-        <locationX>468</locationX>
+        <locationX>336</locationX>
         <locationY>974</locationY>
         <assignmentItems>
             <assignToReference>NAV_Task.CRM_Subtype__c</assignToReference>
@@ -193,7 +199,7 @@
         <description>Subtheme is not required, so validate that it has been set from parent calling this flow.</description>
         <name>Validate_Subtheme</name>
         <label>Validate Subtheme</label>
-        <locationX>380</locationX>
+        <locationX>248</locationX>
         <locationY>518</locationY>
         <defaultConnector>
             <targetReference>Set_Subtheme_Null</targetReference>
@@ -219,7 +225,7 @@
         <description>Subtheme is not required, so validate that it has been set from parent calling this flow.</description>
         <name>Validate_Subtype</name>
         <label>Validate Subtype</label>
-        <locationX>380</locationX>
+        <locationX>248</locationX>
         <locationY>854</locationY>
         <defaultConnector>
             <targetReference>Set_Subtype_Null</targetReference>
@@ -244,7 +250,7 @@
     <decisions>
         <name>Verify_API_Post</name>
         <label>Verify API Post</label>
-        <locationX>380</locationX>
+        <locationX>248</locationX>
         <locationY>1430</locationY>
         <defaultConnector>
             <isGoTo>true</isGoTo>
@@ -333,7 +339,7 @@ null,
         <description>Queries the related account of the NAV Task</description>
         <name>Get_Account</name>
         <label>Get Account</label>
-        <locationX>380</locationX>
+        <locationX>248</locationX>
         <locationY>158</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -375,7 +381,7 @@ null,
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>
-        <locationX>254</locationX>
+        <locationX>122</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Account</targetReference>
@@ -412,6 +418,17 @@ null,
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>true</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Defines if the task post should be performed in system context or not. Defaults to false</description>
+        <name>SYSTEM_CONTEXT</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
         <value>
             <booleanValue>false</booleanValue>
         </value>
