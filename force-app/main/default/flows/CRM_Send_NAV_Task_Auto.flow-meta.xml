@@ -3,7 +3,7 @@
     <actionCalls>
         <name>Format_date_time</name>
         <label>Format date time</label>
-        <locationX>176</locationX>
+        <locationX>380</locationX>
         <locationY>278</locationY>
         <actionName>CRM_FlowUtils</actionName>
         <actionType>apex</actionType>
@@ -23,12 +23,12 @@
         <description>Posts the NAV Task</description>
         <name>Post_NAV_Task</name>
         <label>Post NAV Task</label>
-        <locationX>176</locationX>
+        <locationX>380</locationX>
         <locationY>1310</locationY>
         <actionName>CRM_NavTaskManager</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Get_Existing_NAV_Task</targetReference>
+            <targetReference>Verify_API_Post</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -98,7 +98,7 @@
         <description>Sets the due date for the task based on configured theme and task type combinations</description>
         <name>Set_Task_Due_Date</name>
         <label>Set Task Due Date</label>
-        <locationX>176</locationX>
+        <locationX>380</locationX>
         <locationY>1190</locationY>
         <actionName>CRM_DueDateUtility</actionName>
         <actionType>apex</actionType>
@@ -121,7 +121,7 @@
     <assignments>
         <name>Apply_header_to_comment</name>
         <label>Apply header to comment</label>
-        <locationX>176</locationX>
+        <locationX>380</locationX>
         <locationY>398</locationY>
         <assignmentItems>
             <assignToReference>NAV_Task.NKS_Comments__c</assignToReference>
@@ -137,7 +137,7 @@
     <assignments>
         <name>Set_Subtheme_Null</name>
         <label>Set Subtheme Null</label>
-        <locationX>264</locationX>
+        <locationX>468</locationX>
         <locationY>638</locationY>
         <assignmentItems>
             <assignToReference>NAV_Task.NKS_Subtheme__c</assignToReference>
@@ -150,7 +150,7 @@
     <assignments>
         <name>Set_Subtype_Null</name>
         <label>Set Subtype Null</label>
-        <locationX>264</locationX>
+        <locationX>468</locationX>
         <locationY>974</locationY>
         <assignmentItems>
             <assignToReference>NAV_Task.CRM_Subtype__c</assignToReference>
@@ -170,10 +170,10 @@
     <decisions>
         <name>Check_Task_Creation</name>
         <label>Check Task Creation</label>
-        <locationX>176</locationX>
-        <locationY>1550</locationY>
+        <locationX>50</locationX>
+        <locationY>1670</locationY>
         <defaultConnector>
-            <targetReference>Insert_NAV_Task</targetReference>
+            <targetReference>Insert_NAV_Task_0</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Do Insert</defaultConnectorLabel>
         <rules>
@@ -193,7 +193,7 @@
         <description>Subtheme is not required, so validate that it has been set from parent calling this flow.</description>
         <name>Validate_Subtheme</name>
         <label>Validate Subtheme</label>
-        <locationX>176</locationX>
+        <locationX>380</locationX>
         <locationY>518</locationY>
         <defaultConnector>
             <targetReference>Set_Subtheme_Null</targetReference>
@@ -219,7 +219,7 @@
         <description>Subtheme is not required, so validate that it has been set from parent calling this flow.</description>
         <name>Validate_Subtype</name>
         <label>Validate Subtype</label>
-        <locationX>176</locationX>
+        <locationX>380</locationX>
         <locationY>854</locationY>
         <defaultConnector>
             <targetReference>Set_Subtype_Null</targetReference>
@@ -239,6 +239,32 @@
                 <targetReference>Set_Task_Due_Date</targetReference>
             </connector>
             <label>Subtype Was Set</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Verify_API_Post</name>
+        <label>Verify API Post</label>
+        <locationX>380</locationX>
+        <locationY>1430</locationY>
+        <defaultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Insert_NAV_Task_0</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Failed</defaultConnectorLabel>
+        <rules>
+            <name>Was_Successful_Post</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>SUCCESSFUL_POST</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Existing_NAV_Task</targetReference>
+            </connector>
+            <label>Successful Post</label>
         </rules>
     </decisions>
     <description>Autolaunched flow for dispatching NAV Task to the oppgave API</description>
@@ -297,17 +323,17 @@ null,
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordCreates>
-        <name>Insert_NAV_Task</name>
+        <name>Insert_NAV_Task_0</name>
         <label>Insert NAV Task</label>
-        <locationX>264</locationX>
-        <locationY>1670</locationY>
+        <locationX>182</locationX>
+        <locationY>1790</locationY>
         <inputReference>NAV_Task</inputReference>
     </recordCreates>
     <recordLookups>
         <description>Queries the related account of the NAV Task</description>
         <name>Get_Account</name>
         <label>Get Account</label>
-        <locationX>176</locationX>
+        <locationX>380</locationX>
         <locationY>158</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -329,8 +355,8 @@ null,
         <description>Test to run a query to see if the kafka processor has created the NAV task already.</description>
         <name>Get_Existing_NAV_Task</name>
         <label>Get Existing NAV Task</label>
-        <locationX>176</locationX>
-        <locationY>1430</locationY>
+        <locationX>50</locationX>
+        <locationY>1550</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Check_Task_Creation</targetReference>
@@ -349,7 +375,7 @@ null,
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>
-        <locationX>50</locationX>
+        <locationX>254</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Account</targetReference>

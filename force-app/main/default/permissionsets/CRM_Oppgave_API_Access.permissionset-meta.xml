@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <classAccesses>
+        <apexClass>CRM_FlowUtils</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CRM_NavTaskManager</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <description>Necessary permissions required to send oppgave via API</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Oppgave API Access</label>
+</PermissionSet>
