@@ -8,6 +8,10 @@
         <apexClass>CRM_NavTaskManager</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>CRM_DueDateUtility</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <description>Necessary permissions required to send oppgave via API</description>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Oppgave API Access</label>
