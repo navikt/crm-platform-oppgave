@@ -3,7 +3,7 @@
     <actionCalls>
         <name>Format_date_time</name>
         <label>Format date time</label>
-        <locationX>248</locationX>
+        <locationX>380</locationX>
         <locationY>278</locationY>
         <actionName>CRM_FlowUtils</actionName>
         <actionType>apex</actionType>
@@ -23,7 +23,7 @@
         <description>Posts the NAV Task</description>
         <name>Post_NAV_Task</name>
         <label>Post NAV Task</label>
-        <locationX>248</locationX>
+        <locationX>380</locationX>
         <locationY>1310</locationY>
         <actionName>CRM_NavTaskManager</actionName>
         <actionType>apex</actionType>
@@ -104,7 +104,7 @@
         <description>Sets the due date for the task based on configured theme and task type combinations</description>
         <name>Set_Task_Due_Date</name>
         <label>Set Task Due Date</label>
-        <locationX>248</locationX>
+        <locationX>380</locationX>
         <locationY>1190</locationY>
         <actionName>CRM_DueDateUtility</actionName>
         <actionType>apex</actionType>
@@ -127,7 +127,7 @@
     <assignments>
         <name>Apply_header_to_comment</name>
         <label>Apply header to comment</label>
-        <locationX>248</locationX>
+        <locationX>380</locationX>
         <locationY>398</locationY>
         <assignmentItems>
             <assignToReference>NAV_Task.NKS_Comments__c</assignToReference>
@@ -143,7 +143,7 @@
     <assignments>
         <name>Set_Subtheme_Null</name>
         <label>Set Subtheme Null</label>
-        <locationX>336</locationX>
+        <locationX>468</locationX>
         <locationY>638</locationY>
         <assignmentItems>
             <assignToReference>NAV_Task.NKS_Subtheme__c</assignToReference>
@@ -156,7 +156,7 @@
     <assignments>
         <name>Set_Subtype_Null</name>
         <label>Set Subtype Null</label>
-        <locationX>336</locationX>
+        <locationX>468</locationX>
         <locationY>974</locationY>
         <assignmentItems>
             <assignToReference>NAV_Task.CRM_Subtype__c</assignToReference>
@@ -170,7 +170,7 @@
         <name>EmptyString</name>
         <dataType>String</dataType>
         <value>
-            <stringValue/>
+            <stringValue></stringValue>
         </value>
     </constants>
     <decisions>
@@ -199,7 +199,7 @@
         <description>Subtheme is not required, so validate that it has been set from parent calling this flow.</description>
         <name>Validate_Subtheme</name>
         <label>Validate Subtheme</label>
-        <locationX>248</locationX>
+        <locationX>380</locationX>
         <locationY>518</locationY>
         <defaultConnector>
             <targetReference>Set_Subtheme_Null</targetReference>
@@ -225,7 +225,7 @@
         <description>Subtheme is not required, so validate that it has been set from parent calling this flow.</description>
         <name>Validate_Subtype</name>
         <label>Validate Subtype</label>
-        <locationX>248</locationX>
+        <locationX>380</locationX>
         <locationY>854</locationY>
         <defaultConnector>
             <targetReference>Set_Subtype_Null</targetReference>
@@ -250,7 +250,7 @@
     <decisions>
         <name>Verify_API_Post</name>
         <label>Verify API Post</label>
-        <locationX>248</locationX>
+        <locationX>380</locationX>
         <locationY>1430</locationY>
         <defaultConnector>
             <isGoTo>true</isGoTo>
@@ -333,13 +333,16 @@ null,
         <label>Insert NAV Task</label>
         <locationX>182</locationX>
         <locationY>1790</locationY>
+        <faultConnector>
+            <targetReference>Insert_Log_Warning</targetReference>
+        </faultConnector>
         <inputReference>NAV_Task</inputReference>
     </recordCreates>
     <recordLookups>
         <description>Queries the related account of the NAV Task</description>
         <name>Get_Account</name>
         <label>Get Account</label>
-        <locationX>248</locationX>
+        <locationX>380</locationX>
         <locationY>158</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -381,13 +384,57 @@ null,
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>
-        <locationX>122</locationX>
+        <locationX>254</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Account</targetReference>
         </connector>
     </start>
     <status>Active</status>
+    <subflows>
+        <description>Creates a log warning entry. This is not a critical error as the callout was a success and the NavTask will be created through kafka.</description>
+        <name>Insert_Log_Warning</name>
+        <label>Insert Log Warning</label>
+        <locationX>446</locationX>
+        <locationY>1910</locationY>
+        <flowName>Flow_Create_Application_Log</flowName>
+        <inputAssignments>
+            <name>Application_Domain</name>
+            <value>
+                <stringValue>NKS</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Error_Payload</name>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Error_Source</name>
+            <value>
+                <stringValue>Flow - Send NAV Task Auto</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Log_Category</name>
+            <value>
+                <stringValue>Oppgave</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Log_Level</name>
+            <value>
+                <stringValue>Warning</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Log_Message</name>
+            <value>
+                <stringValue>Successfully posted oppgave, but failed to insert record.</stringValue>
+            </value>
+        </inputAssignments>
+    </subflows>
     <textTemplates>
         <name>Newline</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
