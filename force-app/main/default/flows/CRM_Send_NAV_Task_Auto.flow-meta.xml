@@ -20,6 +20,28 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <actionCalls>
+        <name>Insert_NAV_Task</name>
+        <label>Insert NAV Task</label>
+        <locationX>176</locationX>
+        <locationY>1430</locationY>
+        <actionName>CRM_NavTaskDbHandler</actionName>
+        <actionType>apex</actionType>
+        <faultConnector>
+            <targetReference>Insert_Log_Warning</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>navTasksToInsert</name>
+            <value>
+                <elementReference>NAV_Task</elementReference>
+            </value>
+        </inputParameters>
+        <outputParameters>
+            <assignToReference>NAV_Task</assignToReference>
+            <name>output</name>
+        </outputParameters>
+    </actionCalls>
+    <actionCalls>
         <description>Posts the NAV Task</description>
         <name>Post_NAV_Task</name>
         <label>Post NAV Task</label>
@@ -28,7 +50,7 @@
         <actionName>CRM_NavTaskManager</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Get_Existing_NAV_Task</targetReference>
+            <targetReference>Insert_NAV_Task</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -47,6 +69,12 @@
             <name>createdByUnitNumber</name>
             <value>
                 <elementReference>Created_By_Unit_Number</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>POST_AS_SYSTEM</name>
+            <value>
+                <elementReference>SYSTEM_CONTEXT</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -168,28 +196,6 @@
         </value>
     </constants>
     <decisions>
-        <name>Check_Task_Creation</name>
-        <label>Check Task Creation</label>
-        <locationX>176</locationX>
-        <locationY>1550</locationY>
-        <defaultConnector>
-            <targetReference>Insert_NAV_Task</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Do Insert</defaultConnectorLabel>
-        <rules>
-            <name>Already_Inserted</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_Existing_NAV_Task.Id</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <label>Already Inserted</label>
-        </rules>
-    </decisions>
-    <decisions>
         <description>Subtheme is not required, so validate that it has been set from parent calling this flow.</description>
         <name>Validate_Subtheme</name>
         <label>Validate Subtheme</label>
@@ -296,13 +302,6 @@ null,
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
-    <recordCreates>
-        <name>Insert_NAV_Task</name>
-        <label>Insert NAV Task</label>
-        <locationX>264</locationX>
-        <locationY>1670</locationY>
-        <inputReference>NAV_Task</inputReference>
-    </recordCreates>
     <recordLookups>
         <description>Queries the related account of the NAV Task</description>
         <name>Get_Account</name>
@@ -325,29 +324,6 @@ null,
         <object>Account</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
-    <recordLookups>
-        <description>Test to run a query to see if the kafka processor has created the NAV task already.</description>
-        <name>Get_Existing_NAV_Task</name>
-        <label>Get Existing NAV Task</label>
-        <locationX>176</locationX>
-        <locationY>1430</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Check_Task_Creation</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>INT_External_Reference__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>NAV_Task.INT_External_Reference__c</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>NavTask__c</object>
-        <queriedFields>Id</queriedFields>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
     <start>
         <locationX>50</locationX>
         <locationY>0</locationY>
@@ -356,6 +332,50 @@ null,
         </connector>
     </start>
     <status>Active</status>
+    <subflows>
+        <description>Creates a log warning entry. This is not a critical error as the callout was a success and the NavTask will be created through kafka.</description>
+        <name>Insert_Log_Warning</name>
+        <label>Insert Log Warning</label>
+        <locationX>528</locationX>
+        <locationY>1550</locationY>
+        <flowName>Flow_Create_Application_Log</flowName>
+        <inputAssignments>
+            <name>Application_Domain</name>
+            <value>
+                <stringValue>NKS</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Error_Payload</name>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Error_Source</name>
+            <value>
+                <stringValue>Flow - Send NAV Task Auto</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Log_Category</name>
+            <value>
+                <stringValue>Oppgave</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Log_Level</name>
+            <value>
+                <stringValue>Warning</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Log_Message</name>
+            <value>
+                <stringValue>Successfully posted oppgave, but failed to insert record.</stringValue>
+            </value>
+        </inputAssignments>
+    </subflows>
     <textTemplates>
         <name>Newline</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
@@ -386,6 +406,17 @@ null,
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>true</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Defines if the task post should be performed in system context or not. Defaults to false</description>
+        <name>SYSTEM_CONTEXT</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
         <value>
             <booleanValue>false</booleanValue>
         </value>
