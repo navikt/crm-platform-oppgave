@@ -3,7 +3,7 @@
     <actionCalls>
         <name>Format_date_time</name>
         <label>Format date time</label>
-        <locationX>380</locationX>
+        <locationX>176</locationX>
         <locationY>278</locationY>
         <actionName>CRM_FlowUtils</actionName>
         <actionType>apex</actionType>
@@ -20,15 +20,37 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <actionCalls>
+        <name>Insert_NAV_Task</name>
+        <label>Insert NAV Task</label>
+        <locationX>176</locationX>
+        <locationY>1430</locationY>
+        <actionName>CRM_NavTaskDbHandler</actionName>
+        <actionType>apex</actionType>
+        <faultConnector>
+            <targetReference>Insert_Log_Warning</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>navTasksToInsert</name>
+            <value>
+                <elementReference>NAV_Task</elementReference>
+            </value>
+        </inputParameters>
+        <outputParameters>
+            <assignToReference>NAV_Task</assignToReference>
+            <name>output</name>
+        </outputParameters>
+    </actionCalls>
+    <actionCalls>
         <description>Posts the NAV Task</description>
         <name>Post_NAV_Task</name>
         <label>Post NAV Task</label>
-        <locationX>380</locationX>
+        <locationX>176</locationX>
         <locationY>1310</locationY>
         <actionName>CRM_NavTaskManager</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Verify_API_Post</targetReference>
+            <targetReference>Insert_NAV_Task</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -104,7 +126,7 @@
         <description>Sets the due date for the task based on configured theme and task type combinations</description>
         <name>Set_Task_Due_Date</name>
         <label>Set Task Due Date</label>
-        <locationX>380</locationX>
+        <locationX>176</locationX>
         <locationY>1190</locationY>
         <actionName>CRM_DueDateUtility</actionName>
         <actionType>apex</actionType>
@@ -127,7 +149,7 @@
     <assignments>
         <name>Apply_header_to_comment</name>
         <label>Apply header to comment</label>
-        <locationX>380</locationX>
+        <locationX>176</locationX>
         <locationY>398</locationY>
         <assignmentItems>
             <assignToReference>NAV_Task.NKS_Comments__c</assignToReference>
@@ -143,7 +165,7 @@
     <assignments>
         <name>Set_Subtheme_Null</name>
         <label>Set Subtheme Null</label>
-        <locationX>468</locationX>
+        <locationX>264</locationX>
         <locationY>638</locationY>
         <assignmentItems>
             <assignToReference>NAV_Task.NKS_Subtheme__c</assignToReference>
@@ -156,7 +178,7 @@
     <assignments>
         <name>Set_Subtype_Null</name>
         <label>Set Subtype Null</label>
-        <locationX>468</locationX>
+        <locationX>264</locationX>
         <locationY>974</locationY>
         <assignmentItems>
             <assignToReference>NAV_Task.CRM_Subtype__c</assignToReference>
@@ -170,36 +192,14 @@
         <name>EmptyString</name>
         <dataType>String</dataType>
         <value>
-            <stringValue></stringValue>
+            <stringValue/>
         </value>
     </constants>
-    <decisions>
-        <name>Check_Task_Creation</name>
-        <label>Check Task Creation</label>
-        <locationX>50</locationX>
-        <locationY>1670</locationY>
-        <defaultConnector>
-            <targetReference>Insert_NAV_Task_0</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Do Insert</defaultConnectorLabel>
-        <rules>
-            <name>Already_Inserted</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_Existing_NAV_Task.Id</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <label>Already Inserted</label>
-        </rules>
-    </decisions>
     <decisions>
         <description>Subtheme is not required, so validate that it has been set from parent calling this flow.</description>
         <name>Validate_Subtheme</name>
         <label>Validate Subtheme</label>
-        <locationX>380</locationX>
+        <locationX>176</locationX>
         <locationY>518</locationY>
         <defaultConnector>
             <targetReference>Set_Subtheme_Null</targetReference>
@@ -225,7 +225,7 @@
         <description>Subtheme is not required, so validate that it has been set from parent calling this flow.</description>
         <name>Validate_Subtype</name>
         <label>Validate Subtype</label>
-        <locationX>380</locationX>
+        <locationX>176</locationX>
         <locationY>854</locationY>
         <defaultConnector>
             <targetReference>Set_Subtype_Null</targetReference>
@@ -245,32 +245,6 @@
                 <targetReference>Set_Task_Due_Date</targetReference>
             </connector>
             <label>Subtype Was Set</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Verify_API_Post</name>
-        <label>Verify API Post</label>
-        <locationX>380</locationX>
-        <locationY>1430</locationY>
-        <defaultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>Insert_NAV_Task_0</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Failed</defaultConnectorLabel>
-        <rules>
-            <name>Was_Successful_Post</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>SUCCESSFUL_POST</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Get_Existing_NAV_Task</targetReference>
-            </connector>
-            <label>Successful Post</label>
         </rules>
     </decisions>
     <description>Autolaunched flow for dispatching NAV Task to the oppgave API</description>
@@ -328,21 +302,11 @@ null,
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
-    <recordCreates>
-        <name>Insert_NAV_Task_0</name>
-        <label>Insert NAV Task</label>
-        <locationX>182</locationX>
-        <locationY>1790</locationY>
-        <faultConnector>
-            <targetReference>Insert_Log_Warning</targetReference>
-        </faultConnector>
-        <inputReference>NAV_Task</inputReference>
-    </recordCreates>
     <recordLookups>
         <description>Queries the related account of the NAV Task</description>
         <name>Get_Account</name>
         <label>Get Account</label>
-        <locationX>380</locationX>
+        <locationX>176</locationX>
         <locationY>158</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -360,31 +324,8 @@ null,
         <object>Account</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
-    <recordLookups>
-        <description>Test to run a query to see if the kafka processor has created the NAV task already.</description>
-        <name>Get_Existing_NAV_Task</name>
-        <label>Get Existing NAV Task</label>
-        <locationX>50</locationX>
-        <locationY>1550</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Check_Task_Creation</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>INT_External_Reference__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>NAV_Task.INT_External_Reference__c</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>NavTask__c</object>
-        <queriedFields>Id</queriedFields>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
     <start>
-        <locationX>254</locationX>
+        <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Account</targetReference>
@@ -395,8 +336,8 @@ null,
         <description>Creates a log warning entry. This is not a critical error as the callout was a success and the NavTask will be created through kafka.</description>
         <name>Insert_Log_Warning</name>
         <label>Insert Log Warning</label>
-        <locationX>446</locationX>
-        <locationY>1910</locationY>
+        <locationX>528</locationX>
+        <locationY>1550</locationY>
         <flowName>Flow_Create_Application_Log</flowName>
         <inputAssignments>
             <name>Application_Domain</name>
