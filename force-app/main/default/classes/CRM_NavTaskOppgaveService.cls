@@ -56,7 +56,7 @@ public without sharing class CRM_NavTaskOppgaveService {
      * @param query
      * @return HttpResponse
      **/
-    public HttpResponse queryOppgave(OppgaveQuery query) {
+    public HttpResponse queryOppgave(CRM_OppgaveQuery query) {
         ApiController apiCtrl = new ApiController();
         Map<String, String> httpHeaders = new Map<String, String>{
             'Content-Type' => 'application/json',
@@ -82,12 +82,12 @@ public without sharing class CRM_NavTaskOppgaveService {
     }
 
     /**
-     * Converts the OppgaveQuery instance to a valid map og key value pairs that can be added to the HttpRequest
+     * Converts the CRM_OppgaveQuery instance to a valid map og key value pairs that can be added to the HttpRequest
      * @author Stian Ruud Schikora | 03-21-2022
      * @param query
      * @return Map<String, String>
      **/
-    private Map<String, String> convertToQueryParams(OppgaveQuery query) {
+    private Map<String, String> convertToQueryParams(CRM_OppgaveQuery query) {
         Map<String, String> returnMap = new Map<String, String>();
         String jsonParams = JSON.serialize(query, true); //Suppressing null values
 
@@ -248,23 +248,6 @@ public without sharing class CRM_NavTaskOppgaveService {
         apiCtrl.addHeader('X-Correlation-ID', requestId); //Adds the unique transaction ID to the request
         this.transactionId = requestId;
         logger.publish();
-    }
-
-    public class OppgaveQuery {
-        public String id; //Matches the INT_External_Reference__c on NavTask__c
-        public String aktoerId;
-        public String orgnr;
-        public OppgaveStatuskategori statuskategori;
-        public String tildeltEnhetsnr;
-        public String tilordnetRessurs;
-        public Date fristFom;
-        public Date fristTom;
-        public Date opprettetFom; //Lower limit for the oppgave created date
-    }
-
-    public enum OppgaveStatuskategori {
-        AAPEN,
-        AVSLUTTET
     }
 
     /**
