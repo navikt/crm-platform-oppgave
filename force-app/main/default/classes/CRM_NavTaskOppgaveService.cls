@@ -19,6 +19,65 @@ public without sharing class CRM_NavTaskOppgaveService {
     }
 
     /**
+     * Submit a query request to oppgave returning N tasks from the endpoint
+     * @author Stian Ruud Schikora | 03-21-2022
+     * @param query
+     * @return HttpResponse
+     **/
+    public HttpResponse queryOppgave(OppgaveQuery query) {
+        ApiController apiCtrl = new ApiController();
+        Map<String, String> httpHeaders = new Map<String, String>{
+            'Content-Type' => 'application/json',
+            'accept' => 'application/json'
+        };
+        //If no person access, callout is performed in system mode
+        switch on this.context {
+            when SYSTEM_CONTEXT {
+                apiCtrl.setSystemContext();
+            }
+            when else {
+                //No context change
+            }
+        }
+
+        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVE', convertToQueryParams(query));
+        apiCtrl.addServiceAuthHeader('Oppgave');
+        apiCtrl.setHeaders(httpHeaders);
+
+        addXCorrelation(apiCtrl);
+        apiCtrl.doCallout();
+        return apiCtrl.getResponse();
+    }
+
+    /**
+     * Converts the OppgaveQuery instance to a valid map og key value pairs that can be added to the HttpRequest
+     * @author Stian Ruud Schikora | 03-21-2022
+     * @param query
+     * @return Map<String, String>
+     **/
+    private Map<String, String> convertToQueryParams(OppgaveQuery query) {
+        Map<String, String> returnMap = new Map<String, String>();
+        String jsonParams = JSON.serialize(query, true); //Suppressing null values
+
+        JSONParser parser = JSON.createParser(jsonParams);
+
+        while (parser.nextToken() != null) {
+            if (parser.getCurrentToken() == JSONToken.FIELD_NAME) {
+                String key = parser.getText();
+                parser.nextToken();
+                String value = key == 'fristFom' ||
+                    key == 'fristTom'
+                    ? parser.getDatetimeValue().format('yyyy-MM-dd')
+                    : parser.getText();
+
+                returnMap.put(key, value);
+            }
+        }
+
+        return returnMap;
+    }
+
+    /**
      * @description: Performs callout to oppgave API to create a new task
      * @author Stian Ruud Schikora | 07-26-2021
      * @param request
@@ -120,7 +179,7 @@ public without sharing class CRM_NavTaskOppgaveService {
             'Content-Type' => 'application/json',
             'accept' => 'application/json'
         };
-        
+
         ApiController apiCtrl = new ApiController();
         //If no person access, callout is performed in system mode
         switch on this.context {
@@ -156,6 +215,22 @@ public without sharing class CRM_NavTaskOppgaveService {
         apiCtrl.addHeader('X-Correlation-ID', requestId); //Adds the unique transaction ID to the request
         this.transactionId = requestId;
         logger.publish();
+    }
+
+    public class OppgaveQuery {
+        public String id; //Matches the INT_External_Reference__c on NavTask__c
+        public String aktoerId;
+        public String orgnr;
+        public OppgaveStatuskategori statuskategori;
+        public String tildeltEnhetsnr;
+        public String tilordnetRessurs;
+        public Date fristFom;
+        public Date fristTom;
+    }
+
+    private enum OppgaveStatuskategori {
+        AAPEN,
+        AVSLUTTET
     }
 
     /**

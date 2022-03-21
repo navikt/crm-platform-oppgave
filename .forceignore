@@ -3,6 +3,8 @@
 # ----------------------------------------------------------------------------------------
 **/profiles/*
 
+**/fieldRestrictionRules/*
+
 
 # NOTE!! Do NOT use **/ before
 !unpackagable/profiles/*
