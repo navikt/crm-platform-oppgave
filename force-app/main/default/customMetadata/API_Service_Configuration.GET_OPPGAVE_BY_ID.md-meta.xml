@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>GET_OPPGAVE_BY_ID</label>
+    <protected>false</protected>
+    <values>
+        <field>API_Base_Configuration__c</field>
+        <value xsi:type="xsd:string">Oppgave_API</value>
+    </values>
+    <values>
+        <field>HTTP_Method__c</field>
+        <value xsi:type="xsd:string">GET</value>
+    </values>
+    <values>
+        <field>Has_Path_Parameters__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Mock_Response__c</field>
+        <value xsi:type="xsd:string">{
+&quot;200&quot;: {
+&quot;headers&quot;: null,
+&quot;body&quot;: {
+  &quot;id&quot;: 5436732,
+  &quot;tildeltEnhetsnr&quot;: &quot;0100&quot;,
+  &quot;endretAvEnhetsnr&quot;: &quot;0101&quot;,
+  &quot;opprettetAvEnhetsnr&quot;: &quot;0200&quot;,
+  &quot;journalpostId&quot;: &quot;84938201&quot;,
+  &quot;journalpostkilde&quot;: &quot;AS36&quot;,
+  &quot;behandlesAvApplikasjon&quot;: &quot;FS22&quot;,
+  &quot;saksreferanse&quot;: &quot;84942299&quot;,
+  &quot;bnr&quot;: &quot;11250199559&quot;,
+  &quot;samhandlernr&quot;: &quot;80000999999&quot;,
+  &quot;aktoerId&quot;: &quot;1234567891113&quot;,
+  &quot;identer&quot;: 12345678911,
+  &quot;orgnr&quot;: &quot;979312059&quot;,
+  &quot;tilordnetRessurs&quot;: &quot;Z998323&quot;,
+  &quot;beskrivelse&quot;: &quot;string&quot;,
+  &quot;temagruppe&quot;: &quot;ANSOS&quot;,
+  &quot;tema&quot;: &quot;AAP&quot;,
+  &quot;behandlingstema&quot;: &quot;ab0203&quot;,
+  &quot;oppgavetype&quot;: &quot;HAST_BANK_OPPLYS&quot;,
+  &quot;behandlingstype&quot;: &quot;ae0001&quot;,
+  &quot;versjon&quot;: 1,
+  &quot;mappeId&quot;: 848,
+  &quot;opprettetAv&quot;: &quot;string&quot;,
+  &quot;endretAv&quot;: &quot;string&quot;,
+  &quot;prioritet&quot;: &quot;HOY&quot;,
+  &quot;status&quot;: &quot;UNDER_BEHANDLING&quot;,
+  &quot;metadata&quot;: {
+    &quot;additionalProp1&quot;: &quot;string&quot;,
+    &quot;additionalProp2&quot;: &quot;string&quot;,
+    &quot;additionalProp3&quot;: &quot;string&quot;
+  },
+  &quot;fristFerdigstillelse&quot;: {},
+  &quot;aktivDato&quot;: {},
+  &quot;opprettetTidspunkt&quot;: &quot;2022-03-21T20:16:17.538Z&quot;,
+  &quot;ferdigstiltTidspunkt&quot;: &quot;2022-03-21T20:16:17.538Z&quot;,
+  &quot;endretTidspunkt&quot;: &quot;2022-03-21T20:16:17.538Z&quot;
+}
+},
+&quot;401&quot;: {
+&quot;headers&quot;: null,
+&quot;body&quot;: null
+},
+&quot;404&quot;: {&quot;headers&quot;: null,
+&quot;body&quot;: null
+},
+&quot;500&quot;: {
+&quot;headers&quot;: null,
+&quot;body&quot;: null
+}
+}</value>
+    </values>
+    <values>
+        <field>Service_Path__c</field>
+        <value xsi:type="xsd:string">/oppgave/api/v1/oppgaver/{}</value>
+    </values>
+</CustomMetadata>
