@@ -228,7 +228,7 @@ public without sharing class CRM_NavTaskOppgaveService {
         public Date fristTom;
     }
 
-    private enum OppgaveStatuskategori {
+    public enum OppgaveStatuskategori {
         AAPEN,
         AVSLUTTET
     }
