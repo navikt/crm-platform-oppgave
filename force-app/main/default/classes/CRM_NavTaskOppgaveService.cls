@@ -98,7 +98,8 @@ public without sharing class CRM_NavTaskOppgaveService {
                 String key = parser.getText();
                 parser.nextToken();
                 String value = key == 'fristFom' ||
-                    key == 'fristTom'
+                    key == 'fristTom' ||
+                    key == 'opprettetFom'
                     ? parser.getDatetimeValue().format('yyyy-MM-dd')
                     : parser.getText();
 
@@ -258,6 +259,7 @@ public without sharing class CRM_NavTaskOppgaveService {
         public String tilordnetRessurs;
         public Date fristFom;
         public Date fristTom;
+        public Date opprettetFom; //Lower limit for the oppgave created date
     }
 
     public enum OppgaveStatuskategori {
