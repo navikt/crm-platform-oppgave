@@ -161,6 +161,20 @@ public class CRM_NavTaskManager_Test {
         System.assertEquals(1, [SELECT COUNT() FROM NavTask__c WHERE INT_External_Reference__c = 123456789]);
     }
 
+    @isTest
+    static void testGetActorOppgaver() {
+        ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
+        List<NavTask__c> convertedTasks;
+        CRM_OPPGAVE_TestDataFactory.createRecord(new Person__c(INT_ActorId__c = '1234567891113'));
+        Test.startTest();
+        CRM_OppgaveQueryResponse queryResp = CRM_NavTaskManager.getActorOppgaver('1234567891113');
+        Test.stopTest();
+
+        convertedTasks = queryResp.convertToNavTasks();
+
+        System.assert(convertedTasks != null);
+    }
+
     private static NavTask__c getTask() {
         return [
             SELECT
