@@ -42,7 +42,7 @@ public without sharing class CRM_OppgaveSyncController {
     }
 
     /**
-     * @description: Verifies the upsert results and updates the KafkaMessages with
+     * @description: Verifies the upsert results and creates log entries for any errors
      * Correct status and error messages.
      * @author Stian Ruud Schikora | 02-26-2021
      * @param upsList
