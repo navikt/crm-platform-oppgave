@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <classAccesses>
+        <apexClass>CRM_DueDateUtility</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>CRM_FlowUtils</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -9,7 +13,7 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>CRM_DueDateUtility</apexClass>
+        <apexClass>CRM_OppgaveSyncController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <description>Necessary permissions required to send oppgave via API</description>
