@@ -44,21 +44,21 @@ public class CRM_KafkaOppgave implements Comparable {
     }
 
     public String getActorId() {
+        String actorId;
         if (
             ident != null &&
             String.isNotBlank(this.ident.identType) &&
             this.ident.identType.equalsIgnoreCase('AKTOERID')
         ) {
-            return this.ident.verdi;
+            actorId = this.ident.verdi;
         } else {
-            return null;
+            for (Ident idt : this.identer) {
+                if (String.isNotBlank(idt.gruppe) && idt.gruppe.equalsIgnoreCase('AKTOERID')) {
+                    actorId = idt.ident;
+                }
+            }
         }
 
-        /* For new model
-        for (Ident idt : this.identer) {
-            if (String.isNotBlank(idt.gruppe) && idt.gruppe.equalsIgnoreCase('AKTOERID')) {
-                return idt.ident;
-            }
-        }*/
+        return actorId;
     }
 }

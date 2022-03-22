@@ -1,6 +1,6 @@
-# crm-shared-template
+# crm-platform-oppgave
 
-Repository containing metadata and templates for submitting NAV Task to oppgave via API
+Repository reusable functions and components connected to the oppgave integration.
 
 [![Build](https://github.com/navikt/crm-platform-oppgave/workflows/%5BPUSH%5D%20Create%20Package/badge.svg)](https://github.com/navikt/crm-platform-oppgave/actions?query=workflow%3Acreate)
 [![GitHub version](https://badgen.net/github/release/navikt/crm-platform-oppgave/stable)](https://github.com/navikt/crm-platform-oppgave)

@@ -1,11 +1,7 @@
-name: "[PR MERGE] DEV Quick Package Create"
+name: "Quick Package Create"
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - DEV
-    paths:
-      - "force-app/**"
+
 jobs:
   # ################################################################# #
   # ######################## CREATE PACKAGE ######################### #
@@ -87,9 +83,9 @@ jobs:
           sfdx auth:sfdxurl:store -f ./DEV_SFDX_URL.txt -a dev-sandbox -s
           rm -f ./DEV_SFDX_URL.txt
 
-      # Install new package version into integration org
-      - name: Install new package version into integration org
-        id: integration-installation
+      # Install new package version into DEV org
+      - name: Install new package version into DEV org
+        id: dev-installation
         run: |
           sfdx force:package:install --package ${{ needs.create-package.outputs.packageId }} -w 20 -b 20 -u dev-sandbox -r -k ${{ secrets.PACKAGE_KEY }} --json | tee output
 
@@ -98,7 +94,7 @@ jobs:
             echo "::set-output name=successfullyInstalled::true"
           else
             echo
-            echo FAILED TO INSTALL PACKAGE IN UAT SANDBOX
+            echo FAILED TO INSTALL PACKAGE IN DEV SANDBOX
             echo
 
             exit 125
@@ -112,8 +108,8 @@ jobs:
             sfdx force:source:deploy -p ./force-app/unpackagable-with-auto-deploy -l RunLocalTests
           fi
     outputs:
-      successfullyInstalled: ${{ steps.integration-installation.outputs.successfullyInstalled }}
-      installOutput: ${{ steps.integration-installation.outputs.installOutput }}
+      successfullyInstalled: ${{ steps.dev-installation.outputs.successfullyInstalled }}
+      installOutput: ${{ steps.dev-installation.outputs.installOutput }}
 
   # ################################################################# #
   # ######################### CREATE RELEASE ######################## #
