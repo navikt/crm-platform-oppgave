@@ -7,5 +7,5 @@ public class CRM_OppgaveQuery {
     public String tilordnetRessurs;
     public Date fristFom;
     public Date fristTom;
-    public Date opprettetFom; //Lower limit for the oppgave created date
+    public Datetime opprettetFom; //Lower limit for the oppgave created date
 }

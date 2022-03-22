@@ -55,7 +55,7 @@ public without sharing class CRM_NavTaskManager {
         CRM_OppgaveQuery query = new CRM_OppgaveQuery();
         CRM_OppgaveQueryResponse oppgaveResp;
         query.aktoerId = actorId;
-        query.opprettetFom = System.today().addYears(-1); //Get oppgaver for the given actor created maximum og one year back in time
+        query.opprettetFom = System.now().addYears(-1); //Get oppgaver for the given actor created maximum og one year back in time
         CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
 
         try {

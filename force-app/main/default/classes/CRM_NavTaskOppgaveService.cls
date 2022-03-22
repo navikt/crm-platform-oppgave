@@ -72,9 +72,10 @@ public without sharing class CRM_NavTaskOppgaveService {
             }
         }
 
-        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVE', convertToQueryParams(query));
+        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVE');
         apiCtrl.addServiceAuthHeader('Oppgave');
         apiCtrl.setHeaders(httpHeaders);
+        apiCtrl.setUrlParams(convertToQueryParams(query));
 
         addXCorrelation(apiCtrl);
         apiCtrl.doCallout();
@@ -90,18 +91,21 @@ public without sharing class CRM_NavTaskOppgaveService {
     private Map<String, String> convertToQueryParams(CRM_OppgaveQuery query) {
         Map<String, String> returnMap = new Map<String, String>();
         String jsonParams = JSON.serialize(query, true); //Suppressing null values
-
+        System.debug('JSON PARAMS: ' + jsonParams);
         JSONParser parser = JSON.createParser(jsonParams);
 
         while (parser.nextToken() != null) {
             if (parser.getCurrentToken() == JSONToken.FIELD_NAME) {
                 String key = parser.getText();
+                String value;
                 parser.nextToken();
-                String value = key == 'fristFom' ||
-                    key == 'fristTom' ||
-                    key == 'opprettetFom'
-                    ? parser.getDatetimeValue().format('yyyy-MM-dd')
-                    : parser.getText();
+                if (key == 'fristFom' || key == 'fristTom') {
+                    value = parser.getDatetimeValue().format('yyyy-MM-dd');
+                } else if (key == 'opprettetFom') {
+                    value = parser.getDatetimeValue().format('yyyy-MM-dd\'T\'HH:mm:ss');
+                } else {
+                    value = parser.getText();
+                }
 
                 returnMap.put(key, value);
             }
