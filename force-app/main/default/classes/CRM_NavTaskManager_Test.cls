@@ -4,6 +4,10 @@ public class CRM_NavTaskManager_Test {
     static void makeData() {
         CRM_OPPGAVE_TestDataFactory.createRecord(new NavTask__c());
         CRM_OPPGAVE_TestDataFactory.createRecord(new NavUnit__c(INT_UnitNumber__c = '4100'));
+        CRM_OPPGAVE_TestDataFactory.createRecord(
+            new Common_Code__c(CRM_Code_Set__c = 'Oppgavetyper', CRM_Code__c = 'HAST_BANK_OPPLYS')
+        );
+        CRM_OPPGAVE_TestDataFactory.createRecord(new Common_Code__c(CRM_Code_Set__c = 'Tema', CRM_Code__c = 'AAP'));
     }
 
     @isTest

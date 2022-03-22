@@ -24,7 +24,7 @@
 &quot;oppgaver&quot;: [
 {
 &quot;id&quot;: 5436732,
-&quot;tildeltEnhetsnr&quot;: &quot;0100&quot;,
+&quot;tildeltEnhetsnr&quot;: &quot;4100&quot;,
 &quot;endretAvEnhetsnr&quot;: &quot;0101&quot;,
 &quot;opprettetAvEnhetsnr&quot;: &quot;0200&quot;,
 &quot;journalpostId&quot;: &quot;84938201&quot;,
@@ -36,7 +36,7 @@
 &quot;aktoerId&quot;: &quot;1234567891113&quot;,
 &quot;identer&quot;: [
 {
-&quot;ident&quot;: &quot;ident&quot;,
+&quot;ident&quot;: &quot;1234567891113&quot;,
 &quot;gruppe&quot;: &quot;AKTOERID&quot;
 }
 ],
