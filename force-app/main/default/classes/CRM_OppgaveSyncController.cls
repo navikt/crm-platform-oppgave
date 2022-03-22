@@ -53,7 +53,13 @@ public without sharing class CRM_OppgaveSyncController {
             if (upsList[index].isSuccess()) {
                 //Successful upsert
             } else {
-                //Logging?
+                for (Database.Error error : upsList[index].getErrors()) {
+                    logger.error(
+                        'Error syncing oppgave: ' + error.getMessage(),
+                        null,
+                        CRM_ApplicationDomain.Domain.NKS
+                    );
+                }
             }
         }
     }
