@@ -61,4 +61,35 @@ public class CRM_NavTaskOppgaveService_Test {
         }
         Test.stopTest();
     }
+
+    @isTest
+    static void testGetOppgaveById() {
+        ApiMock.setTestMock('GET_OPPGAVE_BY_ID', 200, 'OK');
+
+        Test.startTest();
+        HttpResponse resp = service.getOppgaveById('DummyId');
+        Test.stopTest();
+
+        System.assertEquals(200, resp.getStatusCode());
+        System.assert(resp.getBody() != null);
+    }
+
+    @isTest
+    static void testGetOppgaveQuery() {
+        ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
+
+        CRM_OppgaveQuery query = new CRM_OppgaveQuery();
+        query.aktoerId = 'Test';
+        query.statuskategori = OppgaveStatuskategori.AAPEN;
+        query.tildeltEnhetsnr = '4100';
+        query.tilordnetRessurs = 'Z999999';
+        query.opprettetFom = System.today().addYears(-1);
+
+        Test.startTest();
+        HttpResponse resp = service.queryOppgave(query);
+        Test.stopTest();
+
+        System.assertEquals(200, resp.getStatusCode());
+        System.assert(resp.getBody() != null);
+    }
 }

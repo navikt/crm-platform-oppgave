@@ -4,6 +4,10 @@ public class CRM_NavTaskManager_Test {
     static void makeData() {
         CRM_OPPGAVE_TestDataFactory.createRecord(new NavTask__c());
         CRM_OPPGAVE_TestDataFactory.createRecord(new NavUnit__c(INT_UnitNumber__c = '4100'));
+        CRM_OPPGAVE_TestDataFactory.createRecord(
+            new Common_Code__c(CRM_Code_Set__c = 'Oppgavetyper', CRM_Code__c = 'HAST_BANK_OPPLYS')
+        );
+        CRM_OPPGAVE_TestDataFactory.createRecord(new Common_Code__c(CRM_Code_Set__c = 'Tema', CRM_Code__c = 'AAP'));
     }
 
     @isTest
@@ -159,6 +163,20 @@ public class CRM_NavTaskManager_Test {
         Test.stopTest();
 
         System.assertEquals(1, [SELECT COUNT() FROM NavTask__c WHERE INT_External_Reference__c = 123456789]);
+    }
+
+    @isTest
+    static void testGetActorOppgaver() {
+        ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
+        List<NavTask__c> convertedTasks;
+        CRM_OPPGAVE_TestDataFactory.createRecord(new Person__c(INT_ActorId__c = '1234567891113'));
+        Test.startTest();
+        CRM_OppgaveQueryResponse queryResp = CRM_NavTaskManager.getActorOppgaver('1234567891113');
+        Test.stopTest();
+
+        convertedTasks = queryResp.convertToNavTasks();
+
+        System.assert(convertedTasks != null);
     }
 
     private static NavTask__c getTask() {

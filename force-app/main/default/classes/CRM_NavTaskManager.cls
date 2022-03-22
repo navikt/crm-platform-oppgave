@@ -46,6 +46,46 @@ public without sharing class CRM_NavTaskManager {
     }
 
     /**
+     * Get oppgaver for a given actorId that has been created maximum one year back in time
+     * @author Stian Ruud Schikora | 03-22-2022
+     * @param actorId
+     * @return List<CRM_KafkaOppgave>
+     **/
+    public static CRM_OppgaveQueryResponse getActorOppgaver(String actorId) {
+        CRM_OppgaveQuery query = new CRM_OppgaveQuery();
+        CRM_OppgaveQueryResponse oppgaveResp;
+        query.aktoerId = actorId;
+        query.opprettetFom = System.now().addYears(-1); //Get oppgaver for the given actor created maximum og one year back in time
+        CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
+
+        try {
+            HttpResponse response = oppgaveService.queryOppgave(query);
+            Integer statusCode = response.getStatusCode();
+
+            if (statusCode == 200 || statusCode == 201) {
+                oppgaveResp = (CRM_OppgaveQueryResponse) JSON.deserialize(
+                    response.getBody(),
+                    CRM_OppgaveQueryResponse.class
+                );
+            } else {
+                logger.httpError(
+                    'Error getting oppgaver',
+                    response,
+                    null,
+                    CRM_ApplicationDomain.Domain.NKS,
+                    oppgaveService.getTransactionId()
+                );
+            }
+        } catch (Exception ex) {
+            logger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
+        } finally {
+            logger.publish();
+        }
+
+        return oppgaveResp;
+    }
+
+    /**
      * @description: Performs a callout to Oppgave for delegating a NAV task to an external system
      * Task is updated with the external reference and the NAV unit number the task was delegated to
      * @author Stian Ruud Schikora | 11-03-2020

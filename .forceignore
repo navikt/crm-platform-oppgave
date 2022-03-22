@@ -3,6 +3,7 @@
 # ----------------------------------------------------------------------------------------
 **/profiles/*
 
+**/fieldRestrictionRules/*
 
 # NOTE!! Do NOT use **/ before
 !unpackagable/profiles/*
@@ -49,6 +50,7 @@
 **/jsconfig.json
 **/.eslintrc.json
 **/__tests__/**
+**/.doc/**
 
 
 # Other packages
