@@ -30,7 +30,7 @@ export function syncAssignedOppgaver(assigneeNavIdent) {
 //input object that is passed to apex performing callout to generate NavTask__c representation of the response
 function syncOppgaver(queryParams) {
     return new Promise((resolve, reject) => {
-        doCalloutAndSync({ query: queryParams })
+        doCalloutAndSync({ jsonQuery: JSON.stringify(queryParams) })
             .then(() => {
                 resolve('Success');
             })

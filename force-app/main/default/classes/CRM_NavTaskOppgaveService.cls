@@ -91,7 +91,6 @@ public without sharing class CRM_NavTaskOppgaveService {
     private Map<String, String> convertToQueryParams(CRM_OppgaveQuery query) {
         Map<String, String> returnMap = new Map<String, String>();
         String jsonParams = JSON.serialize(query, true); //Suppressing null values
-        System.debug('JSON PARAMS: ' + jsonParams);
         JSONParser parser = JSON.createParser(jsonParams);
 
         while (parser.nextToken() != null) {

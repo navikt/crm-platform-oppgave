@@ -20,6 +20,9 @@ public class CRM_KafkaOppgave implements Comparable {
     public List<Ident> identer; //To-be model
     public LegacyIdent ident;
 
+    //Only included in the API response from oppgave
+    public String aktoerId;
+
     public Integer compareTo(Object compareToObj) {
         CRM_KafkaOppgave compareOppg = (CRM_KafkaOppgave) compareToObj;
 
@@ -51,6 +54,8 @@ public class CRM_KafkaOppgave implements Comparable {
             this.ident.identType.equalsIgnoreCase('AKTOERID')
         ) {
             actorId = this.ident.verdi;
+        } else if (String.isNotBlank(this.aktoerId)) {
+            actorId = this.aktoerId;
         } else {
             for (Ident idt : this.identer) {
                 if (String.isNotBlank(idt.gruppe) && idt.gruppe.equalsIgnoreCase('AKTOERID')) {
