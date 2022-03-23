@@ -1,4 +1,3 @@
-export default { syncOppgaver, syncActorOppgaver, syncAssignedOppgaver };
 import doCalloutAndSync from '@salesforce/apex/CRM_OppgaveSyncController.doOppgaveSync';
 
 class OppgaveQueryParams {
@@ -15,14 +14,14 @@ class OppgaveQueryParams {
     }
 }
 
-function syncActorOppgaver(actorId) {
+export function syncActorOppgaver(actorId) {
     let params = new OppgaveQueryParams();
     params.aktoerId = actorId;
 
-    return this.syncOppgaver(params);
+    return syncOppgaver(params);
 }
 
-function syncAssignedOppgaver(assigneeNavIdent) {
+export function syncAssignedOppgaver(assigneeNavIdent) {
     let params = new OppgaveQueryParams();
     params.tilordnetRessurs = assigneeNavIdent;
 
