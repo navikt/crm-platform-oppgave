@@ -1,9 +1,10 @@
 public without sharing class CRM_OppgaveSyncController {
     private static LoggerUtility logger = new LoggerUtility('Oppgave');
 
-    @AuraEnabled(cacheable=true)
-    public static void doOppgaveSync(CRM_OppgaveQuery query) {
+    @AuraEnabled
+    public static void doOppgaveSync(String jsonQuery) {
         CRM_OppgaveQueryResponse oppgaveResp;
+        CRM_OppgaveQuery query = (CRM_OppgaveQuery) JSON.deserialize(jsonQuery, CRM_OppgaveQuery.class);
         query.opprettetFom = query.opprettetFom == null ? System.now().addYears(-1) : null; //Get oppgaver for the given actor created maximum og one year back in time
         CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
 
@@ -42,7 +43,7 @@ public without sharing class CRM_OppgaveSyncController {
     }
 
     /**
-     * @description: Verifies the upsert results and updates the KafkaMessages with
+     * @description: Verifies the upsert results and creates log entries for any errors
      * Correct status and error messages.
      * @author Stian Ruud Schikora | 02-26-2021
      * @param upsList
@@ -53,7 +54,13 @@ public without sharing class CRM_OppgaveSyncController {
             if (upsList[index].isSuccess()) {
                 //Successful upsert
             } else {
-                //Logging?
+                for (Database.Error error : upsList[index].getErrors()) {
+                    logger.error(
+                        'Error syncing oppgave: ' + error.getMessage(),
+                        null,
+                        CRM_ApplicationDomain.Domain.NKS
+                    );
+                }
             }
         }
     }

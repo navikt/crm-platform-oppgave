@@ -1,4 +1,3 @@
-export default { syncOppgaver, syncActorOppgaver, syncAssignedOppgaver };
 import doCalloutAndSync from '@salesforce/apex/CRM_OppgaveSyncController.doOppgaveSync';
 
 class OppgaveQueryParams {
@@ -15,14 +14,14 @@ class OppgaveQueryParams {
     }
 }
 
-function syncActorOppgaver(actorId) {
+export function syncActorOppgaver(actorId) {
     let params = new OppgaveQueryParams();
     params.aktoerId = actorId;
 
-    return this.syncOppgaver(params);
+    return syncOppgaver(params);
 }
 
-function syncAssignedOppgaver(assigneeNavIdent) {
+export function syncAssignedOppgaver(assigneeNavIdent) {
     let params = new OppgaveQueryParams();
     params.tilordnetRessurs = assigneeNavIdent;
 
@@ -31,7 +30,7 @@ function syncAssignedOppgaver(assigneeNavIdent) {
 //input object that is passed to apex performing callout to generate NavTask__c representation of the response
 function syncOppgaver(queryParams) {
     return new Promise((resolve, reject) => {
-        doCalloutAndSync({ query: queryParams })
+        doCalloutAndSync({ jsonQuery: JSON.stringify(queryParams) })
             .then(() => {
                 resolve('Success');
             })
