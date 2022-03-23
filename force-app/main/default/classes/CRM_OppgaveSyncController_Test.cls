@@ -18,7 +18,7 @@ public class CRM_OppgaveSyncController_Test {
         Test.startTest();
         CRM_OppgaveQuery query = new CRM_OppgaveQuery();
         query.aktoerId = '1234567891113';
-        CRM_OppgaveSyncController.doOppgaveSync(query);
+        CRM_OppgaveSyncController.doOppgaveSync(JSON.serialize(query));
         Test.stopTest();
 
         System.assert([SELECT COUNT() FROM NavTask__c] > 0);
