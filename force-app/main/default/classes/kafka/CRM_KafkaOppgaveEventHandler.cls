@@ -29,6 +29,11 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
         logger.publish();
     }
 
+    /**
+     * Apply filter to only update NavTask__c that already exist in DB
+     * @author Stian Ruud Schikora | 03-28-2022
+     * @param kfOppgEvents
+     **/
     private static void filterEvents(List<Kafka_Oppgave_Event__e> kfOppgEvents) {
         Set<Integer> oppgaveKeys = new Set<Integer>();
         Set<Integer> eventKeys = new Set<Integer>();
