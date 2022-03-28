@@ -29,6 +29,31 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
         logger.publish();
     }
 
+    private static void filterEvents(List<Kafka_Oppgave_Event__e> kfOppgEvents) {
+        Set<Integer> oppgaveKeys = new Set<Integer>();
+        Set<Integer> eventKeys = new Set<Integer>();
+        Map<Integer, List<Kafka_Oppgave_Event__e>> oppgaveMap = new Map<Integer, List<Kafka_Oppgave_Event__e>>();
+
+        for (Kafka_Oppgave_Event__e oppgEvent : kfOppgEvents) {
+            eventKeys.add(Integer.valueOf(oppgEvent.CRM_Key__c));
+        }
+
+        for (NavTask__c navTask : [
+            SELECT Id, INT_External_Reference__c
+            FROM NavTask__c
+            WHERE INT_External_Reference__c IN :eventKeys
+        ]) {
+            oppgaveKeys.add(Integer.valueOf(navTask.INT_External_Reference__c));
+        }
+
+        for (Integer i = kfOppgEvents.size() - 1; i >= 0; i--) {
+            if (!oppgaveKeys.contains(Integer.valueOf(kfOppgEvents[i].CRM_Key__c))) {
+                //If oppgave is not in SF DB we discard the event
+                kfOppgEvents.remove(i);
+            }
+        }
+    }
+
     /**
      * @description: Transforms Kafka_Oppgave_Event__c -> KafkaMessage__c
      * @author Stian Ruud Schikora | 08-03-2021
@@ -36,7 +61,9 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
      * @return List<KafkaMessage__c>
      **/
     private static List<KafkaMessage__c> doEventTransform(List<Kafka_Oppgave_Event__e> kfOppgEvents) {
-        String jsonEvents = JSON.serialize(kfOppgEvents);
+        String jsonEvents;
+        filterEvents(kfOppgEvents);
+        jsonEvents = JSON.serialize(kfOppgEvents);
 
         return (List<KafkaMessage__c>) JSON.deserialize(jsonEvents, List<KafkaMessage__c>.class);
     }
