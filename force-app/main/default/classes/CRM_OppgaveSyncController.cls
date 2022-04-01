@@ -48,7 +48,7 @@ public without sharing class CRM_OppgaveSyncController {
         }
 
         for (NavTask__c dbNavTask : [
-            SELECT Id
+            SELECT Id, INT_External_Reference__c
             FROM NavTask__c
             WHERE INT_External_Reference__c IN :navTaskMap.keySet()
         ]) {
