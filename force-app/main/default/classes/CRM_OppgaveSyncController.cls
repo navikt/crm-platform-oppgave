@@ -6,6 +6,7 @@ public without sharing class CRM_OppgaveSyncController {
         CRM_OppgaveQueryResponse oppgaveResp;
         CRM_OppgaveQuery query = (CRM_OppgaveQuery) JSON.deserialize(jsonQuery, CRM_OppgaveQuery.class);
         query.opprettetFom = query.opprettetFom == null ? System.now().addYears(-1) : null; //Get oppgaver for the given actor created maximum og one year back in time
+        query.returnlimit = 100;
         CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
 
         try {
