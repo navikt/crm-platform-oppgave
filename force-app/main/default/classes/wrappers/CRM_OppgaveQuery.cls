@@ -5,6 +5,7 @@ public class CRM_OppgaveQuery {
     public OppgaveStatuskategori statuskategori;
     public String tildeltEnhetsnr;
     public String tilordnetRessurs;
+    public Integer returnlimit;
     public Date fristFom;
     public Date fristTom;
     public Datetime opprettetFom; //Lower limit for the oppgave created date

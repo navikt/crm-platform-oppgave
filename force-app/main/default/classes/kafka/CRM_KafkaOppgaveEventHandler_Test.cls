@@ -33,16 +33,26 @@ public class CRM_KafkaOppgaveEventHandler_Test {
         testOppgave.status = 'AAPNET';
         testOppgave.ident = idt;
 
+        CRM_KafkaOppgave testOppgave2 = testOppgave.clone();
+        testOppgave2.id = 53339;
+        testOppgave2.versjon = 2;
+
         Kafka_Oppgave_Event__e oppgaveEvent = new Kafka_Oppgave_Event__e();
         oppgaveEvent.CRM_Key__c = String.valueOf(testOppgave.id);
         oppgaveEvent.CRM_Value__c = EncodingUtil.base64Encode(Blob.valueOf(JSON.serialize(testOppgave)));
         oppgaveEvent.CRM_Topic__c = 'aapen-oppgave-dev-syntetisk';
 
+        Kafka_Oppgave_Event__e oppgaveEvent2 = new Kafka_Oppgave_Event__e();
+        oppgaveEvent.CRM_Key__c = String.valueOf(testOppgave2.id);
+        oppgaveEvent.CRM_Value__c = EncodingUtil.base64Encode(Blob.valueOf(JSON.serialize(testOppgave2)));
+        oppgaveEvent.CRM_Topic__c = 'aapen-oppgave-dev-syntetisk';
+
         Test.startTest();
-        Eventbus.publish(oppgaveEvent);
+        Eventbus.publish(new List<Kafka_Oppgave_Event__e>{ oppgaveEvent, oppgaveEvent2 });
         Test.stopTest();
 
-        System.assertEquals(1, [SELECT COUNT() FROM NavTask__c WHERE INT_External_Reference__c = :testOppgave.Id]);
+        System.assertEquals(1, [SELECT COUNT() FROM NavTask__c WHERE NKS_Task_Version__c > 1]);
+        System.assertEquals(1, [SELECT COUNT() FROM NavTask__c]);
     }
 
     @isTest
