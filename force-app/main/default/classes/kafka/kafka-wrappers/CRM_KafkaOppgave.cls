@@ -19,6 +19,11 @@ public class CRM_KafkaOppgave implements Comparable {
     public Integer versjon;
     public List<Ident> identer; //To-be model
     public LegacyIdent ident;
+    public OppgaveMetadata metadata;
+
+    public class OppgaveMetadata {
+        public String EKSTERN_HENVENDELSE_ID;
+    }
 
     //Only included in the API response from oppgave
     public String aktoerId;

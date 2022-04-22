@@ -102,6 +102,10 @@ public without sharing class CRM_NavTaskOppgaveService {
                     value = parser.getDatetimeValue().format('yyyy-MM-dd');
                 } else if (key == 'opprettetFom') {
                     value = parser.getDatetimeValue().format('yyyy-MM-dd\'T\'HH:mm:ss');
+                } else if (key == 'returnlimit') {
+                    //limit is reserved in SF so need special parsing handling
+                    key = 'limit';
+                    value = String.valueOf(parser.getIntegerValue());
                 } else {
                     value = parser.getText();
                 }

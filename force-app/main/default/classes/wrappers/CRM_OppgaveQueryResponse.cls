@@ -61,6 +61,7 @@ public class CRM_OppgaveQueryResponse {
             ? Date.valueOf(kafkaOppgave.opprettetTidspunkt)
             : null;
         navTask.CRM_NoPersonInformation__c = true; //Need to be default set because of validation rule
+        navTask.NKS_Henvendelse_BehandlingsId__c = kafkaOppgave.metadata?.EKSTERN_HENVENDELSE_ID;
 
         return navTask;
     }

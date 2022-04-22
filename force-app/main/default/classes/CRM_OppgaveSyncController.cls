@@ -6,6 +6,7 @@ public without sharing class CRM_OppgaveSyncController {
         CRM_OppgaveQueryResponse oppgaveResp;
         CRM_OppgaveQuery query = (CRM_OppgaveQuery) JSON.deserialize(jsonQuery, CRM_OppgaveQuery.class);
         query.opprettetFom = query.opprettetFom == null ? System.now().addYears(-1) : null; //Get oppgaver for the given actor created maximum og one year back in time
+        query.returnlimit = 100;
         CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
 
         try {
@@ -35,10 +36,29 @@ public without sharing class CRM_OppgaveSyncController {
         }
     }
 
+    /**
+     * Performing a database upsert to update exisiting tasks (using SF ID) and create new ones
+     * @author Stian Ruud Schikora | 03-28-2022
+     * @param tasksToUpsert
+     **/
     private static void doNavTaskUpsert(List<NavTask__c> tasksToUpsert) {
-        Schema.SObjectField extRef = NavTask__c.Fields.INT_External_Reference__c;
+        Map<Decimal, NavTask__c> navTaskMap = new Map<Decimal, NavTask__c>();
 
-        List<Database.UpsertResult> upsList = Database.upsert(tasksToUpsert, extRef, false);
+        for (NavTask__c navTask : tasksToUpsert) {
+            navTaskMap.put(navTask.INT_External_Reference__c, navTask);
+        }
+
+        for (NavTask__c dbNavTask : [
+            SELECT Id, INT_External_Reference__c
+            FROM NavTask__c
+            WHERE INT_External_Reference__c IN :navTaskMap.keySet()
+        ]) {
+            NavTask__c mapTask = navTaskMap.get(dbNavTask.INT_External_Reference__c);
+            mapTask.Id = dbNavTask.Id;
+            navTaskMap.put(mapTask.INT_External_Reference__c, mapTask);
+        }
+
+        List<Database.UpsertResult> upsList = Database.upsert(tasksToUpsert, false);
         verifyUpsertResults(upsList, tasksToUpsert);
     }
 
