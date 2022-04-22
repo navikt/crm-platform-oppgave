@@ -2,6 +2,11 @@
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <quickActions>
         <aspect>Master</aspect>
+        <label>Ferdigstill</label>
+        <name>CRM_Complete_NAV_Task</name>
+    </quickActions>
+    <quickActions>
+        <aspect>Master</aspect>
         <label>Rediger oppgave</label>
         <name>CRM_Edit_NAV_Task</name>
     </quickActions>
