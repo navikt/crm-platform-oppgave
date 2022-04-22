@@ -5,7 +5,7 @@
         <name>Process_NAV_task</name>
         <label>Process NAV task</label>
         <locationX>182</locationX>
-        <locationY>518</locationY>
+        <locationY>398</locationY>
         <actionName>CRM_NavTaskManager</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -32,7 +32,7 @@
         <name>NAV_Task_Assignment</name>
         <label>NAV Task Assignment</label>
         <locationX>182</locationX>
-        <locationY>398</locationY>
+        <locationY>278</locationY>
         <assignmentItems>
             <assignToReference>PATCH_NAV_TASK.NKS_Status__c</assignToReference>
             <operator>Assign</operator>
@@ -49,7 +49,7 @@
         <name>Validate_Callout</name>
         <label>Validate Callout</label>
         <locationX>182</locationX>
-        <locationY>638</locationY>
+        <locationY>518</locationY>
         <defaultConnector>
             <targetReference>Error_Screen</targetReference>
         </defaultConnector>
@@ -100,7 +100,7 @@
         <locationY>158</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>NAV_Task_Input_Screen</targetReference>
+            <targetReference>NAV_Task_Assignment</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -115,13 +115,14 @@
         <queriedFields>Id</queriedFields>
         <queriedFields>INT_External_Reference__c</queriedFields>
         <queriedFields>NKS_Status__c</queriedFields>
+        <queriedFields>NKS_Task_Version__c</queriedFields>
     </recordLookups>
     <recordUpdates>
         <description>Updates the Salesforce task with information received from the Apex action.</description>
         <name>Update_Salesforce_Task</name>
         <label>Update Salesforce Task</label>
         <locationX>50</locationX>
-        <locationY>758</locationY>
+        <locationY>638</locationY>
         <inputReference>Process_NAV_task.task</inputReference>
     </recordUpdates>
     <runInMode>SystemModeWithSharing</runInMode>
@@ -130,7 +131,7 @@
         <name>Error_Screen</name>
         <label>Error_Screen</label>
         <locationX>314</locationX>
-        <locationY>758</locationY>
+        <locationY>638</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -144,21 +145,6 @@
             <fieldText>&lt;p&gt;Det oppsto en feil ved lukking av oppgaven.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
-        <showFooter>true</showFooter>
-        <showHeader>false</showHeader>
-    </screens>
-    <screens>
-        <name>NAV_Task_Input_Screen</name>
-        <label>NAV Task Input Screen</label>
-        <locationX>182</locationX>
-        <locationY>278</locationY>
-        <allowBack>false</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>false</allowPause>
-        <connector>
-            <targetReference>NAV_Task_Assignment</targetReference>
-        </connector>
-        <nextOrFinishButtonLabel>Oppdater</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>
         <showHeader>false</showHeader>
     </screens>
