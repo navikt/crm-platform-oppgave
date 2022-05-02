@@ -8,6 +8,7 @@ public without sharing class CRM_OppgaveSyncController {
         query.opprettetFom = query.opprettetFom == null ? System.now().addYears(-1) : null; //Get oppgaver for the given actor created maximum og one year back in time
         query.returnlimit = 100;
         CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
+        oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
 
         try {
             HttpResponse response = oppgaveService.queryOppgave(query);
