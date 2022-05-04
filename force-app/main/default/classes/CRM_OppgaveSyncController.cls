@@ -1,6 +1,47 @@
 public without sharing class CRM_OppgaveSyncController {
     private static LoggerUtility logger = new LoggerUtility('Oppgave');
 
+    @InvocableMethod(label='Get Oppgave By ID' category='Task Handling')
+    public static List<Id> handleNavTaskRequests(List<String> oppgaveIds) {
+        String oppgaveRef = oppgaveIds[0];
+        Id retId;
+        CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
+
+        try {
+            HttpResponse response = oppgaveService.getOppgaveById(oppgaveRef);
+            Integer statusCode = response.getStatusCode();
+            if (statusCode == 200 || statusCode == 201) {
+                CRM_KafkaOppgave kfOppg = (CRM_KafkaOppgave) JSON.deserialize(
+                    response.getBody(),
+                    CRM_KafkaOppgave.class
+                );
+
+                //Using the oppgave query response wrapper to convert and insert NAV Task
+                CRM_OppgaveQueryResponse queryResp = new CRM_OppgaveQueryResponse();
+                queryResp.antallTreffTotalt = 1;
+                queryResp.oppgaver = new List<CRM_KafkaOppgave>{ kfOppg };
+                List<NavTask__c> navTaskList = queryResp.convertToNavTasks();
+
+                doNavTaskUpsert(navTaskList);
+                retId = navTaskList[0].Id;
+            } else {
+                logger.httpError(
+                    'Error getting oppgave by ID',
+                    response,
+                    null,
+                    CRM_ApplicationDomain.Domain.NKS,
+                    oppgaveService.getTransactionId()
+                );
+            }
+        } catch (Exception ex) {
+            logger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
+        } finally {
+            logger.publish();
+        }
+
+        return new List<Id>{ retId };
+    }
+
     @AuraEnabled
     public static void doOppgaveSync(String jsonQuery) {
         CRM_OppgaveQueryResponse oppgaveResp;
