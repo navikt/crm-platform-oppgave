@@ -76,11 +76,18 @@ public without sharing class CRM_OppgaveSyncController {
                 //Successful upsert
             } else {
                 for (Database.Error error : upsList[index].getErrors()) {
-                    logger.error(
-                        'Error syncing oppgave: ' + error.getMessage(),
-                        null,
-                        CRM_ApplicationDomain.Domain.NKS
-                    );
+                    if (
+                        error.getStatusCode() == StatusCode.DUPLICATE_VALUE &&
+                        error.getMessage().containsIgnoreCase('INT_External_Reference__c')
+                    ) {
+                        //Handling race conditions. This should not be logged as an error
+                    } else {
+                        logger.error(
+                            'Error syncing oppgave: ' + error.getMessage(),
+                            null,
+                            CRM_ApplicationDomain.Domain.NKS
+                        );
+                    }
                 }
             }
         }
