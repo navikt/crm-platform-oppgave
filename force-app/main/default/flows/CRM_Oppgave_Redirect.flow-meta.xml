@@ -42,6 +42,9 @@
         <label>Validate</label>
         <locationX>182</locationX>
         <locationY>278</locationY>
+        <defaultConnector>
+            <targetReference>Error_Screen</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Error</defaultConnectorLabel>
         <rules>
             <name>Ready_for_redirect</name>
@@ -82,6 +85,22 @@
     </processMetadataValues>
     <processType>Flow</processType>
     <runInMode>SystemModeWithSharing</runInMode>
+    <screens>
+        <name>Error_Screen</name>
+        <label>Error Screen</label>
+        <locationX>314</locationX>
+        <locationY>398</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>Error_Text</name>
+            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;Fant ikke oppgaven. &lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
     <start>
         <locationX>56</locationX>
         <locationY>0</locationY>
