@@ -4,8 +4,8 @@
         <description>Calls apex with the desired action.</description>
         <name>Process_NAV_task</name>
         <label>Process NAV task</label>
-        <locationX>179</locationX>
-        <locationY>825</locationY>
+        <locationX>380</locationX>
+        <locationY>974</locationY>
         <actionName>CRM_NavTaskManager</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -65,8 +65,8 @@
     <actionCalls>
         <name>Set_Task_Due_Date</name>
         <label>Set Task Due Date</label>
-        <locationX>180</locationX>
-        <locationY>677</locationY>
+        <locationX>380</locationX>
+        <locationY>854</locationY>
         <actionName>CRM_DueDateUtility</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -89,8 +89,8 @@
         <description>Assigns the necessary values to an outbound NAV task</description>
         <name>Existing_NAV_Task_Assignment</name>
         <label>Existing NAV Task Assignment</label>
-        <locationX>375</locationX>
-        <locationY>379</locationY>
+        <locationX>248</locationX>
+        <locationY>398</locationY>
         <assignmentItems>
             <assignToReference>NavTask</assignToReference>
             <operator>Assign</operator>
@@ -106,8 +106,8 @@
         <description>Assigns the appropriate values from the input screen to the NAV task.</description>
         <name>NAV_Task_Assignment</name>
         <label>NAV Task Assignment</label>
-        <locationX>179</locationX>
-        <locationY>531</locationY>
+        <locationX>380</locationX>
+        <locationY>734</locationY>
         <assignmentItems>
             <assignToReference>NavTask.CRM_Comments__c</assignToReference>
             <operator>Assign</operator>
@@ -134,13 +134,6 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>Theme_Categorization.subtheme</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>NavTask.CRM_Priority__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Task_Priority</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -178,6 +171,13 @@
                 <stringValue>ACCOUNT RELATION</stringValue>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Get_NAV_Task.CRM_Priority__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Task_Type_Selector.priority</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Set_Task_Due_Date</targetReference>
         </connector>
@@ -185,8 +185,8 @@
     <decisions>
         <name>DML_Decision</name>
         <label>DML Decision</label>
-        <locationX>171</locationX>
-        <locationY>1143</locationY>
+        <locationX>182</locationX>
+        <locationY>1214</locationY>
         <defaultConnector>
             <targetReference>Update_Salesforce_Task</targetReference>
         </defaultConnector>
@@ -210,8 +210,8 @@
     <decisions>
         <name>POST_OR_PATCH_DECISION</name>
         <label>POST OR PATCH DECISION</label>
-        <locationX>168</locationX>
-        <locationY>224</locationY>
+        <locationX>380</locationX>
+        <locationY>158</locationY>
         <defaultConnector>
             <targetReference>NAV_Task_Input_Screen</targetReference>
         </defaultConnector>
@@ -236,8 +236,8 @@
         <description>Validate if the callout was successful</description>
         <name>Validate_Callout</name>
         <label>Validate Callout</label>
-        <locationX>173</locationX>
-        <locationY>967</locationY>
+        <locationX>380</locationX>
+        <locationY>1094</locationY>
         <defaultConnector>
             <targetReference>Error_Screen</targetReference>
         </defaultConnector>
@@ -303,7 +303,7 @@ TODAY())</expression>
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>FREE_FORM_CANVAS</stringValue>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -316,8 +316,8 @@ TODAY())</expression>
     <recordCreates>
         <name>Create_Salesforce_Task</name>
         <label>Create Salesforce Task</label>
-        <locationX>70</locationX>
-        <locationY>1264</locationY>
+        <locationX>50</locationX>
+        <locationY>1334</locationY>
         <connector>
             <targetReference>Success_Screen</targetReference>
         </connector>
@@ -327,8 +327,8 @@ TODAY())</expression>
         <description>Queries the NAV task information if this is an edit action.</description>
         <name>Get_NAV_Task</name>
         <label>Get NAV Task</label>
-        <locationX>375</locationX>
-        <locationY>223</locationY>
+        <locationX>248</locationX>
+        <locationY>278</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Existing_NAV_Task_Assignment</targetReference>
@@ -349,8 +349,8 @@ TODAY())</expression>
         <description>Updates the Salesforce task with information received from the Apex action.</description>
         <name>Update_Salesforce_Task</name>
         <label>Update Salesforce Task</label>
-        <locationX>293</locationX>
-        <locationY>1265</locationY>
+        <locationX>314</locationX>
+        <locationY>1334</locationY>
         <connector>
             <targetReference>Success_Screen</targetReference>
         </connector>
@@ -360,8 +360,8 @@ TODAY())</expression>
         <description>Something went wrong when posting/updating the NAV task.</description>
         <name>Error_Screen</name>
         <label>Error_Screen</label>
-        <locationX>372</locationX>
-        <locationY>968</locationY>
+        <locationX>578</locationX>
+        <locationY>1214</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -381,8 +381,8 @@ TODAY())</expression>
     <screens>
         <name>NAV_Task_Input_Screen</name>
         <label>NAV Task Input Screen</label>
-        <locationX>178</locationX>
-        <locationY>379</locationY>
+        <locationX>380</locationX>
+        <locationY>614</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -436,14 +436,6 @@ TODAY())</expression>
             <storeOutputAutomatically>true</storeOutputAutomatically>
         </fields>
         <fields>
-            <name>Task_Priority</name>
-            <choiceReferences>Priority_Picklist</choiceReferences>
-            <dataType>String</dataType>
-            <fieldText>Prioritet</fieldText>
-            <fieldType>RadioButtons</fieldType>
-            <isRequired>true</isRequired>
-        </fields>
-        <fields>
             <name>Task_Due_Date</name>
             <dataType>Date</dataType>
             <defaultValue>
@@ -493,8 +485,8 @@ TODAY())</expression>
         <description>Screen for telling user that the task was successfully sent.</description>
         <name>Success_Screen</name>
         <label>Success Screen</label>
-        <locationX>181</locationX>
-        <locationY>1390</locationY>
+        <locationX>182</locationX>
+        <locationY>1550</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -507,13 +499,13 @@ TODAY())</expression>
         <showHeader>false</showHeader>
     </screens>
     <start>
-        <locationX>50</locationX>
-        <locationY>50</locationY>
+        <locationX>254</locationX>
+        <locationY>0</locationY>
         <connector>
             <targetReference>POST_OR_PATCH_DECISION</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
         <description>The NAV task record to perform the action on.</description>
         <name>NavTask</name>

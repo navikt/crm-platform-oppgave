@@ -6,6 +6,8 @@ import { publish, subscribe, unsubscribe, MessageContext } from 'lightning/messa
 //##LABEL IMPORTS
 import TASK_TYPE_REQUIRED_ERROR from '@salesforce/label/c.CRM_NAV_Task_Type_Validation_Error';
 
+const themeWithoutNormalPriority = ['KON'];
+
 export default class NksTaskTypePicklist extends LightningElement {
     labels = {
         TASK_TYPE_REQUIRED_ERROR
@@ -13,10 +15,14 @@ export default class NksTaskTypePicklist extends LightningElement {
 
     @api showcomponent;
     @api theme;
+    @api priority;
+
     @track tasktypes = [];
+
     tasktype;
     commoncodes;
-
+    isSupported = true;
+  
     @wire(MessageContext)
     messageContext;
 
@@ -125,6 +131,19 @@ export default class NksTaskTypePicklist extends LightningElement {
                 isValid: false,
                 errorMessage: TASK_TYPE_REQUIRED_ERROR
             };
+        }
+    }
+
+    get priorities () {
+        const priorities = [{ label: 'Høy', value: 'High' },
+        { label: 'Normal', value: 'Normal'}, {label: 'Lav', value: 'Low' }];
+        return priorities;
+    }
+
+    handlePriorityChange(event) {
+        this.priority = event.detail.value;
+        if (themeWithoutNormalPriority.includes(this.theme) && this.priority === 'Normal') {
+            this.isSupported = false;
         }
     }
 }
