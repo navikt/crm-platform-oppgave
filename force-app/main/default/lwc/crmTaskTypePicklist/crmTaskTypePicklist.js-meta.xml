@@ -13,7 +13,6 @@
             <property name="showcomponent" label="Input: Show component" type="Boolean" role="inputOnly" />
             <property name="selectedTaskType" label="Selected Task Type" type="String" />
             <property name="selectedTaskTypeId" label="Selected Task Type (ID)" type="String" />
-            <property name="priority" label="Selected Priority" type="String" />
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

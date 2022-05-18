@@ -1,4 +1,9 @@
 <template>
+    <template if:false={isSupported}>
+        <font size="3" color="red" aria-live="true">
+            Temaet du har valgt støtter ikke prioriteten Normal. Velg enten Høy eller Lav prioritet.
+        </font>
+    </template>
     <template if:true={showcomponent}>
         <lightning-radio-group
             name="TaskType"
@@ -10,18 +15,4 @@
         >
         </lightning-radio-group>
     </template>
-    <lightning-radio-group
-    name="Priority"
-    label="Prioritet"
-    options={priorities}
-    required="true"
-    value={priority}
-    onchange={handlePriorityChange}
->
-</lightning-radio-group>
-<template if:false={isSupported}>
-    <font size="3" color="red" aria-live="true">
-          Temaet du har valgt støtter ikke prioriteten Normal. Velg enten Høy eller Lav prioritet.
-    </font>
-</template>
 </template>

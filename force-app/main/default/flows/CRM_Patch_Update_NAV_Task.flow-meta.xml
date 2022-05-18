@@ -79,6 +79,13 @@
             </value>
         </assignmentItems>
         <assignmentItems>
+            <assignToReference>PATCH_NAV_TASK.CRM_Priority__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Task_Priority</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
             <assignToReference>PATCH_NAV_TASK.CRM_NavUnit__c</assignToReference>
             <operator>Assign</operator>
             <value>
@@ -134,13 +141,6 @@
                 <elementReference>Task_Status</elementReference>
             </value>
         </assignmentItems>
-        <assignmentItems>
-            <assignToReference>PATCH_NAV_TASK.CRM_Priority__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Task_Type_Selector.priority</elementReference>
-            </value>
-        </assignmentItems>
         <connector>
             <targetReference>Process_NAV_task</targetReference>
         </connector>
@@ -175,16 +175,16 @@
     <dynamicChoiceSets>
         <name>NAV_Task_Statuses</name>
         <dataType>Picklist</dataType>
-        <displayField xsi:nil="true"/>
-        <object xsi:nil="true"/>
+        <displayField xsi:nil="true" />
+        <object xsi:nil="true" />
         <picklistField>NKS_Status__c</picklistField>
         <picklistObject>NavTask__c</picklistObject>
     </dynamicChoiceSets>
     <dynamicChoiceSets>
         <name>Priority_Picklist</name>
         <dataType>Picklist</dataType>
-        <displayField xsi:nil="true"/>
-        <object xsi:nil="true"/>
+        <displayField xsi:nil="true" />
+        <object xsi:nil="true" />
         <picklistField>CRM_Priority__c</picklistField>
         <picklistObject>NavTask__c</picklistObject>
     </dynamicChoiceSets>
@@ -348,6 +348,17 @@ null,
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <fields>
+            <name>Task_Priority</name>
+            <choiceReferences>Priority_Picklist</choiceReferences>
+            <dataType>String</dataType>
+            <defaultValue>
+                <elementReference>Get_NAV_Task.CRM_Priority__c</elementReference>
+            </defaultValue>
+            <fieldText>Prioritet</fieldText>
+            <fieldType>RadioButtons</fieldType>
+            <isRequired>true</isRequired>
         </fields>
         <fields>
             <name>Task_Due_Date</name>
