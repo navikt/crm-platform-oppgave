@@ -11,8 +11,10 @@
         </lightning-radio-group>
     </template>
     <template if:false={isSupported}>
-        <font size="3" color="#8C4B02" aria-live="assertive">
-            Velg lav eller høy prioritet. Temaet du har valgt støtter ikke prioritet normal.
-        </font>
+        <div class="slds-var-p-top_small" role="alert" aria-live="assertive">
+            <font color="#8C4B02">
+                Velg lav eller høy prioritet. Temaet du har valgt støtter ikke prioritet normal.
+            </font>
+        </div>
     </template>
 </template>
