@@ -8,6 +8,7 @@ public without sharing class CRM_OppgaveSyncController {
         query.opprettetFom = query.opprettetFom == null ? System.now().addYears(-1) : null; //Get oppgaver for the given actor created maximum og one year back in time
         query.returnlimit = 100;
         CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
+        oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
 
         try {
             HttpResponse response = oppgaveService.queryOppgave(query);
@@ -75,11 +76,18 @@ public without sharing class CRM_OppgaveSyncController {
                 //Successful upsert
             } else {
                 for (Database.Error error : upsList[index].getErrors()) {
-                    logger.error(
-                        'Error syncing oppgave: ' + error.getMessage(),
-                        null,
-                        CRM_ApplicationDomain.Domain.NKS
-                    );
+                    if (
+                        error.getStatusCode() == StatusCode.DUPLICATE_VALUE &&
+                        error.getMessage().containsIgnoreCase('INT_External_Reference__c')
+                    ) {
+                        //Handling race conditions. This should not be logged as an error
+                    } else {
+                        logger.error(
+                            'Error syncing oppgave: ' + error.getMessage(),
+                            null,
+                            CRM_ApplicationDomain.Domain.NKS
+                        );
+                    }
                 }
             }
         }
