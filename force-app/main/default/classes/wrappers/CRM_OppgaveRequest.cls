@@ -17,6 +17,7 @@ public class CRM_OppgaveRequest {
     private String aktivDato; //Datestring, REQUIRED
     private String fristFerdigstillelse; //Datestring
     private String prioritet; // [HOY, NORM, LAV],
+    private String status;
     private Integer versjon;
     private String saksreferanse; //NKS-111 adding support for relating task to existing NAV Cases
     private OppgaveMetadata metadata;
@@ -32,6 +33,7 @@ public class CRM_OppgaveRequest {
         fristFerdigstillelse = dueDate != null ? dueDate.format('yyyy-MM-dd') : null;
         journalpostId = task.INT_Journal_Entry_Id__c;
         prioritet = String.valueOf(task.CRM_Priority__c); //Using String.valueOf() as there is an issue when this is passed from a flow pickslit: https://trailblazer.salesforce.com/issues_view?id=a1p3A0000003fH1QAI
+        status = String.valueOf(task.NKS_Status__c);
         aktoerId = taskRequest.actorId;
         oppgavetype = taskRequest.taskTypeCode;
         aktivDato = Datetime.now().format('yyyy-MM-dd');
