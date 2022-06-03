@@ -27,6 +27,7 @@ public class CRM_KafkaOppgave implements Comparable {
 
     //Only included in the API response from oppgave
     public String aktoerId;
+    public String orgnr;
 
     public Integer compareTo(Object compareToObj) {
         CRM_KafkaOppgave compareOppg = (CRM_KafkaOppgave) compareToObj;
