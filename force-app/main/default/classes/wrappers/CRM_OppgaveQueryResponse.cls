@@ -12,7 +12,6 @@ public class CRM_OppgaveQueryResponse {
 
         for (CRM_kafkaOppgave kafkaOppgave : this.oppgaver) {
             if (String.isBlank(kafkaOppgave.orgnr)) {
-                System.debug(JSON.serializePretty(kafkaOppgave));
                 actorExists =
                     this.actorAccMap.containsKey(kafkaOppgave.getActorId()) &&
                     String.isNotBlank(this.actorAccMap.get(kafkaOppgave.getActorId()));
