@@ -1,0 +1,12 @@
+<aura:component implements="lightning:isUrlAddressable">
+    <aura:attribute name="flowApiName" type="String" required="true" default="CRM_Oppgave_Redirect" />
+    <aura:attribute name="pageReference" type="Object" />
+
+    <lightning:workspaceAPI aura:id="workspace" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <!-- Flow container -->
+    <lightning:card>
+        <lightning:flow aura:id="flow" onstatuschange="{!c.handleStatusChange}" />
+    </lightning:card>
+</aura:component>

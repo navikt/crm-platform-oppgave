@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Get_Oppgave_By_Reference</name>
+        <label>Get Oppgave By Reference</label>
+        <locationX>182</locationX>
+        <locationY>158</locationY>
+        <actionName>CRM_OppgaveSyncController</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Validate</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>oppgaveIds</name>
+            <value>
+                <elementReference>oppgaveId</elementReference>
+            </value>
+        </inputParameters>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
+        <name>Redirect_to_oppgave</name>
+        <label>Redirect to oppgave</label>
+        <locationX>50</locationX>
+        <locationY>398</locationY>
+        <actionName>c:crmOppgaveFlowRedirect</actionName>
+        <actionType>component</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recordId</name>
+            <value>
+                <elementReference>Get_Oppgave_By_Reference</elementReference>
+            </value>
+        </inputParameters>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>54.0</apiVersion>
+    <decisions>
+        <description>Verify if the transaction was successful and a redirect is ready</description>
+        <name>Validate</name>
+        <label>Validate</label>
+        <locationX>182</locationX>
+        <locationY>278</locationY>
+        <defaultConnector>
+            <targetReference>Error_Screen</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Error</defaultConnectorLabel>
+        <rules>
+            <name>Ready_for_redirect</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Oppgave_By_Reference</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Redirect_to_oppgave</targetReference>
+            </connector>
+            <label>Ready for redirect</label>
+        </rules>
+    </decisions>
+    <description>Screenflow that will automatically sync and redirect to a NAV Task using the external reference as input</description>
+    <interviewLabel>Oppgave Redirect {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Oppgave Redirect</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <runInMode>SystemModeWithSharing</runInMode>
+    <screens>
+        <name>Error_Screen</name>
+        <label>Error Screen</label>
+        <locationX>314</locationX>
+        <locationY>398</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>Error_Text</name>
+            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;Fant ikke oppgaven. &lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Oppgave_By_Reference</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>External reference for the oppgave to be synced and created.</description>
+        <name>oppgaveId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>
