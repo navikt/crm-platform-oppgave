@@ -6,6 +6,8 @@ import { publish, subscribe, unsubscribe, MessageContext } from 'lightning/messa
 //##LABEL IMPORTS
 import TASK_TYPE_REQUIRED_ERROR from '@salesforce/label/c.CRM_NAV_Task_Type_Validation_Error';
 
+const themesWithoutNormalPriority = ['PEN', 'BID', 'OKO'];
+
 export default class NksTaskTypePicklist extends LightningElement {
     labels = {
         TASK_TYPE_REQUIRED_ERROR
@@ -13,9 +15,12 @@ export default class NksTaskTypePicklist extends LightningElement {
 
     @api showcomponent;
     @api theme;
+
     @track tasktypes = [];
+
     tasktype;
     commoncodes;
+    isSupported = true;
 
     @wire(MessageContext)
     messageContext;
@@ -77,6 +82,7 @@ export default class NksTaskTypePicklist extends LightningElement {
         switch (fieldName) {
             case 'themeCode':
                 this.theme = value;
+                this.handleThemeChange();
                 this.findTaskTypes();
                 break;
             case 'createtask':
@@ -125,6 +131,14 @@ export default class NksTaskTypePicklist extends LightningElement {
                 isValid: false,
                 errorMessage: TASK_TYPE_REQUIRED_ERROR
             };
+        }
+    }
+
+    handleThemeChange() {
+        if (themesWithoutNormalPriority.includes(this.theme)) {
+            this.isSupported = false;
+        } else {
+            this.isSupported = true;
         }
     }
 }
