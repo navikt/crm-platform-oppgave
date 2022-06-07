@@ -137,6 +137,8 @@ export default class NksTaskTypePicklist extends LightningElement {
     handleThemeChange() {
         if (themesWithoutNormalPriority.includes(this.theme)) {
             this.isSupported = false;
+        } else {
+            this.isSupported = true;
         }
     }
 }
