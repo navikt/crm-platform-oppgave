@@ -46,43 +46,6 @@
     </actionCalls>
     <apiVersion>53.0</apiVersion>
     <assignments>
-        <name>Add_Comment_to_History</name>
-        <label>Add Comment to History</label>
-        <locationX>50</locationX>
-        <locationY>878</locationY>
-        <assignmentItems>
-            <assignToReference>Send_Update_Request.task.NKS_Comments__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>FORMATTED_COMMENT</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>Send_Update_Request.task.NKS_Comments__c</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>NEWLINE</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>Send_Update_Request.task.NKS_Comments__c</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>NEWLINE</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>Send_Update_Request.task.NKS_Comments__c</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>Get_NAV_Task.NKS_Comments__c</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Update_NAV_Task</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
         <name>Assign_NAV_Task_Values</name>
         <label>Assign NAV Task Values</label>
         <locationX>182</locationX>
@@ -115,6 +78,27 @@
                 <elementReference>FORMATTED_COMMENT</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PATCH_NAV_TASK.NKS_Comments__c</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>NEWLINE</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PATCH_NAV_TASK.NKS_Comments__c</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>NEWLINE</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PATCH_NAV_TASK.NKS_Comments__c</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_NAV_Task.NKS_Comments__c</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Send_Update_Request</targetReference>
         </connector>
@@ -140,7 +124,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Add_Comment_to_History</targetReference>
+                <targetReference>Update_NAV_Task</targetReference>
             </connector>
             <label>Update Success</label>
         </rules>
@@ -201,7 +185,7 @@
         <name>Update_NAV_Task</name>
         <label>Update NAV Task</label>
         <locationX>50</locationX>
-        <locationY>998</locationY>
+        <locationY>878</locationY>
         <inputReference>Send_Update_Request.task</inputReference>
     </recordUpdates>
     <runInMode>SystemModeWithSharing</runInMode>
@@ -262,7 +246,7 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <value>
-            <stringValue/>
+            <stringValue></stringValue>
         </value>
     </variables>
     <variables>
