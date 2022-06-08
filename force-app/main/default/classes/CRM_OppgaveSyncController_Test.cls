@@ -23,4 +23,16 @@ public class CRM_OppgaveSyncController_Test {
 
         System.assert([SELECT COUNT() FROM NavTask__c] > 0);
     }
+
+    @isTest
+    static void testInvocable() {
+        ApiMock.setTestMock('GET_OPPGAVE_BY_ID', 200, 'OK');
+        CRM_OPPGAVE_TestDataFactory.createRecord(new Person__c(INT_ActorId__c = '1234567891113'));
+
+        Test.startTest();
+        CRM_OppgaveSyncController.handleNavTaskRequests(new List<String>{ '5436732' });
+        Test.stopTest();
+
+        System.assert([SELECT COUNT() FROM NavTask__c] > 0);
+    }
 }
