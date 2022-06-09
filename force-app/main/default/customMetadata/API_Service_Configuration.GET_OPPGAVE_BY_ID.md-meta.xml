@@ -31,8 +31,6 @@
   &quot;bnr&quot;: &quot;11250199559&quot;,
   &quot;samhandlernr&quot;: &quot;80000999999&quot;,
   &quot;aktoerId&quot;: &quot;1234567891113&quot;,
-  &quot;identer&quot;: 12345678911,
-  &quot;orgnr&quot;: &quot;979312059&quot;,
   &quot;tilordnetRessurs&quot;: &quot;Z998323&quot;,
   &quot;beskrivelse&quot;: &quot;string&quot;,
   &quot;temagruppe&quot;: &quot;ANSOS&quot;,
@@ -51,8 +49,8 @@
     &quot;additionalProp2&quot;: &quot;string&quot;,
     &quot;additionalProp3&quot;: &quot;string&quot;
   },
-  &quot;fristFerdigstillelse&quot;: {},
-  &quot;aktivDato&quot;: {},
+  &quot;fristFerdigstillelse&quot;: &quot;2022-03-21T20:16:17.538Z&quot;,
+  &quot;aktivDato&quot;: &quot;2022-03-21T20:16:17.538Z&quot;,
   &quot;opprettetTidspunkt&quot;: &quot;2022-03-21T20:16:17.538Z&quot;,
   &quot;ferdigstiltTidspunkt&quot;: &quot;2022-03-21T20:16:17.538Z&quot;,
   &quot;endretTidspunkt&quot;: &quot;2022-03-21T20:16:17.538Z&quot;

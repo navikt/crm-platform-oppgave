@@ -11,12 +11,15 @@ public class CRM_OppgaveQueryResponse {
         Boolean mappedTheme = false;
 
         for (CRM_kafkaOppgave kafkaOppgave : this.oppgaver) {
-            actorExists =
-                this.actorAccMap.containsKey(kafkaOppgave.getActorId()) &&
-                String.isNotBlank(this.actorAccMap.get(kafkaOppgave.getActorId()));
-            mappedTheme = this.commonCodeMap.containsKey('Tema' + kafkaOppgave.tema);
-            if (actorExists && mappedTheme) {
-                returnList.add(convertToNavTask(kafkaOppgave));
+            if (String.isBlank(kafkaOppgave.orgnr)) {
+                actorExists =
+                    this.actorAccMap.containsKey(kafkaOppgave.getActorId()) &&
+                    String.isNotBlank(this.actorAccMap.get(kafkaOppgave.getActorId()));
+                mappedTheme = this.commonCodeMap.containsKey('Tema' + kafkaOppgave.tema);
+                //Added criteria to filter our oppgave related to organizations
+                if (actorExists && mappedTheme) {
+                    returnList.add(convertToNavTask(kafkaOppgave));
+                }
             }
         }
 
@@ -95,7 +98,9 @@ public class CRM_OppgaveQueryResponse {
                 Set<String> actorIdSet = new Set<String>();
                 //Adds all the actorIds to a unique set
                 for (CRM_KafkaOppgave kfOppg : this.oppgaver) {
-                    actorIdSet.add(kfOppg.getActorId());
+                    if (String.isBlank(kfOppg.orgnr)) {
+                        actorIdSet.add(kfOppg.getActorId());
+                    }
                 }
                 for (Person__c person : [
                     SELECT CRM_Account__c, INT_ActorId__c

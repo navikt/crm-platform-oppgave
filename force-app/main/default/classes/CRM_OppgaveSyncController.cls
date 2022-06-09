@@ -34,6 +34,7 @@ public without sharing class CRM_OppgaveSyncController {
                 );
             }
         } catch (Exception ex) {
+            System.debug(ex);
             logger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
         } finally {
             logger.publish();
