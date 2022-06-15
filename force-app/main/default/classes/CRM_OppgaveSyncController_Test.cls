@@ -25,6 +25,20 @@ public class CRM_OppgaveSyncController_Test {
     }
 
     @isTest
+    static void testSyncById() {
+        ApiMock.setTestMock('GET_OPPGAVE_BY_ID', 200, 'OK');
+        CRM_OPPGAVE_TestDataFactory.createRecord(new Person__c(INT_ActorId__c = '1234567891113'));
+
+        Test.startTest();
+        CRM_OppgaveQuery query = new CRM_OppgaveQuery();
+        query.aktoerId = '1234567891113';
+        CRM_OppgaveSyncController.syncOppgaveByExtRef('1234567892');
+        Test.stopTest();
+
+        System.assert([SELECT COUNT() FROM NavTask__c] > 0);
+    }
+
+    @isTest
     static void testInvocable() {
         ApiMock.setTestMock('GET_OPPGAVE_BY_ID', 200, 'OK');
         CRM_OPPGAVE_TestDataFactory.createRecord(new Person__c(INT_ActorId__c = '1234567891113'));

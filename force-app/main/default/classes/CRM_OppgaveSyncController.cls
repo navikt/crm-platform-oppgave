@@ -79,6 +79,43 @@ public without sharing class CRM_OppgaveSyncController {
         }
     }
 
+    @AuraEnabled
+    public static void syncOppgaveByExtRef(String oppgaveRef) {
+        CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
+
+        try {
+            HttpResponse response = oppgaveService.getOppgaveById(oppgaveRef);
+            Integer statusCode = response.getStatusCode();
+            if (statusCode == 200 || statusCode == 201) {
+                CRM_KafkaOppgave kfOppg = (CRM_KafkaOppgave) JSON.deserialize(
+                    response.getBody(),
+                    CRM_KafkaOppgave.class
+                );
+
+                //Using the oppgave query response wrapper to convert and insert NAV Task
+                CRM_OppgaveQueryResponse queryResp = new CRM_OppgaveQueryResponse();
+                queryResp.antallTreffTotalt = 1;
+                queryResp.oppgaver = new List<CRM_KafkaOppgave>{ kfOppg };
+                List<NavTask__c> navTaskList = queryResp.convertToNavTasks();
+
+                doNavTaskUpsert(navTaskList);
+            } else {
+                logger.httpError(
+                    'Error getting oppgave by ID',
+                    response,
+                    null,
+                    CRM_ApplicationDomain.Domain.NKS,
+                    oppgaveService.getTransactionId()
+                );
+            }
+        } catch (Exception ex) {
+            System.debug(ex);
+            logger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
+        } finally {
+            logger.publish();
+        }
+    }
+
     /**
      * Performing a database upsert to update exisiting tasks (using SF ID) and create new ones
      * @author Stian Ruud Schikora | 03-28-2022
