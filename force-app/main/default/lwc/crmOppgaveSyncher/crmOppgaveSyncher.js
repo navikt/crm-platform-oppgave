@@ -1,4 +1,5 @@
 import doCalloutAndSync from '@salesforce/apex/CRM_OppgaveSyncController.doOppgaveSync';
+import syncByExtRef from '@salesforce/apex/CRM_OppgaveSyncController.syncOppgaveByExtRef';
 
 class OppgaveQueryParams {
     constructor() {
@@ -21,11 +22,8 @@ export function syncActorOppgaver(actorId) {
     return syncOppgaver(params);
 }
 
-export function syncOppgaveById(id) {
-    let params = new OppgaveQueryParams();
-    params.id = id;
-
-    return syncOppgaver(params);
+export function syncOppgaveById(oppgaveRef) {
+    return syncByOppgaveId(oppgaveRef);
 }
 
 export function syncAssignedOppgaver(assigneeNavIdent) {
@@ -34,6 +32,19 @@ export function syncAssignedOppgaver(assigneeNavIdent) {
 
     return this.syncOppgaver(params);
 }
+
+function syncByOppgaveId(oppgaveRef) {
+    return new Promise((resolve, reject) => {
+        syncByExtRef({ oppgaveRef: oppgaveRef })
+            .then(() => {
+                resolve('Success');
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+}
+
 //input object that is passed to apex performing callout to generate NavTask__c representation of the response
 function syncOppgaver(queryParams) {
     return new Promise((resolve, reject) => {
