@@ -21,6 +21,13 @@ export function syncActorOppgaver(actorId) {
     return syncOppgaver(params);
 }
 
+export function syncOppgaveById(id) {
+    let params = new OppgaveQueryParams();
+    params.id = id;
+
+    return syncOppgaver(params);
+}
+
 export function syncAssignedOppgaver(assigneeNavIdent) {
     let params = new OppgaveQueryParams();
     params.tilordnetRessurs = assigneeNavIdent;

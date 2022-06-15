@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Oppgaver Record Syncer</masterLabel>
+    <description>Component to be placed on NavTask__c layout with INT_External_Reference__c defined. Will then automatically sync the NavTask__c using Oppgave API</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+    </targets>
+</LightningComponentBundle>
