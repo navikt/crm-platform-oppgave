@@ -1,4 +1,4 @@
-public class CRM_KafkaOppgaveHandler implements IKafkaMessageConsumer {
+public without sharing class CRM_KafkaOppgaveHandler implements IKafkaMessageConsumer {
     private LoggerUtility logger = new LoggerUtility();
     private Map<String, String> actorAccMap = new Map<String, String>();
     private Map<String, List<KafkaMessage__c>> messageMap = new Map<String, List<KafkaMessage__c>>(); //Maps CRM_Key__c to a list of KafkaMessages for that key
@@ -72,6 +72,7 @@ public class CRM_KafkaOppgaveHandler implements IKafkaMessageConsumer {
         List<NavTask__c> tasksToUpsert = new List<NavTask__c>();
         Map<Decimal, NavTask__c> existingTaskMap = new Map<Decimal, NavTask__c>();
         Map<Decimal, List<CRM_KafkaOppgave>> kafkaTaskMap = convertToKafkaTasks(messages);
+        CRM_KafkaOppgaveEventHandler.logLimits(); //LOGGING LIMIT CONSUMPTION
         List<CRM_KafkaOppgave> tasksToConvert = new List<CRM_KafkaOppgave>();
 
         for (NavTask__c navTask : [
@@ -96,10 +97,12 @@ public class CRM_KafkaOppgaveHandler implements IKafkaMessageConsumer {
             if (taskToConvert != null)
                 tasksToConvert.add(taskToConvert);
         }
+        CRM_KafkaOppgaveEventHandler.logLimits(); //LOGGING LIMITS
 
         tasksToUpsert = convertToNavTasks(tasksToConvert);
-
+        CRM_KafkaOppgaveEventHandler.logLimits(); //LOGGING LIMITS
         doUpsert(tasksToUpsert);
+        CRM_KafkaOppgaveEventHandler.logLimits(); //LOGGING LIMITS
         logger.publish();
     }
 

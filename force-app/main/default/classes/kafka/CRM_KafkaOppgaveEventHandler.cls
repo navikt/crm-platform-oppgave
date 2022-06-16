@@ -6,6 +6,8 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
      * @param kfOppgEvents
      **/
     public static void processOppgaveEvents(List<Kafka_Oppgave_Event__e> kfOppgEvents) {
+        logger.info('Handling ' + kfOppgEvents.size() + ' events', null, CRM_ApplicationDomain.Domain.NKS);
+        logger.publish();
         CRM_KafkaOppgaveHandler messageHandler = new CRM_KafkaOppgaveHandler();
         List<KafkaMessage__c> transformedMessages;
         try {
@@ -104,5 +106,18 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
         } catch (Exception ex) {
             logger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
         }
+    }
+
+    public static void logLimits() {
+        String message = 'Current limits\n';
+        message += 'HEAP SIZE: ' + Limits.getHeapSize() + ' of ' + Limits.getLimitHeapSize() + '\n';
+        message += 'CPU: ' + Limits.getCpuTime() + ' of ' + Limits.getLimitCpuTime() + '\n';
+        message += 'SOQL ROWS: ' + Limits.getQueryRows() + ' of ' + Limits.getLimitQueryRows() + '\n';
+        message += 'SOQL QUERIES: ' + Limits.getQueries() + ' of ' + Limits.getLimitQueries() + '\n';
+        message += 'DML ROWS: ' + Limits.getDmlRows() + ' of ' + Limits.getLimitDmlRows() + '\n';
+        message += 'DML STATEMENTS: ' + Limits.getDMLStatements() + ' of ' + Limits.getLimitDMLStatements();
+
+        Logger.info(message, null, CRM_ApplicationDomain.Domain.NKS);
+        logger.publish();
     }
 }
