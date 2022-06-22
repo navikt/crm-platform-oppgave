@@ -6,8 +6,7 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
      * @param kfOppgEvents
      **/
     public static void processOppgaveEvents(List<Kafka_Oppgave_Event__e> kfOppgEvents) {
-        logger.info('Handling ' + kfOppgEvents.size() + ' events', null, CRM_ApplicationDomain.Domain.NKS);
-        logger.publish();
+        logOffsets(kfOppgEvents);
         CRM_KafkaOppgaveHandler messageHandler = new CRM_KafkaOppgaveHandler();
         List<KafkaMessage__c> transformedMessages;
         try {
@@ -106,6 +105,27 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
         } catch (Exception ex) {
             logger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
         }
+    }
+
+    public static void logOffsets(List<Kafka_Oppgave_Event__e> kfOppgEvents) {
+        List<Integer> oppgKeys = new List<Integer>();
+        List<Integer> offsets = new List<Integer>();
+        List<Integer> partitions = new List<Integer>();
+
+        for (Kafka_Oppgave_Event__e kfOppgEvent : kfOppgEvents) {
+            offsets.add(Integer.valueOf(kfOppgEvent.CRM_Offset__c));
+            partitions.add(Integer.valueOf(kfOppgEvent.CRM_Partition__c));
+            oppgKeys.add(Integer.valueOf(kfOppgEvent.CRM_Key__c));
+        }
+
+        offsets.sort();
+        partitions.sort();
+
+        String logMessage = 'Offsets from kafka: ' + offsets.toString() + '\n';
+        logMessage += 'Partitions: ' + partitions.toString();
+        logMessage += 'Keys: ' + oppgKeys.toString();
+        Logger.info(logMessage, null, CRM_ApplicationDomain.Domain.NKS);
+        logger.publish();
     }
 
     public static void logLimits() {
