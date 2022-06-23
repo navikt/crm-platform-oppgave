@@ -122,7 +122,7 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
         partitions.sort();
 
         String logMessage = 'Offsets from kafka: ' + offsets.toString() + '\n';
-        logMessage += 'Partitions: ' + partitions.toString();
+        logMessage += 'Partitions: ' + partitions.toString() + '\n';
         logMessage += 'Keys: ' + oppgKeys.toString();
         Logger.info(logMessage, null, CRM_ApplicationDomain.Domain.NKS);
         logger.publish();
