@@ -72,7 +72,7 @@ public without sharing class CRM_KafkaOppgaveHandler implements IKafkaMessageCon
         List<NavTask__c> tasksToUpsert = new List<NavTask__c>();
         Map<Decimal, NavTask__c> existingTaskMap = new Map<Decimal, NavTask__c>();
         Map<Decimal, List<CRM_KafkaOppgave>> kafkaTaskMap = convertToKafkaTasks(messages);
-        CRM_KafkaOppgaveEventHandler.logLimits(); //LOGGING LIMIT CONSUMPTION
+        //CRM_KafkaOppgaveEventHandler.logLimits(); //LOGGING LIMIT CONSUMPTION
         List<CRM_KafkaOppgave> tasksToConvert = new List<CRM_KafkaOppgave>();
 
         for (NavTask__c navTask : [
@@ -97,12 +97,12 @@ public without sharing class CRM_KafkaOppgaveHandler implements IKafkaMessageCon
             if (taskToConvert != null)
                 tasksToConvert.add(taskToConvert);
         }
-        CRM_KafkaOppgaveEventHandler.logLimits(); //LOGGING LIMITS
+        //CRM_KafkaOppgaveEventHandler.logLimits(); //LOGGING LIMITS
 
         tasksToUpsert = convertToNavTasks(tasksToConvert);
-        CRM_KafkaOppgaveEventHandler.logLimits(); //LOGGING LIMITS
+        //CRM_KafkaOppgaveEventHandler.logLimits(); //LOGGING LIMITS
         doUpsert(tasksToUpsert);
-        CRM_KafkaOppgaveEventHandler.logLimits(); //LOGGING LIMITS
+        //CRM_KafkaOppgaveEventHandler.logLimits(); //LOGGING LIMITS
         logger.publish();
     }
 

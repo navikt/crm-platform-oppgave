@@ -6,8 +6,7 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
      * @param kfOppgEvents
      **/
     public static void processOppgaveEvents(List<Kafka_Oppgave_Event__e> kfOppgEvents) {
-        logger.info('Handling ' + kfOppgEvents.size() + ' events', null, CRM_ApplicationDomain.Domain.NKS);
-        logger.publish();
+        logOffsets(JSON.serialize(kfOppgEvents));
         CRM_KafkaOppgaveHandler messageHandler = new CRM_KafkaOppgaveHandler();
         List<KafkaMessage__c> transformedMessages;
         try {
@@ -106,6 +105,28 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
         } catch (Exception ex) {
             logger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
         }
+    }
+
+    @future
+    public static void logOffsets(String jsonEvents) {
+        List<Kafka_Oppgave_Event__e> kfOppgEvents = (List<Kafka_Oppgave_Event__e>) JSON.deserialize(
+            jsonEvents,
+            List<Kafka_Oppgave_Event__e>.class
+        );
+        List<Application_Log__c> offsetLogs = new List<Application_Log__c>();
+
+        for (Kafka_Oppgave_Event__e kfOppgEvent : kfOppgEvents) {
+            offsetLogs.add(
+                new Application_Log__c(
+                    Category__c = 'Oppgave Events',
+                    CRM_Offset__c = Integer.valueOf(kfOppgEvent.CRM_Offset__c),
+                    CRM_Partition__c = Integer.valueOf(kfOppgEvent.CRM_Partition__c),
+                    Referrence_ID__c = kfOppgEvent.CRM_Key__c
+                )
+            );
+        }
+
+        insert offsetLogs;
     }
 
     public static void logLimits() {

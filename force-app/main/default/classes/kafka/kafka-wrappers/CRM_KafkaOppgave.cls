@@ -63,9 +63,11 @@ public class CRM_KafkaOppgave implements Comparable {
         } else if (String.isNotBlank(this.aktoerId)) {
             actorId = this.aktoerId;
         } else {
-            for (Ident idt : this.identer) {
-                if (String.isNotBlank(idt.gruppe) && idt.gruppe.equalsIgnoreCase('AKTOERID')) {
-                    actorId = idt.ident;
+            if (this.identer != null) {
+                for (Ident idt : this.identer) {
+                    if (String.isNotBlank(idt.gruppe) && idt.gruppe.equalsIgnoreCase('AKTOERID')) {
+                        actorId = idt.ident;
+                    }
                 }
             }
         }
