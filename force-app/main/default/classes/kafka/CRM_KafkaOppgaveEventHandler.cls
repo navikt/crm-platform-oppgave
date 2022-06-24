@@ -125,6 +125,8 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
                 )
             );
         }
+
+        insert offsetLogs;
     }
 
     public static void logLimits() {
