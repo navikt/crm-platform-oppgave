@@ -46,6 +46,43 @@
     </actionCalls>
     <apiVersion>53.0</apiVersion>
     <assignments>
+        <name>Add_Comment_to_History</name>
+        <label>Add Comment to History</label>
+        <locationX>50</locationX>
+        <locationY>878</locationY>
+        <assignmentItems>
+            <assignToReference>Send_Update_Request.task.NKS_Comments__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FORMATTED_COMMENT</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Send_Update_Request.task.NKS_Comments__c</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>NEWLINE</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Send_Update_Request.task.NKS_Comments__c</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>NEWLINE</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Send_Update_Request.task.NKS_Comments__c</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_NAV_Task.NKS_Comments__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_NAV_Task</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_NAV_Task_Values</name>
         <label>Assign NAV Task Values</label>
         <locationX>182</locationX>
@@ -78,27 +115,6 @@
                 <elementReference>FORMATTED_COMMENT</elementReference>
             </value>
         </assignmentItems>
-        <assignmentItems>
-            <assignToReference>PATCH_NAV_TASK.NKS_Comments__c</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>NEWLINE</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>PATCH_NAV_TASK.NKS_Comments__c</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>NEWLINE</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>PATCH_NAV_TASK.NKS_Comments__c</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>Get_NAV_Task.NKS_Comments__c</elementReference>
-            </value>
-        </assignmentItems>
         <connector>
             <targetReference>Send_Update_Request</targetReference>
         </connector>
@@ -124,7 +140,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Update_NAV_Task</targetReference>
+                <targetReference>Add_Comment_to_History</targetReference>
             </connector>
             <label>Update Success</label>
         </rules>
@@ -164,10 +180,10 @@
         <name>Get_NAV_Task</name>
         <label>Get NAV Task</label>
         <locationX>182</locationX>
-        <locationY>158</locationY>
+        <locationY>278</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Add_Comment_Screen</targetReference>
+            <targetReference>Format_datetime</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -185,7 +201,7 @@
         <name>Update_NAV_Task</name>
         <label>Update NAV Task</label>
         <locationX>50</locationX>
-        <locationY>878</locationY>
+        <locationY>998</locationY>
         <inputReference>Send_Update_Request.task</inputReference>
     </recordUpdates>
     <runInMode>SystemModeWithSharing</runInMode>
@@ -193,12 +209,12 @@
         <name>Add_Comment_Screen</name>
         <label>Add Comment Screen</label>
         <locationX>182</locationX>
-        <locationY>278</locationY>
+        <locationY>158</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Format_datetime</targetReference>
+            <targetReference>Get_NAV_Task</targetReference>
         </connector>
         <fields>
             <name>Comment_Failed_Text</name>
@@ -229,7 +245,7 @@
         <locationX>56</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_NAV_Task</targetReference>
+            <targetReference>Add_Comment_Screen</targetReference>
         </connector>
     </start>
     <status>Active</status>
