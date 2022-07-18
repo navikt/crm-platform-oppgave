@@ -18,6 +18,10 @@
                 {
                     "package": "crm-platform-integration",
                     "versionNumber": "0.69.0.LATEST"
+                },
+                {
+                    "package": "crm-shared-flowComponents",
+                    "versionNumber": "0.3.0.LATEST"
                 }
             ]
         }
