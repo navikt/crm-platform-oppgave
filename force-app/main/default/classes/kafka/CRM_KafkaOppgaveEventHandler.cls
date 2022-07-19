@@ -107,7 +107,7 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
         }
     }
 
-    @future
+    /* @future
     public static void logOffsets(String jsonEvents) {
         List<Kafka_Oppgave_Event__e> kfOppgEvents = (List<Kafka_Oppgave_Event__e>) JSON.deserialize(
             jsonEvents,
@@ -127,7 +127,7 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
         }
 
         insert offsetLogs;
-    }
+    }*/
 
     public static void logLimits() {
         String message = 'Current limits\n';
