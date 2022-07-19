@@ -10,4 +10,9 @@
         <label>Send til fellesbenken</label>
         <name>CRM_Remove_Assignee</name>
     </quickActions>
+    <quickActions>
+        <aspect>Master</aspect>
+        <label>Endre enhetsbenk</label>
+        <name>Change_NAV_Unit</name>
+    </quickActions>
 </CustomObjectTranslation>
