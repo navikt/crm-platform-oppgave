@@ -132,6 +132,7 @@ public without sharing class CRM_OppgaveSyncController {
             SELECT Id, INT_External_Reference__c
             FROM NavTask__c
             WHERE INT_External_Reference__c IN :navTaskMap.keySet()
+            FOR UPDATE
         ]) {
             NavTask__c mapTask = navTaskMap.get(dbNavTask.INT_External_Reference__c);
             mapTask.Id = dbNavTask.Id;
