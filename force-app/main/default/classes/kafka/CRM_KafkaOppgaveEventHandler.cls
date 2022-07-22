@@ -5,6 +5,10 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
      * @author Stian Ruud Schikora | 08-03-2021
      * @param kfOppgEvents
      **/
+    @invocableMethod(
+        label='Oppgave Event Handler'
+        description='Apex action to transform and handle converting events to NAV Task updates'
+    )
     public static void processOppgaveEvents(List<Kafka_Oppgave_Event__e> kfOppgEvents) {
         CRM_KafkaOppgaveHandler messageHandler = new CRM_KafkaOppgaveHandler();
         List<KafkaMessage__c> transformedMessages;
