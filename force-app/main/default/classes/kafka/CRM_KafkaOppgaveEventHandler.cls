@@ -73,7 +73,7 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
         String jsonEvents;
         filterEvents(kfOppgEvents);
         jsonEvents = JSON.serialize(kfOppgEvents);
-        logOffsets(jsonEvents); //Logging the events to be handled when others are filtered out
+        //logOffsets(jsonEvents); //Logging the events to be handled when others are filtered out
 
         return (List<KafkaMessage__c>) JSON.deserialize(jsonEvents, List<KafkaMessage__c>.class);
     }
@@ -111,7 +111,7 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
         }
     }
 
-    @future
+    /*@future
     public static void logOffsets(String jsonEvents) {
         List<Kafka_Oppgave_Event__e> kfOppgEvents = (List<Kafka_Oppgave_Event__e>) JSON.deserialize(
             jsonEvents,
@@ -132,9 +132,9 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
         }
 
         insert offsetLogs;
-    }
+    }*/
 
-    public static void logLimits() {
+    /*public static void logLimits() {
         String message = 'Current limits\n';
         message += 'HEAP SIZE: ' + Limits.getHeapSize() + ' of ' + Limits.getLimitHeapSize() + '\n';
         message += 'CPU: ' + Limits.getCpuTime() + ' of ' + Limits.getLimitCpuTime() + '\n';
@@ -145,5 +145,5 @@ public without sharing class CRM_KafkaOppgaveEventHandler {
 
         Logger.info(message, null, CRM_ApplicationDomain.Domain.NKS);
         logger.publish();
-    }
+    }*/
 }
