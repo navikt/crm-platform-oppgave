@@ -60,6 +60,12 @@
                 <elementReference>$Record</elementReference>
             </value>
         </inputParameters>
+        <inputParameters>
+            <name>source</name>
+            <value>
+                <stringValue>Kafka Oppgave Event - On Insert</stringValue>
+            </value>
+        </inputParameters>
     </actionCalls>
     <apiVersion>55.0</apiVersion>
     <interviewLabel>Kafka Oppgave Event - On Insert {!$Flow.CurrentDateTime}</interviewLabel>
