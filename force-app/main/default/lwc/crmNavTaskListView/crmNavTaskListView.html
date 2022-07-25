@@ -1,0 +1,28 @@
+<template>
+    <lightning-card class="slds-is-relative" title={listTitle}>
+        <lightning-spinner if:true={isLoading} variant="brand" size="small"></lightning-spinner>
+        <lightning-button-icon
+            slot="actions"
+            icon-name="utility:refresh"
+            alternative-text="Refresh"
+            title="Refresh"
+            onclick={handleRefresh}
+        ></lightning-button-icon>
+        <c-crm-empty-state-no-task if:true={emptyState} message="Ingen oppgaver"></c-crm-empty-state-no-task>
+        <div if:true={hasRecords}>
+            <template for:each={records} for:item="navTask">
+                <lightning-layout key={navTask.Id} multiple-rows="true">
+                    <lightning-layout-item padding="horizontal-medium" size="12">
+                        <c-crm-nav-task-list-item
+                            display-fields={queryFields}
+                            nav-task-record={navTask}
+                        ></c-crm-nav-task-list-item>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </template>
+        </div>
+        <div slot="footer" class="slds-align_absolute-center">
+            <a onclick={navigateToListView}>Se alle oppgaver</a>
+        </div>
+    </lightning-card>
+</template>

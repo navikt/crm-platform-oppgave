@@ -1,0 +1,20 @@
+<template>
+    <lightning-record-view-form object-api-name="NavTask__c" record-id={recordId}>
+        <lightning-layout class="slds-text-link_faux" role="link" onclick={navigateToRecord}>
+            <template for:each={dataFields} for:item="dataField">
+                <lightning-layout-item key={dataField.fieldName} class="slds-p-right_small">
+                    <div class="slds-text-link slds-text-link-fauz" if:true={dataField.isRelationshipField}>
+                        {dataField.fieldValue}
+                    </div>
+                    <div if:false={dataField.isRelationshipField}>
+                        <lightning-output-field
+                            variant="label-hidden"
+                            field-class="slds-text-body_regular slds-text-link "
+                            field-name={dataField.fieldName}
+                        ></lightning-output-field>
+                    </div>
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
+    </lightning-record-view-form>
+</template>
