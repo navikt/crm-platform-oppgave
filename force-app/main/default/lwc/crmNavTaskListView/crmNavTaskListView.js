@@ -56,7 +56,7 @@ export default class CrmNavTaskListView extends NavigationMixin(LightningElement
     }
 
     get hasRecords() {
-        return this.records.length > 0 || this.isLoading == false;
+        return this.records.length > 0;
     }
 
     get emptyState() {
@@ -67,6 +67,10 @@ export default class CrmNavTaskListView extends NavigationMixin(LightningElement
         if (this.colHeaders) {
             return this.colHeaders.split(',');
         }
+    }
+
+    get colHeaderSize() {
+        return this.columnHeaders.length > 0 ? Math.floor(12 / this.columnHeaders.length) : 12;
     }
 
     get displayFields() {
