@@ -10,7 +10,8 @@
     <targetConfigs>
         <targetConfig targets="lightning__HomePage">
             <property name="listTitle" label="List Title:" type="String" />
-            <property name="listViewApiName" label="List View API Name" type="String" />
+            <property name="fieldsToDisplay" label="Comma-separated list of fields to display" type="String" />
+            <property name="filterString" label="SOQL formatted filter string (without WHERE)" type="String" />
             <property name="ownedByRunningUser" label="Records owned by running user?" description="If the list view has the \'My NAV Tasks\' filter, set this to true" type="Boolean" default="false" />
             <property name="numRecords" label="Number of records:" description="Number of records to be returned" type="Integer" default="10" />
         </targetConfig>

@@ -14,7 +14,7 @@
                 <template for:each={records} for:item="navTask">
                     <li key={navTask.Id} class="list-item-row slds-m-horizontal_small slds-p-horizontal_small">
                         <c-crm-nav-task-list-item
-                            display-fields={queryFields}
+                            display-fields={displayFields}
                             nav-task-record={navTask}
                         ></c-crm-nav-task-list-item>
                     </li>
