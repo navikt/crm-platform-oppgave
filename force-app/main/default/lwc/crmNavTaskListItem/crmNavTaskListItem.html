@@ -2,7 +2,7 @@
     <lightning-record-view-form object-api-name="NavTask__c" record-id={recordId}>
         <lightning-layout role="link" onclick={navigateToRecord}>
             <template for:each={dataFields} for:item="dataField">
-                <lightning-layout-item key={dataField.fieldName} class="slds-p-right_small">
+                <lightning-layout-item key={dataField.fieldName} size="3" class="slds-truncate">
                     <div class="slds-text-link" if:true={dataField.isRelationshipField}>{dataField.fieldValue}</div>
                     <div if:false={dataField.isRelationshipField}>
                         <lightning-output-field
