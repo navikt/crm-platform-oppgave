@@ -71,19 +71,19 @@ public without sharing class CRM_NavTaskListViewCtrl {
                         filter += ' NOT LIKE %\'' + this.operandLabels[0] + '%\'';
                     }
                     when 'GreaterOrEqual' {
-                        filter += ' >= ' + this.operandLabels[0];
+                        filter += ' >= ' + parseDate(this.operandLabels[0]);
                     }
                     when 'GreaterThan' {
-                        filter += ' > ' + this.operandLabels[0];
+                        filter += ' > ' + parseDate(this.operandLabels[0]);
                     }
                     when 'Includes' {
                         filter += ' LIKE %\'' + this.operandLabels[0] + '%\'';
                     }
                     when 'LessOrEqual' {
-                        filter += ' <= ' + this.operandLabels[0];
+                        filter += ' <= ' + parseDate(this.operandLabels[0]);
                     }
                     when 'LessThan' {
-                        filter += ' < ' + this.operandLabels[0];
+                        filter += ' < ' + parseDate(this.operandLabels[0]);
                     }
                     when 'NotContain' {
                         filter += ' NOT LIKE %\'' + this.operandLabels[0] + '%\'';
@@ -114,6 +114,22 @@ public without sharing class CRM_NavTaskListViewCtrl {
                 return filter;
             }
             private set {
+            }
+        }
+
+        /**
+         * If the input is a parseable date string. The string is parsed and returned on a SOQL friendly format
+         * @author Stian Ruud Schikora | 07-26-2022
+         * @param dateString
+         * @return Boolean
+         **/
+        private String parseDate(String dateString) {
+            try {
+                Date parsedDate = Date.parse(dateString);
+                Datetime output = parsedDate;
+                return output.format('yyyy-MM-dd');
+            } catch (TypeException typeEx) {
+                return dateString;
             }
         }
     }
