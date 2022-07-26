@@ -4,10 +4,12 @@ import getNavTaskRecords from '@salesforce/apex/CRM_NavTaskListViewCtrl.getRecor
 
 export default class CrmNavTaskListView extends NavigationMixin(LightningElement) {
     @api fieldsToDisplay;
+    @api colHeaders;
     @api filterString;
     @api listTitle;
     @api ownedByRunningUser = false;
     @api numRecords = 10;
+    @api listViewApiName;
 
     records = [];
     isLoading = false;
@@ -60,6 +62,12 @@ export default class CrmNavTaskListView extends NavigationMixin(LightningElement
 
     get emptyState() {
         return this.records.length == 0 && this.isLoading == false;
+    }
+
+    get columnHeaders() {
+        if (this.colHeaders) {
+            return this.colHeaders.replace(/\s+/g, '').split(',');
+        }
     }
 
     get displayFields() {

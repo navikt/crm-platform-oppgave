@@ -14,6 +14,7 @@
             <property name="filterString" label="SOQL formatted filter string (without WHERE)" type="String" />
             <property name="ownedByRunningUser" label="Records owned by running user?" description="If the list view has the \'My NAV Tasks\' filter, set this to true" type="Boolean" default="false" />
             <property name="numRecords" label="Number of records:" description="Number of records to be returned" type="Integer" default="10" />
+            <property name="listViewApiName" label="API name of the list view to navigate to on footer click" type="String" />
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>
