@@ -66,7 +66,7 @@ export default class CrmNavTaskListView extends NavigationMixin(LightningElement
 
     get columnHeaders() {
         if (this.colHeaders) {
-            return this.colHeaders.replace(/\s+/g, '').split(',');
+            return this.colHeaders.split(',');
         }
     }
 

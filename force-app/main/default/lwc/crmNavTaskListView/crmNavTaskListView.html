@@ -19,6 +19,13 @@
         </lightning-layout>
         <c-crm-empty-state-no-task if:true={emptyState} message="Ingen oppgaver"></c-crm-empty-state-no-task>
         <div if:true={hasRecords}>
+            <lightning-layout class="slds-p-horizontal_small slds-var-p-bottom_xx-small" if:true={columnHeaders}>
+                <template for:each={columnHeaders} for:item="colHeader">
+                    <lightning-layout-item key={colHeader} size="3">
+                        <span class="slds-text-title_bold">{colHeader}</span>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
             <ul>
                 <template for:each={records} for:item="navTask">
                     <li key={navTask.Id} class="list-item-row slds-var-p-vertical_x-small slds-p-horizontal_small">
