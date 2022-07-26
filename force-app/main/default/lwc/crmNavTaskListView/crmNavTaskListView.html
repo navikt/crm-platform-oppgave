@@ -1,7 +1,6 @@
 <template>
     <section class="slds-box slds-theme_default slds-is-relative">
         <lightning-spinner if:true={isLoading} variant="brand" size="small"></lightning-spinner>
-        <c-crm-empty-state-no-task if:true={emptyState} message="Ingen oppgaver"></c-crm-empty-state-no-task>
         <lightning-layout class="slds-var-p-bottom_small">
             <lightning-layout-item class="slds-media__figure">
                 <lightning-icon icon-name="custom:custom45" size="small" aria-hidden="true"></lightning-icon>
@@ -18,6 +17,7 @@
                 ></lightning-button-icon>
             </lightning-layout-item>
         </lightning-layout>
+        <c-crm-empty-state-no-task if:true={emptyState} message="Ingen oppgaver"></c-crm-empty-state-no-task>
         <div if:true={hasRecords}>
             <ul>
                 <template for:each={records} for:item="navTask">
