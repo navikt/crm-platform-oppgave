@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>55.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>NAV Task List View</masterLabel>
+    <description>List component showing result records from a Salesforce list view for the NAV Task object</description>
+    <targets>
+        <target>lightning__HomePage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__HomePage">
+            <property name="listTitle" label="List Title:" type="String" />
+            <property name="fieldsToDisplay" label="Comma-separated list of fields to display" type="String" />
+            <property name="colHeaders" label="Comma-separated list of column headers (keep blank for list without headers)" type="String" />
+            <property name="filterString" label="SOQL formatted filter string (without WHERE)" type="String" />
+            <property name="ownedByRunningUser" label="Records owned by running user?" description="If the list view has the \'My NAV Tasks\' filter, set this to true" type="Boolean" default="false" />
+            <property name="numRecords" label="Number of records:" description="Number of records to be returned" type="Integer" default="10" />
+            <property name="listViewApiName" label="API name of the list view to navigate to on footer click" type="String" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
