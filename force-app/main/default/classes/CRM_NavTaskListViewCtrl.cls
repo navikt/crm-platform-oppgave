@@ -28,8 +28,7 @@ public without sharing class CRM_NavTaskListViewCtrl {
         query += filterString != null ? filterString : '';
         query = query.removeEnd('AND ');
 
-        query += ' ORDER BY CRM_DueDate__c LIMIT ' + String.valueOf(numRecords);
-        System.debug('QUERY: ' + query);
+        query += ' ORDER BY CRM_DueDate__c DESC LIMIT ' + String.valueOf(numRecords);
         return (List<NavTask__c>) Database.query(query);
     }
 }

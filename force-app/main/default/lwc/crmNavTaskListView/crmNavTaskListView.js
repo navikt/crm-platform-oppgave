@@ -32,7 +32,6 @@ export default class CrmNavTaskListView extends NavigationMixin(LightningElement
             numRecords: this.numRecords
         })
             .then((data) => {
-                console.log(JSON.stringify(data, null, 2));
                 this.records = data;
             })
             .catch((error) => {
