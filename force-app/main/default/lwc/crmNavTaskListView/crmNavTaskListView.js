@@ -56,7 +56,7 @@ export default class CrmNavTaskListView extends NavigationMixin(LightningElement
     }
 
     get hasRecords() {
-        return this.records.length > 0 || this.isLoading == false;
+        return this.records.length > 0 && this.isLoading == false;
     }
 
     get emptyState() {
