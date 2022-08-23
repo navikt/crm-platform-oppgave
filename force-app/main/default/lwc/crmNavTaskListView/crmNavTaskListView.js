@@ -1,6 +1,7 @@
 import { LightningElement, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import getNavTaskRecords from '@salesforce/apex/CRM_NavTaskListViewCtrl.getRecords';
+import syncNavTasks from '@salesforce/apex/CRM_NavTaskListViewCtrl.syncOpenAndAssigned';
 
 export default class CrmNavTaskListView extends NavigationMixin(LightningElement) {
     @api fieldsToDisplay;
@@ -16,12 +17,24 @@ export default class CrmNavTaskListView extends NavigationMixin(LightningElement
 
     connectedCallback() {
         this.isLoading = true;
-        this.getNavTasks();
+        this.syncTasks();
+    }
+
+    syncTasks() {
+        syncNavTasks({})
+            .then(() => {
+                //Success
+                this.getNavTasks();
+            })
+            .catch((error) => {
+                //Failed to sync
+                console.log(JSON.stringify(error, null, 2));
+            });
     }
 
     handleRefresh() {
         this.isLoading = true;
-        this.getNavTasks();
+        this.syncTasks();
     }
 
     getNavTasks() {
@@ -56,7 +69,7 @@ export default class CrmNavTaskListView extends NavigationMixin(LightningElement
     }
 
     get hasRecords() {
-        return this.records.length > 0 || this.isLoading == false;
+        return this.records.length > 0;
     }
 
     get emptyState() {
@@ -67,6 +80,10 @@ export default class CrmNavTaskListView extends NavigationMixin(LightningElement
         if (this.colHeaders) {
             return this.colHeaders.split(',');
         }
+    }
+
+    get colHeaderSize() {
+        return this.columnHeaders.length > 0 ? Math.floor(12 / this.columnHeaders.length) : 12;
     }
 
     get displayFields() {
