@@ -15,4 +15,13 @@ public class CRM_NavTaskListViewCtrl_Test {
 
         System.assertNotEquals(0, retList.size());
     }
+
+    @isTest
+    static void testSyncOpenAndAssigned() {
+        ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
+
+        Test.startTest();
+        CRM_NavTaskListViewCtrl.syncOpenAndAssigned();
+        Test.stopTest();
+    }
 }

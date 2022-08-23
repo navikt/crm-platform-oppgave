@@ -1,6 +1,7 @@
 import { LightningElement, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import getNavTaskRecords from '@salesforce/apex/CRM_NavTaskListViewCtrl.getRecords';
+import syncNavTasks from '@salesforce/apex/CRM_NavTaskListViewCtrl.syncOpenAndAssigned';
 
 export default class CrmNavTaskListView extends NavigationMixin(LightningElement) {
     @api fieldsToDisplay;
@@ -16,12 +17,24 @@ export default class CrmNavTaskListView extends NavigationMixin(LightningElement
 
     connectedCallback() {
         this.isLoading = true;
-        this.getNavTasks();
+        this.syncTasks();
+    }
+
+    syncTasks() {
+        syncNavTasks({})
+            .then(() => {
+                //Success
+                this.getNavTasks();
+            })
+            .catch((error) => {
+                //Failed to sync
+                console.log(JSON.stringify(error, null, 2));
+            });
     }
 
     handleRefresh() {
         this.isLoading = true;
-        this.getNavTasks();
+        this.syncTasks();
     }
 
     getNavTasks() {
