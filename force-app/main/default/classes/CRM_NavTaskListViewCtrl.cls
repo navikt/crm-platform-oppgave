@@ -12,7 +12,7 @@ public without sharing class CRM_NavTaskListViewCtrl {
         Boolean ownedByRunningUser,
         Integer numRecords
     ) {
-        String query = 'SELECT Id, ';
+        String query = 'SELECT Id, INT_External_Reference__c, ';
 
         for (String queryField : fieldsToQuery) {
             query += queryField + ',';
@@ -109,20 +109,5 @@ public without sharing class CRM_NavTaskListViewCtrl {
 
         if (!recordsToDelete.isEmpty())
             delete recordsToDelete;
-    }
-
-    /**
-     * Syncs the running users open assigned person tasks from oppgave
-     * @author Stian Ruud Schikora | 08-23-2022
-     **/
-    @AuraEnabled
-    public static void syncRecords(List<String> oppgaveIds) {
-        try {
-            CRM_OppgaveQuery oppgQuery = new CRM_OppgaveQuery();
-
-            CRM_OppgaveSyncController.doOppgaveSync(JSON.serialize(oppgQuery));
-        } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
     }
 }

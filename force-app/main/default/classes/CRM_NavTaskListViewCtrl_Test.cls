@@ -2,7 +2,7 @@
 public class CRM_NavTaskListViewCtrl_Test {
     @TestSetup
     static void makeData() {
-        CRM_OPPGAVE_TestDataFactory.createRecord(new NavTask__c(Name = 'TEST'));
+        CRM_OPPGAVE_TestDataFactory.createRecord(new NavTask__c(Name = 'TEST', INT_External_Reference__c = 233457161));
     }
 
     @isTest
@@ -22,6 +22,15 @@ public class CRM_NavTaskListViewCtrl_Test {
 
         Test.startTest();
         CRM_NavTaskListViewCtrl.syncOpenAndAssigned();
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testRefreshSync() {
+        ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
+
+        Test.startTest();
+        CRM_NavTaskListViewCtrl.refresh_syncOpenAndAssigned([SELECT Id, INT_External_Reference__c FROM NavTask__c]);
         Test.stopTest();
     }
 }
