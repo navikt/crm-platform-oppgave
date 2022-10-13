@@ -1,6 +1,6 @@
 import { LightningElement, api, wire } from 'lwc';
 import { syncOppgaveById } from 'c/crmOppgaveSyncher';
-import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
+import { getRecord, getFieldValue, getRecordNotifyChange } from 'lightning/uiRecordApi';
 import EXTERNAL_REF_FIELD from '@salesforce/schema/NavTask__c.INT_External_Reference__c';
 
 export default class CrmOppgaveRecordSyncer extends LightningElement {
@@ -17,6 +17,7 @@ export default class CrmOppgaveRecordSyncer extends LightningElement {
             syncOppgaveById(oppgaveRef)
                 .then(() => {
                     //Synced
+                    getRecordNotifyChange([{ recordId: this.recordId }]);
                 })
                 .catch((error) => {
                     console.log('Error syncing oppgave: ' + JSON.stringify(error, null, 2));
