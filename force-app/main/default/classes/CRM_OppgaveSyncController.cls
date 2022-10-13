@@ -121,7 +121,7 @@ public without sharing class CRM_OppgaveSyncController {
      * @author Stian Ruud Schikora | 03-28-2022
      * @param tasksToUpsert
      **/
-    private static void doNavTaskUpsert(List<NavTask__c> tasksToUpsert) {
+    public static void doNavTaskUpsert(List<NavTask__c> tasksToUpsert) {
         Map<Decimal, NavTask__c> navTaskMap = new Map<Decimal, NavTask__c>();
 
         for (NavTask__c navTask : tasksToUpsert) {
