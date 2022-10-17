@@ -31,7 +31,7 @@ jobs:
             echo "::set-output name=target::$(echo ${{ secrets.CRM_PROD_SFDX_URL }})"
             echo "'prod' was set"
           elif [ ${{ github.event.inputs.org }} == "preprod" ];then
-            echo "::set-output name=target::$(echo ${{ secrets.PRECRM_PROD_SFDX_URL }})"
+            echo "::set-output name=target::$(echo ${{ secrets.CRM_PREPROD_SFDX_URL }})"
             echo "'preprod' was set"
           elif [ ${{ github.event.inputs.org }} == "dev" ];then
             echo "::set-output name=target::$(echo ${{ secrets.DEV_SFDX_URL }})"
