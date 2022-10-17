@@ -38,8 +38,8 @@ This workflows is automatically executed whenever a PR is merged into master (or
 ## Secrets
 
 - Environment secrets
-    - `secrets.PROD_SFDX_URL`
-    - `secrets.INTEGRATION_SANDBOX_SFDX_URL`
+    - `secrets.CRM_PROD_SFDX_URL`
+    - `secrets.CRM_SIT_SFDX_URL`
     - `secrets.DEV_SFDX_URL`
     - `secrets.UAT_SFDX_URL`
 - Setting secrets
