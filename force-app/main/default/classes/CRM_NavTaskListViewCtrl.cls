@@ -81,8 +81,6 @@ public without sharing class CRM_NavTaskListViewCtrl {
             } else {
                 throw new AuraHandledException('Error getting oppgaver');
             }
-
-            CRM_OppgaveSyncController.doOppgaveSync(JSON.serialize(oppgQuery));
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }
