@@ -97,7 +97,6 @@ export default class NksTaskTypePicklist extends LightningElement {
         const input = {
             themeCode: this.theme
         };
-        console.log(this.theme);
         try {
             getTaskTypes(input).then((result) => {
                 this.commoncodes = result;
