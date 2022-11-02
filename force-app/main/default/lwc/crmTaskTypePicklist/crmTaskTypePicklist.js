@@ -18,9 +18,10 @@ export default class NksTaskTypePicklist extends LightningElement {
 
     @track tasktypes = [];
 
-    tasktype;
+    @track tasktype;
     commoncodes;
     isSupported = true;
+    loaded = false;
 
     @wire(MessageContext)
     messageContext;
@@ -82,6 +83,7 @@ export default class NksTaskTypePicklist extends LightningElement {
         switch (fieldName) {
             case 'themeCode':
                 this.theme = value;
+                this.loaded = false; 
                 this.handleThemeChange();
                 this.findTaskTypes();
                 break;
@@ -107,9 +109,19 @@ export default class NksTaskTypePicklist extends LightningElement {
                     availableTypes.push(option);
                 });
                 this.tasktypes = availableTypes;
-            });
+
+                // if the list of tasktypes changed and the previoursly selected value not in the list
+                // reset selected value
+                if(this.tasktype){
+                    if(!this.tasktypes.some( (e)=> e.value === this.tasktype ) ){
+                        this.tasktype = null;
+                    }
+                }
+                this.loaded = true;
+            },this);
         } catch (error) {
             this.errorMessage = error.body.message;
+            this.loaded = true;
         }
     }
 
@@ -140,5 +152,12 @@ export default class NksTaskTypePicklist extends LightningElement {
         } else {
             this.isSupported = true;
         }
+    }
+
+    handleOnFocus(event){
+        if(!this.tasktype){
+            this.tasktype = this.tasktypes[0].value;
+        }
+        this.publishFieldChange('tasktype', this.selectedTaskType);
     }
 }
