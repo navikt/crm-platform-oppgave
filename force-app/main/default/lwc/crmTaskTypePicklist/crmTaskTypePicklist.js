@@ -97,6 +97,7 @@ export default class NksTaskTypePicklist extends LightningElement {
         const input = {
             themeCode: this.theme
         };
+        console.log(this.theme);
         try {
             getTaskTypes(input).then((result) => {
                 this.commoncodes = result;
@@ -109,6 +110,14 @@ export default class NksTaskTypePicklist extends LightningElement {
                     availableTypes.push(option);
                 });
                 this.tasktypes = availableTypes;
+
+                // if the list of tasktypes changed and the previoursly selected value not in the list
+                // reset selected value
+                if(this.tasktype){
+                    if(!this.tasktypes.some( (e)=> e.value === this.tasktype ) ){
+                        this.tasktype = null;
+                    }
+                }
                 this.loaded = true;
             },this);
         } catch (error) {
