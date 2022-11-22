@@ -58,6 +58,7 @@ export default class CrmNavTaskRerunner extends LightningElement {
         startJob({ queryFilter: this.queryFilter })
             .then((out) => {
                 this.getRunningJob();
+                this.filterRecordCount = undefined; //resets the filter validation
             })
             .catch((error) => {
                 const event = new ShowToastEvent({
