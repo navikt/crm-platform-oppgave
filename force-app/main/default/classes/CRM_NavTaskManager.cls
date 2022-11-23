@@ -25,12 +25,10 @@ public without sharing class CRM_NavTaskManager {
      * @param tasksIdsToRerun
      **/
     public static void rerunFailedTasks(Set<String> tasksIdsToRerun) {
-        if (tasksIdsToRerun.size() > Limits.getLimitFutureCalls())
-            throw new LimitException('List size exceeds future call limit');
+        if (tasksIdsToRerun.size() > Limits.getLimitCallouts() / 2)
+            throw new LimitException('List size exceeds callout limit');
 
-        for (String taskId : tasksIdsToRerun) {
-            rerunFailedTask(taskId);
-        }
+        rerunFailedTask(tasksIdsToRerun);
     }
 
     /**
@@ -39,8 +37,8 @@ public without sharing class CRM_NavTaskManager {
      * @param taskId
      **/
     @future
-    private static void rerunFailedTask(String taskId) {
-        Map<String, Object> flowInputs = new Map<String, Object>{ 'recordId' => taskId };
+    private static void rerunFailedTask(Set<String> taskIds) {
+        Map<String, Object> flowInputs = new Map<String, Object>{ 'recordIds' => taskIds };
         Flow.Interview flow = Flow.Interview.createInterview('CRM_Retry_NAV_Task_Post', flowInputs);
         flow.start();
     }
