@@ -1,0 +1,74 @@
+<template>
+    <lightning-card title="NAV Task Rerunner" icon-name="standard:invocable_action">
+        <lightning-spinner if:true={isLoading} size="medium"> </lightning-spinner>
+        <div if:true={runningJob} class="slds-var-p-around_small">
+            <!--THERE IS ALREADY A RUNNING JOB-->
+            <div class="slds-box slds-box_xx-small">
+                <lightning-card icon-name="utility:info" title="Running job details">
+                    <lightning-button-icon
+                        slot="actions"
+                        icon-name="utility:refresh"
+                        onclick={refreshRunningJob}
+                    ></lightning-button-icon>
+                    <lightning-layout class="slds-var-p-horizontal_medium" multiple-rows="true">
+                        <lightning-layout-item class="slds-var-p-bottom_small" size="12"
+                            ><strong class="slds-var-p-right_small">Status:</strong
+                            >{runningJob.Status}</lightning-layout-item
+                        >
+                        <lightning-layout-item class="slds-text-title_bold" size="3">
+                            Submitted date
+                        </lightning-layout-item>
+                        <lightning-layout-item class="slds-text-title_bold" style="text-align: end" size="3">
+                            Total batches
+                        </lightning-layout-item>
+                        <lightning-layout-item class="slds-text-title_bold" style="text-align: end" size="3">
+                            Processed
+                        </lightning-layout-item>
+                        <lightning-layout-item class="slds-text-title_bold" style="text-align: end" size="3">
+                            Failures
+                        </lightning-layout-item>
+                        <lightning-layout-item alignment-bump="right" size="3">
+                            <lightning-formatted-date-time
+                                day="2-digit"
+                                month="2-digit"
+                                hour="numeric"
+                                minute="2-digit"
+                                value={runningJob.CreatedDate}
+                            >
+                            </lightning-formatted-date-time>
+                        </lightning-layout-item>
+                        <lightning-layout-item style="text-align: end" size="3">
+                            {runningJob.TotalJobItems}
+                        </lightning-layout-item>
+                        <lightning-layout-item style="text-align: end" size="3">
+                            {runningJob.JobItemsProcessed}
+                        </lightning-layout-item>
+                        <lightning-layout-item style="text-align: end" size="3">
+                            {runningJob.NumberOfErrors}
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-card>
+            </div>
+        </div>
+        <div class="slds-var-p-around_small">
+            <lightning-textarea
+                label="Query filter"
+                field-level-help="Filter conditions for the records to be retried (I.e. NKS_TaskType__r.CRM_Code__c IN ('CODE1', 'Code2')"
+                value={queryFilter}
+                onchange={filterChange}
+            >
+            </lightning-textarea>
+            <p if:true={isValid}>The processes will include {filterRecordCount} records</p>
+        </div>
+        <div slot="footer">
+            <lightning-layout horizontal-align="end">
+                <lightning-button-group>
+                    <lightning-button variant={buttonVariant} label="Validate filter" onclick={testFilter}>
+                    </lightning-button>
+                    <lightning-button variant="Brand" label="Start rerun" disabled={notValid} onclick={initiateRerun}>
+                    </lightning-button>
+                </lightning-button-group>
+            </lightning-layout>
+        </div>
+    </lightning-card>
+</template>

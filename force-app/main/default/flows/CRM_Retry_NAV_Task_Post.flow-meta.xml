@@ -4,18 +4,18 @@
         <description>Posts the NAV Task</description>
         <name>Post_NAV_Task</name>
         <label>Post NAV Task</label>
-        <locationX>176</locationX>
-        <locationY>278</locationY>
+        <locationX>264</locationX>
+        <locationY>518</locationY>
         <actionName>CRM_NavTaskManager</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Update_NAV_Task</targetReference>
+            <targetReference>Add_NAV_Task_for_Update</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>actorId</name>
             <value>
-                <elementReference>Get_NAV_Task.CRM_Account__r.CRM_Person__r.INT_ActorId__c</elementReference>
+                <elementReference>Retry_Loop.CRM_Account__r.CRM_Person__r.INT_ActorId__c</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -28,6 +28,12 @@
             <name>createdByUnitNumber</name>
             <value>
                 <elementReference>Created_By_Unit_Number</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>POST_AS_SYSTEM</name>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -45,52 +51,77 @@
         <inputParameters>
             <name>task</name>
             <value>
-                <elementReference>Get_NAV_Task</elementReference>
+                <elementReference>Retry_Loop</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
             <name>taskTypeCode</name>
             <value>
-                <elementReference>Get_NAV_Task.NKS_TaskType__r.CRM_Code__c</elementReference>
+                <elementReference>Retry_Loop.NKS_TaskType__r.CRM_Code__c</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
             <name>themeCode</name>
             <value>
-                <elementReference>Get_NAV_Task.NKS_Theme__r.CRM_Code__c</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>POST_AS_SYSTEM</name>
-            <value>
-                <booleanValue>true</booleanValue>
+                <elementReference>Retry_Loop.NKS_Theme__r.CRM_Code__c</elementReference>
             </value>
         </inputParameters>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <apiVersion>52.0</apiVersion>
+    <assignments>
+        <name>Add_NAV_Task_for_Update</name>
+        <label>Add NAV Task for Update</label>
+        <locationX>264</locationX>
+        <locationY>638</locationY>
+        <assignmentItems>
+            <assignToReference>NavTasksToUpdate</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Post_NAV_Task.task</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Retry_Loop</targetReference>
+        </connector>
+    </assignments>
     <description>Flow to trigger a new API post of a NAV Task that has previously failed.</description>
     <formulas>
         <description>Formula field to define the NAV unit the task is to be assigned to. If blank, standard arbeidsfordeling will be performed by API</description>
         <name>Assign_To_Unit</name>
         <dataType>String</dataType>
-        <expression>IF(NOT(ISBLANK({!Get_NAV_Task.CRM_NavUnit__c})),
-{!Get_NAV_Task.CRM_NavUnit__r.INT_UnitNumber__c},
+        <expression>IF(NOT(ISBLANK({!Retry_Loop.CRM_NavUnit__c})),
+{!Retry_Loop.CRM_NavUnit__r.INT_UnitNumber__c},
 null)</expression>
     </formulas>
     <formulas>
         <name>Created_By_Unit_Number</name>
         <dataType>String</dataType>
-        <expression>{!Get_NAV_Task.CreatedBy.Department}</expression>
+        <expression>{!Retry_Loop.CreatedBy.Department}</expression>
     </formulas>
     <formulas>
         <description>Formula for better handling of nulls for subtheme code.</description>
         <name>Subtheme_Code</name>
         <dataType>String</dataType>
-        <expression>{!Get_NAV_Task.NKS_Subtheme__r.CRM_Code__c}</expression>
+        <expression>{!Retry_Loop.NKS_Subtheme__r.CRM_Code__c}</expression>
     </formulas>
     <interviewLabel>Retry NAV Task Post {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Retry NAV Task Post</label>
+    <loops>
+        <description>Looping through all records perform post callouts</description>
+        <name>Retry_Loop</name>
+        <label>Retry Loop</label>
+        <locationX>176</locationX>
+        <locationY>278</locationY>
+        <collectionReference>Get_NAV_Task</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Pause_for_Callout</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Update_NAV_Tasks</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -117,26 +148,26 @@ null)</expression>
         <locationY>158</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Post_NAV_Task</targetReference>
+            <targetReference>Retry_Loop</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
-            <operator>EqualTo</operator>
+            <operator>In</operator>
             <value>
-                <elementReference>recordId</elementReference>
+                <elementReference>recordIds</elementReference>
             </value>
         </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>NavTask__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
-        <name>Update_NAV_Task</name>
-        <label>Update NAV Task</label>
+        <name>Update_NAV_Tasks</name>
+        <label>Update NAV Tasks</label>
         <locationX>176</locationX>
-        <locationY>398</locationY>
-        <inputReference>Post_NAV_Task.task</inputReference>
+        <locationY>950</locationY>
+        <inputReference>NavTasksToUpdate</inputReference>
     </recordUpdates>
     <runInMode>SystemModeWithoutSharing</runInMode>
     <start>
@@ -148,11 +179,53 @@ null)</expression>
     </start>
     <status>Active</status>
     <variables>
-        <description>ID of the NAV Task to retry.</description>
-        <name>recordId</name>
+        <name>NavTasksToUpdate</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>NavTask__c</objectType>
+    </variables>
+    <variables>
+        <description>List of ID to rerun.</description>
+        <name>recordIds</name>
         <dataType>String</dataType>
-        <isCollection>false</isCollection>
+        <isCollection>true</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>
+    <waits>
+        <name>Pause_for_Callout</name>
+        <label>Pause for Callout</label>
+        <locationX>396</locationX>
+        <locationY>398</locationY>
+        <defaultConnectorLabel>Default Path</defaultConnectorLabel>
+        <waitEvents>
+            <name>Callout_Pause</name>
+            <conditionLogic>and</conditionLogic>
+            <connector>
+                <targetReference>Post_NAV_Task</targetReference>
+            </connector>
+            <eventType>AlarmEvent</eventType>
+            <inputParameters>
+                <name>AlarmTime</name>
+                <value>
+                    <elementReference>$Flow.CurrentDateTime</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>TimeOffset</name>
+                <value>
+                    <numberValue>0.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>TimeOffsetUnit</name>
+                <value>
+                    <stringValue>Hours</stringValue>
+                </value>
+            </inputParameters>
+            <label>Callout Pause</label>
+        </waitEvents>
+    </waits>
 </Flow>
