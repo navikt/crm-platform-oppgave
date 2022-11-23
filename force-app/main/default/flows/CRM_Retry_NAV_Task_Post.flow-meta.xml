@@ -5,7 +5,7 @@
         <name>Post_NAV_Task</name>
         <label>Post NAV Task</label>
         <locationX>264</locationX>
-        <locationY>398</locationY>
+        <locationY>518</locationY>
         <actionName>CRM_NavTaskManager</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -73,7 +73,7 @@
         <name>Add_NAV_Task_for_Update</name>
         <label>Add NAV Task for Update</label>
         <locationX>264</locationX>
-        <locationY>518</locationY>
+        <locationY>638</locationY>
         <assignmentItems>
             <assignToReference>NavTasksToUpdate</assignToReference>
             <operator>Add</operator>
@@ -116,7 +116,7 @@ null)</expression>
         <collectionReference>Get_NAV_Task</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Post_NAV_Task</targetReference>
+            <targetReference>Pause_for_Callout</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Update_NAV_Tasks</targetReference>
@@ -166,7 +166,7 @@ null)</expression>
         <name>Update_NAV_Tasks</name>
         <label>Update NAV Tasks</label>
         <locationX>176</locationX>
-        <locationY>734</locationY>
+        <locationY>950</locationY>
         <inputReference>NavTasksToUpdate</inputReference>
     </recordUpdates>
     <runInMode>SystemModeWithoutSharing</runInMode>
@@ -194,4 +194,38 @@ null)</expression>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>
+    <waits>
+        <name>Pause_for_Callout</name>
+        <label>Pause for Callout</label>
+        <locationX>396</locationX>
+        <locationY>398</locationY>
+        <defaultConnectorLabel>Default Path</defaultConnectorLabel>
+        <waitEvents>
+            <name>Callout_Pause</name>
+            <conditionLogic>and</conditionLogic>
+            <connector>
+                <targetReference>Post_NAV_Task</targetReference>
+            </connector>
+            <eventType>AlarmEvent</eventType>
+            <inputParameters>
+                <name>AlarmTime</name>
+                <value>
+                    <elementReference>$Flow.CurrentDateTime</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>TimeOffset</name>
+                <value>
+                    <numberValue>0.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>TimeOffsetUnit</name>
+                <value>
+                    <stringValue>Hours</stringValue>
+                </value>
+            </inputParameters>
+            <label>Callout Pause</label>
+        </waitEvents>
+    </waits>
 </Flow>
