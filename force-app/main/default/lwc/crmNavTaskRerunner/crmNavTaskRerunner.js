@@ -71,29 +71,37 @@ export default class CrmNavTaskRerunner extends LightningElement {
      * Test that the input filter is valid and that the SOQL will not throw any errors;
      */
     testFilter() {
+        if (this.metFilterRequirements() === false) {
+            return;
+        }
         this.invalidateFilter();
         this.isLoading = true;
         validateFilter({ queryFilter: this.queryFilter })
             .then((recordCount) => {
                 this.filterRecordCount = recordCount;
-                this.textArea.setCustomValidity('');
-                this.textArea.reportValidity();
             })
             .catch((error) => {
                 this.filterError = error.body.message;
-                this.textArea.setCustomValidity(error.body.message);
-                this.textArea.reportValidity();
             })
             .finally(() => {
                 this.isLoading = false;
             });
     }
 
+    metFilterRequirements() {
+        if (this.taskTypeFilters.length > 0) {
+            return true;
+        } else {
+            this.filterError = 'Choose at least one task type filter';
+            return false;
+        }
+    }
+
     initiateRerun() {
         startJob({ queryFilter: this.queryFilter })
             .then((out) => {
                 this.getRunningJob();
-                this.filterRecordCount = undefined; //resets the filter validation
+                this.invalidateFilter();
             })
             .catch((error) => {
                 const event = new ShowToastEvent({
@@ -201,10 +209,6 @@ export default class CrmNavTaskRerunner extends LightningElement {
 
     get timeframeSoql() {
         return 'AND CreatedDate = LAST_N_DAYS:' + this.template.querySelector('lightning-input')?.value;
-    }
-
-    get textArea() {
-        return this.template.querySelector('lightning-textarea');
     }
 
     get hasTaskTypeFilters() {

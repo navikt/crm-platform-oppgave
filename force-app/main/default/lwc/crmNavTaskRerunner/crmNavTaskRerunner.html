@@ -97,6 +97,7 @@
             >
             </lightning-textarea>
             <p if:true={isValid}>The processes will include {filterRecordCount} records</p>
+            <p if:true={filterError} class="slds-text-color_error">{filterError}</p>
         </div>
         <div slot="footer">
             <lightning-layout horizontal-align="end">
