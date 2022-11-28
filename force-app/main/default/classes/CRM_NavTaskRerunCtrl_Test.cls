@@ -3,6 +3,12 @@ public class CRM_NavTaskRerunCtrl_Test {
     @TestSetup
     static void makeData() {
         CRM_OPPGAVE_TestDataFactory.createRecord(new NavTask__c(Name = 'TEST'));
+        CRM_OPPGAVE_TestDataFactory.createRecord(
+            new Common_Code__c(Name = 'Dagpenger', CRM_Code__c = 'DAG', CRM_Code_Set__c = 'Tema')
+        );
+        CRM_OPPGAVE_TestDataFactory.createRecord(
+            new Common_Code__c(Name = 'Behandle vedtak', CRM_Code__c = 'BEH_VEDT', CRM_Code_Set__c = 'Oppgavetyper')
+        );
     }
 
     @isTest
@@ -12,6 +18,23 @@ public class CRM_NavTaskRerunCtrl_Test {
         Test.stopTest();
 
         System.assertEquals(1, recordCount, 'Wrong count returned');
+    }
+
+    @isTest
+    static void testGetThemes() {
+        Test.startTest();
+        List<Common_Code__c> themes = CRM_NavTaskRerunCtrl.getThemes();
+        Test.stopTest();
+
+        System.assertEquals(1, themes.size(), 'Invaldig number of themes returned');
+    }
+    @isTest
+    static void testGetTaskTypes() {
+        Test.startTest();
+        List<Common_Code__c> taskTypes = CRM_NavTaskRerunCtrl.getTaskTypes();
+        Test.stopTest();
+
+        System.assertEquals(1, taskTypes.size(), 'Invaldig number of task types returned');
     }
 
     @isTest

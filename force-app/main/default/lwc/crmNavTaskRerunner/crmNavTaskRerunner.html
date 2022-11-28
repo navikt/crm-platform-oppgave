@@ -50,12 +50,50 @@
                 </lightning-card>
             </div>
         </div>
+        <lightning-layout vertical-align="center" class="slds-var-p-around_small" multiple-rows="true">
+            <lightning-layout-item size="8">
+                <lightning-combobox
+                    name="taskTypeFilterInput"
+                    label="Task type filters: "
+                    placeholder="Add task type filter"
+                    options={taskTypes}
+                    onchange={handleFilterAdd}
+                ></lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item if:true={hasTaskTypeFilters} class="slds-var-p-top_xx-small" size="12">
+                <lightning-pill-container
+                    items={taskTypeFilters}
+                    onitemremove={handleTaskTypeFilterRemove}
+                ></lightning-pill-container>
+            </lightning-layout-item>
+            <lightning-layout-item size="8">
+                <lightning-combobox
+                    name="themeFilterInput"
+                    label="Theme filters: "
+                    placeholder="Add theme filter"
+                    options={themes}
+                    onchange={handleFilterAdd}
+                ></lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item if:true={hasThemeFilters} class="slds-var-p-top_xx-small" size="12">
+                <lightning-pill-container
+                    items={themeFilters}
+                    onitemremove={handleThemeFilterRemove}
+                ></lightning-pill-container>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12"> Timeframe: </lightning-layout-item>
+            <lightning-layout-item> LAST_N_DAYS: </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-small" size="2">
+                <lightning-input type="number" value="5" variant="label-hidden" min="1.0"></lightning-input>
+            </lightning-layout-item>
+        </lightning-layout>
         <div class="slds-var-p-around_small">
             <lightning-textarea
                 label="Query filter"
-                field-level-help="Filter conditions for the records to be retried (I.e. NKS_TaskType__r.CRM_Code__c IN ('CODE1', 'Code2')"
+                field-level-help="Filter conditions for the records to be retried"
                 value={queryFilter}
-                onchange={filterChange}
+                readonly
             >
             </lightning-textarea>
             <p if:true={isValid}>The processes will include {filterRecordCount} records</p>
