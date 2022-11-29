@@ -48,6 +48,29 @@ public without sharing class CRM_NavTaskRerunCtrl {
         }
     }
 
+    @AuraEnabled(cacheable=true)
+    public static List<Common_Code__c> getThemes() {
+        try {
+            return [SELECT Id, Name, CRM_Code__c FROM Common_Code__c WHERE CRM_Code_Set__c = 'Tema' ORDER BY Name];
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Common_Code__c> getTaskTypes() {
+        try {
+            return [
+                SELECT Id, Name, CRM_Code__c
+                FROM Common_Code__c
+                WHERE CRM_Code_Set__c = 'Oppgavetyper'
+                ORDER BY Name
+            ];
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+
     /**
      * @description Initiate NavTaskBatchRerunner with the defined filter
      * @param queryFilter
