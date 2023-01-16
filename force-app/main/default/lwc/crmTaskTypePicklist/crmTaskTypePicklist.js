@@ -157,7 +157,7 @@ export default class NksTaskTypePicklist extends LightningElement {
     handleOnFocus(event){
         if(!this.tasktype){
             this.tasktype = this.tasktypes[0].value;
+            this.publishFieldChange('tasktype', this.selectedTaskType);
         }
-        this.publishFieldChange('tasktype', this.selectedTaskType);
     }
 }
