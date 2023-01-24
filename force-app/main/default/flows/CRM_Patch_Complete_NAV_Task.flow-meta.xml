@@ -45,80 +45,6 @@
         </inputParameters>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
-    <actionCalls>
-        <name>Show_Error_Toast</name>
-        <label>Show Error Toast</label>
-        <locationX>314</locationX>
-        <locationY>878</locationY>
-        <actionName>c:fcFlowToaster</actionName>
-        <actionType>component</actionType>
-        <connector>
-            <targetReference>Flow_Complete_Screen</targetReference>
-        </connector>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>duration</name>
-            <value>
-                <stringValue>5</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>message</name>
-            <value>
-                <stringValue>Det oppsto en feil ved ferdigstilling av oppgaven</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>title</name>
-            <value>
-                <stringValue>Oppdatering feilet</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>type</name>
-            <value>
-                <stringValue>error</stringValue>
-            </value>
-        </inputParameters>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </actionCalls>
-    <actionCalls>
-        <name>Show_Success_Toast</name>
-        <label>Show Success Toast</label>
-        <locationX>50</locationX>
-        <locationY>998</locationY>
-        <actionName>c:fcFlowToaster</actionName>
-        <actionType>component</actionType>
-        <connector>
-            <targetReference>Flow_Complete_Screen</targetReference>
-        </connector>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>duration</name>
-            <value>
-                <stringValue>5</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>message</name>
-            <value>
-                <stringValue>Oppgaven ble ferdigstilt</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>title</name>
-            <value>
-                <stringValue>Oppdatering vellykket</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>type</name>
-            <value>
-                <stringValue>success</stringValue>
-            </value>
-        </inputParameters>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </actionCalls>
     <apiVersion>52.0</apiVersion>
     <assignments>
         <description>Assigns the correct status value for the NAV task.</description>
@@ -188,7 +114,7 @@
         <locationX>182</locationX>
         <locationY>758</locationY>
         <defaultConnector>
-            <targetReference>Show_Error_Toast</targetReference>
+            <targetReference>Flow_Complete_Screen</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Update failed</defaultConnectorLabel>
         <rules>
@@ -215,6 +141,24 @@
 &apos;--- &apos; + {!Format_datetime} + &apos; ---&apos;,
 &apos;--- &apos; + {!Format_datetime}  + &apos; &apos; + {!$User.FirstName} + &apos; &apos; + {!$User.LastName} + &apos; (&apos; + {!$User.CRM_NAV_Ident__c} + &apos;, &apos; + {!$User.Department} + &apos;) ---&apos;
 ) + {!NEWLINE} + &apos;Oppgaven ble ferdigstilt i Salesforce&apos;</expression>
+    </formulas>
+    <formulas>
+        <description>The main message of the end toast</description>
+        <name>Toast_Message</name>
+        <dataType>String</dataType>
+        <expression>IF({!Process_NAV_task.success}, &apos;Oppgaven ble ferdigstilt&apos;, &apos;Det oppsto en feil ved ferdigstilling av oppgaven&apos;)</expression>
+    </formulas>
+    <formulas>
+        <description>The title of the end toast</description>
+        <name>Toast_Title</name>
+        <dataType>String</dataType>
+        <expression>IF({!Process_NAV_task.success}, &apos;Oppdatering vellykket&apos;, &apos;Oppdatering feilet&apos;)</expression>
+    </formulas>
+    <formulas>
+        <description>The variant of the end toast</description>
+        <name>Toast_Variant</name>
+        <dataType>String</dataType>
+        <expression>IF({!Process_NAV_task.success}, &apos;success&apos;, &apos;error&apos;)</expression>
     </formulas>
     <interviewLabel>Patch Complete NAV Task {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Patch Complete NAV Task</label>
@@ -270,7 +214,7 @@
         <locationX>50</locationX>
         <locationY>878</locationY>
         <connector>
-            <targetReference>Show_Success_Toast</targetReference>
+            <targetReference>Flow_Complete_Screen</targetReference>
         </connector>
         <inputReference>Process_NAV_task.task</inputReference>
     </recordUpdates>
@@ -279,7 +223,7 @@
         <name>Flow_Complete_Screen</name>
         <label>Flow Complete Screen</label>
         <locationX>182</locationX>
-        <locationY>1214</locationY>
+        <locationY>1094</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -297,6 +241,44 @@
                 <name>recordId</name>
                 <value>
                     <elementReference>recordId</elementReference>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <fields>
+            <name>show_toast</name>
+            <extensionName>c:fcFlowCloseWithToast</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>closeModal</name>
+                <value>
+                    <booleanValue>false</booleanValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>mode</name>
+                <value>
+                    <stringValue>dismissible</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>message</name>
+                <value>
+                    <elementReference>Toast_Message</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>title</name>
+                <value>
+                    <elementReference>Toast_Title</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>variant</name>
+                <value>
+                    <elementReference>Toast_Variant</elementReference>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
