@@ -1,3 +1,10 @@
+/**
+ * @description       : 
+ * @author            : mamikals
+ * @group             : 
+ * @last modified on  : 08-02-2023
+ * @last modified by  : mamikals
+**/
 public without sharing class CRM_NavTaskOppgaveService {
     public enum Context {
         SYSTEM_CONTEXT,
@@ -57,6 +64,24 @@ public without sharing class CRM_NavTaskOppgaveService {
      * @return HttpResponse
      **/
     public HttpResponse queryOppgave(CRM_OppgaveQuery query) {
+        ApiController apiCtrl = setupController('GET_OPPGAVE');
+        apiCtrl.setUrlParams(convertToQueryParams(query));
+
+        addXCorrelation(apiCtrl);
+        apiCtrl.doCallout();
+        return apiCtrl.getResponse();
+    }
+
+    public HttpResponse queryOppgave(CRM_OppgaveQueryList query) {
+        ApiController apiCtrl = setupController('GET_OPPGAVE');
+        apiCtrl.setUrlParams(convertToQueryParams(query));
+
+        addXCorrelation(apiCtrl);
+        apiCtrl.doCallout();
+        return apiCtrl.getResponse();
+    }
+
+    private ApiController setupController(String request) {
         ApiController apiCtrl = new ApiController();
         Map<String, String> httpHeaders = new Map<String, String>{
             'Content-Type' => 'application/json',
@@ -72,15 +97,13 @@ public without sharing class CRM_NavTaskOppgaveService {
             }
         }
 
-        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVE');
+        apiCtrl.initRequest('Oppgave_API', request);
         apiCtrl.addServiceAuthHeader('Oppgave');
         apiCtrl.setHeaders(httpHeaders);
-        apiCtrl.setUrlParams(convertToQueryParams(query));
-
-        addXCorrelation(apiCtrl);
-        apiCtrl.doCallout();
-        return apiCtrl.getResponse();
+        return apiCtrl;
     }
+
+
 
     /**
      * Converts the CRM_OppgaveQuery instance to a valid map og key value pairs that can be added to the HttpRequest
@@ -115,6 +138,45 @@ public without sharing class CRM_NavTaskOppgaveService {
         }
 
         return returnMap;
+    }
+
+    private Map<String, List<String>> convertToQueryParams(CRM_OppgaveQueryList query) {
+        Map<String, List<String>> returnMap = new Map<String, List<String>>();
+        String jsonParams = JSON.serialize(query, true); //Suppressing null values
+        JSONParser parser = JSON.createParser(jsonParams);
+
+        while (parser.nextToken() != null) {
+            if (parser.getCurrentToken() == JSONToken.FIELD_NAME) {
+                String key = parser.getText();
+                List<String> value = new List<String>();
+                parser.nextToken();
+                
+                if(parser.getCurrentToken() == JSONToken.START_ARRAY) {
+                    while(parser.nextToken() != JSONToken.END_ARRAY) {
+                        addFilterdQueryParams(parser, key, value);
+                    }
+                } else {
+                    addFilterdQueryParams(parser, key, value);
+                }
+                returnMap.put(key, value);
+            }
+        }
+
+        return returnMap;
+    }
+
+    private void addFilterdQueryParams(JSONParser parser, String key, List<String> value) {
+        if (key == 'fristFom' || key == 'fristTom') {
+            value.add(parser.getDatetimeValue().format('yyyy-MM-dd'));
+        } else if (key == 'opprettetFom') {
+            value.add(parser.getDatetimeValue().format('yyyy-MM-dd\'T\'HH:mm:ss'));
+        } else if (key == 'returnlimit') {
+            //limit is reserved in SF so need special parsing handling
+            key = 'limit';
+            value.add(String.valueOf(parser.getIntegerValue()));
+        } else {
+            value.add(parser.getText());
+        }
     }
 
     /**

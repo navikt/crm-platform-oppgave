@@ -1,3 +1,10 @@
+/**
+ * @description       : 
+ * @author            : mamikals
+ * @group             : 
+ * @last modified on  : 09-02-2023
+ * @last modified by  : mamikals
+**/
 public without sharing class CRM_OppgaveSyncController {
     private static LoggerUtility logger = new LoggerUtility('Oppgave');
 
@@ -45,7 +52,6 @@ public without sharing class CRM_OppgaveSyncController {
 
     @AuraEnabled
     public static void doOppgaveSync(String jsonQuery) {
-        CRM_OppgaveQueryResponse oppgaveResp;
         CRM_OppgaveQuery query = (CRM_OppgaveQuery) JSON.deserialize(jsonQuery, CRM_OppgaveQuery.class);
         query.opprettetFom = query.opprettetFom == null ? System.now().addYears(-1) : null; //Get oppgaver for the given actor created maximum og one year back in time
         query.returnlimit = 100;
@@ -54,24 +60,8 @@ public without sharing class CRM_OppgaveSyncController {
 
         try {
             HttpResponse response = oppgaveService.queryOppgave(query);
-            Integer statusCode = response.getStatusCode();
-
-            if (statusCode == 200 || statusCode == 201) {
-                oppgaveResp = (CRM_OppgaveQueryResponse) JSON.deserialize(
-                    response.getBody(),
-                    CRM_OppgaveQueryResponse.class
-                );
-
-                doNavTaskUpsert(oppgaveResp.convertToNavTasks());
-            } else {
-                logger.httpError(
-                    'Error getting oppgaver',
-                    response,
-                    null,
-                    CRM_ApplicationDomain.Domain.NKS,
-                    oppgaveService.getTransactionId()
-                );
-            }
+            CRM_OppgaveQueryResponse oppgaveResp = convertResponse(response, oppgaveService);
+            if(oppgaveResp != null) doNavTaskUpsert(oppgaveResp.convertToNavTasks());
         } catch (Exception ex) {
             logger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
         } finally {
@@ -113,6 +103,41 @@ public without sharing class CRM_OppgaveSyncController {
             logger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
         } finally {
             logger.publish();
+        }
+    }
+
+    public static void doMassOppgaveSync(CRM_OppgaveQueryList query) {
+        
+        CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
+        oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
+
+        try {
+            HttpResponse response = oppgaveService.queryOppgave(query);
+            CRM_OppgaveQueryResponse oppgaveResp = convertResponse(response, oppgaveService);
+            if(oppgaveResp != null) doNavTaskUpsert(oppgaveResp.convertToNavTasks());            
+        } catch (Exception ex) {
+            logger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
+        } finally {
+            logger.publish();
+        }
+    }
+
+    private static CRM_OppgaveQueryResponse convertResponse(HttpResponse response, CRM_NavTaskOppgaveService oppgaveService) {
+        Integer statusCode = response.getStatusCode();
+        if (statusCode == 200 || statusCode == 201) {
+            return (CRM_OppgaveQueryResponse) JSON.deserialize(
+                response.getBody(),
+                CRM_OppgaveQueryResponse.class
+            );
+        } else {
+            logger.httpError(
+                'Error getting oppgaver',
+                response,
+                null,
+                CRM_ApplicationDomain.Domain.NKS,
+                oppgaveService.getTransactionId()
+            );
+            return null;
         }
     }
 
