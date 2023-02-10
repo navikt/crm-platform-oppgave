@@ -1,3 +1,10 @@
+/**
+ * @description       :
+ * @author            : mamikals
+ * @group             :
+ * @last modified on  : 10-02-2023
+ * @last modified by  : mamikals
+ **/
 @isTest
 public class CRM_NavTaskOppgaveService_Test {
     static CRM_NavTaskOppgaveService service = new CRM_NavTaskOppgaveService();
@@ -84,6 +91,26 @@ public class CRM_NavTaskOppgaveService_Test {
         query.tildeltEnhetsnr = '4100';
         query.tilordnetRessurs = 'Z999999';
         query.opprettetFom = System.today().addYears(-1);
+
+        Test.startTest();
+        HttpResponse resp = service.queryOppgave(query);
+        Test.stopTest();
+
+        System.assertEquals(200, resp.getStatusCode());
+        System.assert(resp.getBody() != null);
+    }
+
+    @isTest
+    static void testGetOppgaveQueryList() {
+        ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
+
+        CRM_OppgaveQueryList query = new CRM_OppgaveQueryList();
+        query.aktoerId = new List<String>{ 'Test' };
+        query.statuskategori = OppgaveStatuskategori.AAPEN;
+        query.tildeltEnhetsnr = '4100';
+        query.tilordnetRessurs = 'Z999999';
+        query.fristFom = System.today().addYears(-1);
+        query.returnlimit = 100;
 
         Test.startTest();
         HttpResponse resp = service.queryOppgave(query);

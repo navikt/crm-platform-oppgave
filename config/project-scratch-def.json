@@ -15,7 +15,8 @@
         "CustomerCommunityPlus",
         "ServiceCloud",
         "LightningServiceConsole",
-        "FIELDSERVICE:1"
+        "FIELDSERVICE:1",
+        "Knowledge"
     ],
     "country": "NO",
     "language": "en_US",
@@ -56,6 +57,13 @@
         },
         "userManagementSettings": {
             "enableNewProfileUI": true
+        },
+        "knowledgeSettings": {
+            "enableKnowledge": true,
+            "enableLightningKnowledge": true
+        },
+        "omniChannelSettings": {
+            "enableOmniChannel": true
         }
     }
 }
