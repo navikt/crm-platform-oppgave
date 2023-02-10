@@ -1,10 +1,10 @@
 /**
- * @description       : 
+ * @description       :
  * @author            : mamikals
- * @group             : 
- * @last modified on  : 09-02-2023
+ * @group             :
+ * @last modified on  : 10-02-2023
  * @last modified by  : mamikals
-**/
+ **/
 public without sharing class CRM_OppgaveSyncController {
     private static LoggerUtility logger = new LoggerUtility('Oppgave');
 
@@ -61,7 +61,8 @@ public without sharing class CRM_OppgaveSyncController {
         try {
             HttpResponse response = oppgaveService.queryOppgave(query);
             CRM_OppgaveQueryResponse oppgaveResp = convertResponse(response, oppgaveService);
-            if(oppgaveResp != null) doNavTaskUpsert(oppgaveResp.convertToNavTasks());
+            if (oppgaveResp != null)
+                doNavTaskUpsert(oppgaveResp.convertToNavTasks());
         } catch (Exception ex) {
             logger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
         } finally {
@@ -107,14 +108,14 @@ public without sharing class CRM_OppgaveSyncController {
     }
 
     public static void doMassOppgaveSync(CRM_OppgaveQueryList query) {
-        
         CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
         oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
 
         try {
             HttpResponse response = oppgaveService.queryOppgave(query);
             CRM_OppgaveQueryResponse oppgaveResp = convertResponse(response, oppgaveService);
-            if(oppgaveResp != null) doNavTaskUpsert(oppgaveResp.convertToNavTasks());            
+            if (oppgaveResp != null)
+                doNavTaskUpsert(oppgaveResp.convertToNavTasks());
         } catch (Exception ex) {
             logger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
         } finally {
@@ -122,13 +123,13 @@ public without sharing class CRM_OppgaveSyncController {
         }
     }
 
-    private static CRM_OppgaveQueryResponse convertResponse(HttpResponse response, CRM_NavTaskOppgaveService oppgaveService) {
+    private static CRM_OppgaveQueryResponse convertResponse(
+        HttpResponse response,
+        CRM_NavTaskOppgaveService oppgaveService
+    ) {
         Integer statusCode = response.getStatusCode();
         if (statusCode == 200 || statusCode == 201) {
-            return (CRM_OppgaveQueryResponse) JSON.deserialize(
-                response.getBody(),
-                CRM_OppgaveQueryResponse.class
-            );
+            return (CRM_OppgaveQueryResponse) JSON.deserialize(response.getBody(), CRM_OppgaveQueryResponse.class);
         } else {
             logger.httpError(
                 'Error getting oppgaver',
