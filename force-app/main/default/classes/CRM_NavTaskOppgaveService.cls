@@ -1,10 +1,10 @@
 /**
- * @description       : 
+ * @description       :
  * @author            : mamikals
- * @group             : 
- * @last modified on  : 08-02-2023
+ * @group             :
+ * @last modified on  : 10-02-2023
  * @last modified by  : mamikals
-**/
+ **/
 public without sharing class CRM_NavTaskOppgaveService {
     public enum Context {
         SYSTEM_CONTEXT,
@@ -74,7 +74,14 @@ public without sharing class CRM_NavTaskOppgaveService {
 
     public HttpResponse queryOppgave(CRM_OppgaveQueryList query) {
         ApiController apiCtrl = setupController('GET_OPPGAVE');
-        apiCtrl.setUrlParams(convertToQueryParams(query));
+        Map<String, List<String>> convertedParams = convertToQueryParams(query);
+        for (String param : convertedParams.keySet()) {
+            if (!convertedParams.get(param).isEmpty()) {
+                for (String paramValue : convertedParams.get(param)) {
+                    apiCtrl.addUrlParam(param, paramValue);
+                }
+            }
+        }
 
         addXCorrelation(apiCtrl);
         apiCtrl.doCallout();
@@ -102,8 +109,6 @@ public without sharing class CRM_NavTaskOppgaveService {
         apiCtrl.setHeaders(httpHeaders);
         return apiCtrl;
     }
-
-
 
     /**
      * Converts the CRM_OppgaveQuery instance to a valid map og key value pairs that can be added to the HttpRequest
@@ -150,9 +155,9 @@ public without sharing class CRM_NavTaskOppgaveService {
                 String key = parser.getText();
                 List<String> value = new List<String>();
                 parser.nextToken();
-                
-                if(parser.getCurrentToken() == JSONToken.START_ARRAY) {
-                    while(parser.nextToken() != JSONToken.END_ARRAY) {
+
+                if (parser.getCurrentToken() == JSONToken.START_ARRAY) {
+                    while (parser.nextToken() != JSONToken.END_ARRAY) {
                         addFilterdQueryParams(parser, key, value);
                     }
                 } else {
