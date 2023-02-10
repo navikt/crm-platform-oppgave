@@ -1,10 +1,10 @@
 /**
- * @description       : 
+ * @description       :
  * @author            : mamikals
- * @group             : 
- * @last modified on  : 08-02-2023
+ * @group             :
+ * @last modified on  : 10-02-2023
  * @last modified by  : mamikals
-**/
+ **/
 public class CRM_OppgaveQueryList {
     public OppgaveStatuskategori statuskategori;
     public List<String> status;
@@ -21,14 +21,14 @@ public class CRM_OppgaveQueryList {
     public List<String> saksreferanse;
     public String opprettetAv;
     public String opprettetAvEnhetsnr;
-    public String aktivDatoFom;
-    public String aktivDatoTom;
-    public String opprettetFom;
-    public String opprettetTom;
-    public String ferdigstiltFom;
-    public String ferdigstiltTom;
-    public String fristFom;
-    public String fristTom;
+    public Date aktivDatoFom;
+    public Date aktivDatoTom;
+    public Date opprettetFom;
+    public Date opprettetTom;
+    public Date ferdigstiltFom;
+    public Date ferdigstiltTom;
+    public Date fristFom;
+    public Date fristTom;
     public String ikkeTidligereTilordnetRessurs;
     public List<String> orgnr;
     public String sorteringsrekkefolge;
