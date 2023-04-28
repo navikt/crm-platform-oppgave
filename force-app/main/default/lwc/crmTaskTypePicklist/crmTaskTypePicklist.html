@@ -1,7 +1,6 @@
 <template>
     <template if:false={loaded}>
-        <lightning-spinner alternative-text="Loading" size="small">
-        </lightning-spinner>
+        <lightning-spinner alternative-text="Loading" size="small"> </lightning-spinner>
     </template>
     <template if:true={showcomponent}>
         <lightning-radio-group
@@ -11,7 +10,7 @@
             required
             value={tasktype}
             onchange={handleTaskTypeChange}
-            onfocusin={handleOnFocus}>
+        >
         </lightning-radio-group>
     </template>
     <template if:false={isSupported}>
@@ -21,5 +20,4 @@
             </font>
         </div>
     </template>
-
 </template>
