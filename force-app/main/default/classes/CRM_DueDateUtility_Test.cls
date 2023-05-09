@@ -8,6 +8,9 @@ public with sharing class CRM_DueDateUtility_Test {
         Common_Code__c sykCode = (Common_Code__c) CRM_OPPGAVE_TestDataFactory.createRecord(
             new Common_Code__c(CRM_Code__c = 'SYK', Name = 'Sykepenger', CRM_Code_Set__c = 'Tema')
         );
+        Common_Code__c unknownCode = (Common_Code__c) CRM_OPPGAVE_TestDataFactory.createRecord(
+            new Common_Code__c(CRM_Code__c = 'UNK', Name = 'Unknown', CRM_Code_Set__c = 'Tema')
+        );
         Common_Code__c vurKonsCode = (Common_Code__c) CRM_OPPGAVE_TestDataFactory.createRecord(
             new Common_Code__c(
                 CRM_Code__c = 'VUR_KONS_YTE',
@@ -30,6 +33,12 @@ public with sharing class CRM_DueDateUtility_Test {
                 INT_External_Reference__c = 53340,
                 NKS_Theme__c = sykCode.Id,
                 NKS_TaskType__c = kontBrukCode.Id
+            ),
+            new NavTask__c(
+                Name = 'TEST TASK 2',
+                INT_External_Reference__c = 53341,
+                NKS_Theme__c = unknownCode.Id,
+                NKS_TaskType__c = kontBrukCode.Id
             )
         };
         CRM_OPPGAVE_TestDataFactory.createRecordList(taskList);
@@ -39,6 +48,7 @@ public with sharing class CRM_DueDateUtility_Test {
         List<NavTask__c> navList = [
             SELECT Id, NKS_Theme__c, NKS_TaskType__c
             FROM NavTask__c
+            WHERE INT_External_Reference__c != 53341
             ORDER BY INT_External_Reference__c
         ];
 
@@ -48,5 +58,21 @@ public with sharing class CRM_DueDateUtility_Test {
         System.assertEquals(false, dateList.isEmpty());
         System.assert(dateList[0] == Date.today());
         System.assert(dateList[1] != Date.today());
+    }
+
+    @isTest
+    static void testUnknownTheme() {
+        List<NavTask__c> navList = [
+            SELECT Id, NKS_Theme__c, NKS_TaskType__c
+            FROM NavTask__c
+            WHERE INT_External_reference__c = 53341
+            ORDER BY INT_External_Reference__c
+        ];
+
+        Test.startTest();
+        List<Date> dateList = CRM_DueDateUtility.setDueDate(navList);
+        Test.stopTest();
+        System.assertEquals(false, dateList.isEmpty());
+        System.assert(dateList[0] == Date.today().addDays(2));
     }
 }
