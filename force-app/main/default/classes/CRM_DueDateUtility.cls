@@ -43,10 +43,14 @@ public without sharing class CRM_DueDateUtility {
     @invocableMethod(label='get Due Date' category='Oppgave')
     public static List<Date> setDueDate(List<NavTask__c> taskList) {
         List<Date> dateList = new List<Date>();
-        List<Holiday> holidays = [SELECT ActivityDate FROM Holiday];
+        List<Holiday> holidays = [SELECT ActivityDate, RecurrenceType FROM Holiday];
         List<Date> holidayDateList = new List<Date>();
         for (Holiday h : holidays) {
-            holidayDateList.add(h.ActivityDate);
+            if (h.RecurrenceType == 'RecursYearly') {
+                holidayDateList.add(getNextOccurance(h));
+            } else {
+                holidayDateList.add(h.ActivityDate);
+            }
         }
 
         for (NavTask__c task : taskList) {
@@ -90,5 +94,13 @@ public without sharing class CRM_DueDateUtility {
             dateList.add(newDueDate);
         }
         return dateList;
+    }
+
+    private static Date getNextOccurance(Holiday h) {
+        Date retDate = h.ActivityDate.addYears(Date.today().year() - h.ActivityDate.year());
+        if (retDate < Date.today()) {
+            return retDate.addYears(1);
+        }
+        return retDate;
     }
 }
