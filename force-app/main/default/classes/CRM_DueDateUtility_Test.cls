@@ -43,6 +43,7 @@ public with sharing class CRM_DueDateUtility_Test {
         };
         CRM_OPPGAVE_TestDataFactory.createRecordList(taskList);
 
+        // Creating a new context since Apex doesn't allow MIXED_DML_OPERATIONS (non-setup and setup inserts at the same time)
         Test.startTest();
         insertHolidays();
         Test.stopTest();
