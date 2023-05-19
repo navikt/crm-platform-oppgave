@@ -73,6 +73,6 @@ public with sharing class CRM_DueDateUtility_Test {
         List<Date> dateList = CRM_DueDateUtility.setDueDate(navList);
         Test.stopTest();
         System.assertEquals(false, dateList.isEmpty());
-        System.assert(dateList[0] == Date.today().addDays(2));
+        System.assert(dateList[0] == CRM_DueDateUtility.addBusinessDays(2));
     }
 }
