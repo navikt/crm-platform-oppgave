@@ -42,7 +42,21 @@ public with sharing class CRM_DueDateUtility_Test {
             )
         };
         CRM_OPPGAVE_TestDataFactory.createRecordList(taskList);
+
+        // Creating a new context since Apex doesn't allow MIXED_DML_OPERATIONS (non-setup and setup inserts at the same time)
+        Test.startTest();
+        insertHolidays();
+        Test.stopTest();
     }
+
+    @future
+    private static void insertHolidays() {
+        insert new List<Holiday>{
+            new Holiday(Name = 'Damba day', ActivityDate = Date.today().addDays(3)),
+            new Holiday(Name = 'Echidna day', ActivityDate = Date.today().addDays(5), RecurrenceType = 'RecursYearly')
+        };
+    }
+
     @isTest
     static void setDueDateTest() {
         List<NavTask__c> navList = [
@@ -56,8 +70,8 @@ public with sharing class CRM_DueDateUtility_Test {
         List<Date> dateList = CRM_DueDateUtility.setDueDate(navList);
         Test.stopTest();
         System.assertEquals(false, dateList.isEmpty());
-        System.assert(dateList[0] == Date.today());
-        System.assert(dateList[1] != Date.today());
+        System.assertEquals(Date.today(), dateList[0]);
+        System.assertNotEquals(Date.today(), dateList[1]);
     }
 
     @isTest
@@ -73,6 +87,6 @@ public with sharing class CRM_DueDateUtility_Test {
         List<Date> dateList = CRM_DueDateUtility.setDueDate(navList);
         Test.stopTest();
         System.assertEquals(false, dateList.isEmpty());
-        System.assert(dateList[0] == Date.today().addDays(2));
+        System.assert(dateList[0] == CRM_DueDateUtility.addBusinessDays(2));
     }
 }
