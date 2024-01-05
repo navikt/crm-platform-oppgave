@@ -48,6 +48,7 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
         logger = new LoggerUtility();
         if(resp.getStatusCode() != 200 && resp.getStatusCode() != 201) {
             logger.Error('Status code not 200/201: ' + resp.getStatus(), null, CRM_ApplicationDomain.Domain.NKS);
+            logger.publish();
             return;
         }
         Map<String, Object> parsedJson = (Map<String, Object>) JSON.deserializeUntyped(resp.getBody());
