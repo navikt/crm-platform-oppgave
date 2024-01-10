@@ -10,24 +10,7 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
     private List<Common_Code__c> potentialSubList;
     private LoggerUtility logger;
 
-
-    public void setLogger(LoggerUtility logger) {
-        this.logger = logger;
-    }
-
-    private void checkLogger() {
-        if(logger == null){
-            setLogger(new LoggerUtility());
-        }
-    }
-
-    private Map<String, Object> initSync(HttpResponse response) {
-        checkLogger();
-        if(response.getStatusCode() != 200 && response.getStatusCode() != 201) {
-            return null;
-        }
-        Map<String, Object> parsedJson = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
-
+    private void initSync() {
         List<Common_Code__c> usedThemeList = [
             SELECT CRM_Code__c, CRM_UniqueKey__c
             FROM Common_Code__c
@@ -48,8 +31,6 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
             keyMap.put(gjelder.CRM_UniqueKey__c, gjelder);
             keyString.add(gjelder.CRM_UniqueKey__c);
         }
-
-        return parsedJson;
     }
 
     public void doSync() {
@@ -64,7 +45,15 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
     }
 
     public void startSync(HttpResponse resp) {
-        Map<String, Object> parsedJson = initSync(resp);
+        logger = new LoggerUtility();
+        if(resp.getStatusCode() != 200 && resp.getStatusCode() != 201) {
+            logger.Error('Status code not 200/201: ' + resp.getStatus(), null, CRM_ApplicationDomain.Domain.NKS);
+            logger.publish();
+            return;
+        }
+        Map<String, Object> parsedJson = (Map<String, Object>) JSON.deserializeUntyped(resp.getBody());
+        initSync();
+
         for (String theme : parsedJson.keySet()) {
             List<Object> currentTheme = (List<Object>) parsedJson.get(theme);
             if (!themeMap.keySet().contains(theme)) {
