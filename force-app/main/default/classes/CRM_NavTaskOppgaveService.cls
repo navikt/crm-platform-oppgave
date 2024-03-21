@@ -58,6 +58,38 @@ public without sharing class CRM_NavTaskOppgaveService {
     }
 
     /**
+     * Get an oppgave's oppfølging by its unique ID
+     * @author Eirik Fladby | 28-02-2024
+     * @param Id
+     * @return HttpResponse
+     **/
+    public HttpResponse getOppgaveOppfolgingById(String Id) {
+        ApiController apiCtrl = new ApiController();
+        Map<String, String> httpHeaders = new Map<String, String>{
+            'Content-Type' => 'application/json',
+            'accept' => 'application/json'
+        };
+        //If no person access, callout is performed in system mode
+        switch on this.context {
+            when SYSTEM_CONTEXT {
+                apiCtrl.setSystemContext();
+            }
+            when else {
+                //No context change
+            }
+        }
+        Map<String, String> queryParams = new Map<String, String>{ 'id' => Id };
+
+        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVEOPPFOLGING_BY_ID', queryParams);
+        apiCtrl.addServiceAuthHeader('Oppgave');
+        apiCtrl.setHeaders(httpHeaders);
+
+        addXCorrelation(apiCtrl);
+        apiCtrl.doCallout();
+        return apiCtrl.getResponse();
+    }
+
+    /**
      * Submit a query request to oppgave returning N tasks from the endpoint
      * @author Stian Ruud Schikora | 03-21-2022
      * @param query

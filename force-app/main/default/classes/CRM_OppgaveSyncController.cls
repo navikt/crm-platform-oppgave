@@ -107,6 +107,38 @@ public without sharing class CRM_OppgaveSyncController {
         }
     }
 
+    @AuraEnabled
+    public static void syncOppgaveOppfolgingByExtRef(String oppgaveRef) {
+        CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
+
+        try {
+            HttpResponse response = oppgaveService.getOppgaveOppfolgingById(oppgaveRef);
+            Integer statusCode = response.getStatusCode();
+            if (statusCode == 200 || statusCode == 201) {
+                CRM_OppgaveOppfolging oppfolgingOppgave = (CRM_OppgaveOppfolging) JSON.deserialize(
+                    response.getBody(),
+                    CRM_OppgaveOppfolging.class
+                );
+                List<NavTask__c> navTaskList = oppfolgingOppgave.convertToNavTasks();
+
+                doNavTaskUpsert(navTaskList);
+            } else {
+                logger.httpError(
+                    'Error getting oppgaveOppfolging by ID',
+                    response,
+                    null,
+                    CRM_ApplicationDomain.Domain.NKS,
+                    oppgaveService.getTransactionId()
+                );
+            }
+        } catch (Exception ex) {
+            System.debug(ex);
+            logger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
+        } finally {
+            logger.publish();
+        }
+    }
+
     public static void doMassOppgaveSync(CRM_OppgaveQueryList query) {
         CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
         oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);

@@ -1,5 +1,6 @@
 import doCalloutAndSync from '@salesforce/apex/CRM_OppgaveSyncController.doOppgaveSync';
 import syncByExtRef from '@salesforce/apex/CRM_OppgaveSyncController.syncOppgaveByExtRef';
+import syncOppgaveOppfolgingByExtRef from '@salesforce/apex/CRM_OppgaveSyncController.syncOppgaveOppfolgingByExtRef';
 
 class OppgaveQueryParams {
     constructor() {
@@ -31,6 +32,22 @@ export function syncAssignedOppgaver(assigneeNavIdent) {
     params.tilordnetRessurs = assigneeNavIdent;
 
     return this.syncOppgaver(params);
+}
+
+export function syncOppgaveOppfolgingById(oppgaveRef) {
+    return syncOppgaveOppfolging(oppgaveRef);
+}
+
+function syncOppgaveOppfolging(oppgaveRef) {
+    return new Promise((resolve, reject) => {
+        syncOppgaveOppfolgingByExtRef({ oppgaveRef: oppgaveRef })
+            .then(() => {
+                resolve('Success');
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
 }
 
 function syncByOppgaveId(oppgaveRef) {
