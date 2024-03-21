@@ -46,7 +46,7 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
 
     public void startSync(HttpResponse resp) {
         logger = new LoggerUtility();
-        if(resp.getStatusCode() != 200 && resp.getStatusCode() != 201) {
+        if(resp == null || resp.getBody() == null || resp.getStatusCode() != 200 && resp.getStatusCode() != 201) {
             logger.Error('Status code not 200/201: ' + resp.getStatus(), null, CRM_ApplicationDomain.Domain.NKS);
             logger.publish();
             return;
@@ -86,7 +86,7 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
                 // If we cannot add this, the gjelder is not new
                 if(!keyString.add(currentGjelder.CRM_UniqueKey__c)) {
                     // If the name is not the same, we assume that it has changed
-                    if(currentGjelder.Name != keyMap.get(currentGjelder.CRM_UniqueKey__c).Name) {
+                    if(currentGjelder?.Name != keyMap.get(currentGjelder.CRM_UniqueKey__c)?.Name) {
                         gjelderList.add(currentGjelder);
                         behandlingsList.addAll(potentialSubList);
                     }
