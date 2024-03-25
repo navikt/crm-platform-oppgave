@@ -4,6 +4,10 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
     private LoggerUtility logger;
     private CRM_NavTaskOppgaveService service;
 
+    public CRM_GjelderSynchroniser() {
+        logger = new LoggerUtility('Gjelder');
+    }
+
     public void doSync() {
         executeSync();
     }
@@ -43,7 +47,6 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
 
     public void startSync() {
         populateSoqlMap();
-        logger = new LoggerUtility();
         String resp = getGjelderHierarchy();
         if (resp == null) {
             return;
@@ -122,34 +125,7 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
         insertSubcodeList.addAll(disableUnusedCodes(gjelderKeysInResponse, 'Gjelder'));
 
         // Insert new subthemes and subtypes, and update old ones with new names or disable them
-        try {
-            upsert insertSubcodeList CRM_UniqueKey__c;
-        } catch (Exception er) {
-            logger.logMessage(
-                LoggerUtility.LogLevel.Error,
-                null,
-                null,
-                'Could not insert/update subthemes or subtypes: ' + er,
-                JSON.serialize(insertSubcodeList),
-                null,
-                CRM_ApplicationDomain.Domain.NKS
-            );
-        }
-        // Insert new gjelder and update disabled ones
-        try {
-            upsert insertGjelderList CRM_UniqueKey__c;
-        } catch (Exception e) {
-            logger.logMessage(
-                LoggerUtility.LogLevel.Error,
-                null,
-                null,
-                'Could not insert/update Gjelder: ' + e,
-                JSON.serialize(insertGjelderList),
-                null,
-                CRM_ApplicationDomain.Domain.NKS
-            );
-        }
-        logger.publish();
+        insertCommonCodes(insertSubcodeList, insertGjelderList);
     }
 
     private List<Common_code__c> createSubCodes(Map<String, String> subcodeTermMap, String codeType) {
@@ -180,6 +156,38 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
             }
         }
         return retList;
+    }
+
+    @TestVisible
+    private void insertCommonCodes(List<Common_code__c> insertSubcodeList, List<Common_code__c> insertGjelderList) {
+        try {
+            upsert insertSubcodeList CRM_UniqueKey__c;
+        } catch (Exception er) {
+            logger.logMessage(
+                LoggerUtility.LogLevel.Error,
+                null,
+                null,
+                'Could not insert/update subthemes or subtypes: ' + er,
+                JSON.serialize(insertSubcodeList),
+                null,
+                CRM_ApplicationDomain.Domain.NKS
+            );
+        }
+        // Insert new gjelder and update disabled ones
+        try {
+            upsert insertGjelderList CRM_UniqueKey__c;
+        } catch (Exception e) {
+            logger.logMessage(
+                LoggerUtility.LogLevel.Error,
+                null,
+                null,
+                'Could not insert/update Gjelder: ' + e,
+                JSON.serialize(insertGjelderList),
+                null,
+                CRM_ApplicationDomain.Domain.NKS
+            );
+        }
+        logger.publish();
     }
 
     public class ThemeInformation {

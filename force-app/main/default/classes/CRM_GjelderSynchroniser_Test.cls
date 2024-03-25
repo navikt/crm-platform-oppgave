@@ -89,4 +89,25 @@ public class CRM_GjelderSynchroniser_Test {
             'Subtheme was disabled even though api call failed'
         );
     }
+
+    @isTest
+    static void testDMLError() {
+        CRM_GjelderSynchroniser sync = new CRM_GjelderSynchroniser();
+        List<Common_Code__c> insertList = new List<Common_code__c>();
+        Common_code__c duplicateCode = new Common_Code__c(CRM_UniqueKey__c = 'Duplicate', Name = 'Duplicate');
+        insertList.add(duplicateCode);
+        insertList.add(duplicateCode);
+        Test.startTest();
+        sync.insertCommonCodes(insertList, insertList);
+        Test.stopTest();
+        Assert.isTrue(
+            [
+                SELECT Id
+                FROM Application_Log__c
+                WHERE Log_Level__c = 'ERROR' AND Source_Class__c = 'CRM_GjelderSynchroniser'
+            ]
+            .size() > 0,
+            'Tried to upsert list with duplicates but did not the exception'
+        );
+    }
 }
