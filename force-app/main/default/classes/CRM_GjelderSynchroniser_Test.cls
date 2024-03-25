@@ -70,4 +70,23 @@ public class CRM_GjelderSynchroniser_Test {
             'Subtheme was not disabled even though it was not used by any gjelder'
         );
     }
+
+    @isTest
+    static void testDoSyncFail() {
+        ApiMock.setTestMock('GET_OPPGAVE_GJELDER', 404, 'NOT FOUND');
+        CRM_GjelderSynchroniser sync = new CRM_GjelderSynchroniser();
+        Test.startTest();
+        sync.doSync();
+        Test.stopTest();
+        Assert.isTrue(
+            [
+                SELECT CRM_Active__c
+                FROM Common_Code__c
+                WHERE CRM_Code_Set__c = 'Behandlingstema' AND CRM_Code__c = 'ab0464'
+                LIMIT 1
+            ]
+            .CRM_Active__c,
+            'Subtheme was disabled even though api call failed'
+        );
+    }
 }
