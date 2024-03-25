@@ -1,37 +1,8 @@
 public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
-    private Set<String> processed;
-    private List<Common_Code__c> gjelderList;
-    private List<Common_Code__c> behandlingsList;
-    private Map<String, Object> gjelderMap;
-    private Common_Code__C currentGjelder;
-    private Map<String, String> themeMap;
-    private Set<String> keyString;
-    private Map<String, Common_Code__c> keyMap;
-    private List<Common_Code__c> potentialSubList;
+    private Map<String, Map<String, Common_code__c>> commonCodeMaps;
+
     private LoggerUtility logger;
-
-    private void initSync() {
-        List<Common_Code__c> usedThemeList = [
-            SELECT CRM_Code__c, CRM_UniqueKey__c
-            FROM Common_Code__c
-            WHERE CRM_Code_Set__c = 'Tema'
-        ];
-        themeMap = new Map<String, String>();
-        for (Common_Code__c theme : usedThemeList) {
-            themeMap.put(theme.CRM_Code__c, theme.CRM_UniqueKey__c);
-        }
-        gjelderList = new List<Common_Code__c>();
-        behandlingsList = new List<Common_Code__c>();
-        processed = new Set<String>();
-        potentialSubList = new List<Common_Code__c>();
-
-        keyString = new Set<String>();
-        keyMap = new Map<String, Common_Code__C>();
-        for(Common_Code__c gjelder : [SELECT CRM_Code__c, CRM_UniqueKey__c, Id, Name FROM Common_Code__c WHERE CRM_Code_Set__c ='Gjelder']) {
-            keyMap.put(gjelder.CRM_UniqueKey__c, gjelder);
-            keyString.add(gjelder.CRM_UniqueKey__c);
-        }
-    }
+    private CRM_NavTaskOppgaveService service;
 
     public void doSync() {
         executeSync();
@@ -39,105 +10,195 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
 
     @future(callout=true)
     public static void executeSync() {
-        CRM_NavTaskOppgaveService service = new CRM_NavTaskOppgaveService(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
         CRM_GjelderSynchroniser sync = new CRM_GjelderSynchroniser();
-        sync.startSync(service.getGjelderValues());
+        sync.startSync();
     }
 
-    public void startSync(HttpResponse resp) {
-        logger = new LoggerUtility();
-        if(resp == null || resp.getBody() == null || resp.getStatusCode() != 200 && resp.getStatusCode() != 201) {
+    public String getGjelderHierarchy() {
+        service = new CRM_NavTaskOppgaveService();
+        HttpResponse resp = service.getGjelderValues();
+        if (resp == null || resp.getBody() == null || (resp.getStatusCode() != 200 && resp.getStatusCode() != 201)) {
             logger.Error('Status code not 200/201: ' + resp.getStatus(), null, CRM_ApplicationDomain.Domain.NKS);
             logger.publish();
+            return null;
+        }
+        return resp.getBody();
+    }
+
+    private void populateSoqlMap() {
+        Map<String, Map<String, Common_code__c>> retMap = new Map<String, Map<String, Common_code__c>>();
+        for (Common_Code__c cCode : [
+            SELECT Id, CRM_Code__c, CRM_Code_Set__c, CRM_Available__c, CRM_Active__c, CRM_UniqueKey__c
+            FROM Common_Code__c
+            WHERE CRM_Code_Set__c IN ('Tema', 'Gjelder', 'Behandlingstema', 'Behandlingstyper')
+        ]) {
+            if (retMap.containsKey(cCode.CRM_Code_Set__c)) {
+                retMap.get(cCode.CRM_Code_set__c).put(cCode.CRM_Code__c, cCode);
+            } else {
+                retMap.put(cCode.CRM_Code_set__c, new Map<String, Common_code__c>{ cCode.CRM_Code__c => cCode });
+            }
+        }
+        commonCodeMaps = retMap;
+    }
+
+    public void startSync() {
+        populateSoqlMap();
+        logger = new LoggerUtility();
+        String resp = getGjelderHierarchy();
+        if (resp == null) {
             return;
         }
-        Map<String, Object> parsedJson = (Map<String, Object>) JSON.deserializeUntyped(resp.getBody());
-        initSync();
 
-        for (String theme : parsedJson.keySet()) {
-            List<Object> currentTheme = (List<Object>) parsedJson.get(theme);
-            if (!themeMap.keySet().contains(theme)) {
-                logger.Error('Missing theme: ' + theme, null, CRM_ApplicationDomain.Domain.NKS);
+        List<ThemeInformation> geirArne = (List<ThemeInformation>) JSON.deserialize(resp, List<ThemeInformation>.class);
+        Set<String> gjelderKeysInResponse = new Set<String>();
+        List<Common_code__c> insertGjelderList = new List<Common_code__c>();
+        Map<String, String> subthemeTermMap = new Map<String, String>();
+        Map<String, String> subtypeTermMap = new Map<String, String>();
+
+        for (ThemeInformation themeInformation : geirArne) {
+            if (!commonCodeMaps.get('Tema').containsKey(themeInformation.tema.tema)) {
+                logger.Error(
+                    'Missing theme: ' +
+                    themeInformation.tema.term +
+                    '(' +
+                    themeInformation.tema.tema +
+                    ')',
+                    null,
+                    CRM_ApplicationDomain.Domain.NKS
+                );
                 continue;
             }
-            for (Integer i = 0; i < currentTheme.size(); i++) {
-                gjelderMap = (Map<String, Object>) currentTheme[i];
-                currentGjelder = new Common_Code__c(
+            System.debug(themeInformation.tema.tema);
+            for (Gjelder gjelder : themeInformation.gjelderverdier) {
+                Common_code__c currentGjelder = new Common_Code__c(
                     CRM_Code_Set__c = 'Gjelder',
-                    CRM_Parent_Code__r = new Common_Code__c(CRM_UniqueKey__c = themeMap.get(theme))
+                    CRM_Active__c = true,
+                    CRM_Parent_Code__c = commonCodeMaps.get('Tema').get(themeInformation.tema.tema).Id
                 );
-                potentialSubList.clear();
 
                 // A gjelder is essentially a relation between a theme and subtheme and/or subtype.
                 // So to create a unique "code" for gjelder, we combine the codes of the children/parent.
                 // It will look like <ThemeCode>+TM<SubthemeCode>+TY<SubtypeCode>
-                currentGjelder.CRM_Code__c = theme;
+                currentGjelder.CRM_Code__c = themeInformation.tema.tema;
                 currentGjelder.Name = '';
-
-                if (gjelderMap.get('behandlingstema') != null) {
-                    createSubCode('Behandlingstema');
-                }
-
-                if (gjelderMap.get('behandlingstype') != null) {
-                    createSubCode('Behandlingstyper');
-                }
-                currentGjelder.CRM_UniqueKey__c = 'Gjelder' + currentGjelder.CRM_Code__c;
-
-                // If we cannot add this, the gjelder is not new
-                if(!keyString.add(currentGjelder.CRM_UniqueKey__c)) {
-                    // If the name is not the same, we assume that it has changed
-                    if(currentGjelder?.Name != keyMap.get(currentGjelder.CRM_UniqueKey__c)?.Name) {
-                        gjelderList.add(currentGjelder);
-                        behandlingsList.addAll(potentialSubList);
+                if (gjelder.behandlingstema != null) {
+                    if (!subthemeTermMap.containsKey(gjelder.behandlingstema)) {
+                        subthemeTermMap.put(gjelder.behandlingstema, gjelder.behandlingstemaTerm);
                     }
-                    keyMap.remove(currentGjelder.CRM_UniqueKey__c);
-                } else {
-                    gjelderList.add(currentGjelder);
-                    behandlingsList.addAll(potentialSubList);
+                    currentGjelder.CRM_Subtheme__r = new Common_Code__C(
+                        CRM_UniqueKey__c = 'Behandlingstema' + gjelder.behandlingstema
+                    );
+                    currentGjelder.CRM_Code__c += 'TM' + gjelder.behandlingstema;
+                    currentGjelder.Name = gjelder.behandlingstemaTerm;
                 }
+                if (gjelder.behandlingstype != null) {
+                    if (!subtypeTermMap.containsKey(gjelder.behandlingstema)) {
+                        subtypeTermMap.put(gjelder.behandlingstype, gjelder.behandlingstypeTerm);
+                    }
+                    currentGjelder.CRM_Subtype__r = new Common_Code__C(
+                        CRM_UniqueKey__c = 'Behandlingstyper' + gjelder.behandlingstype
+                    );
+                    currentGjelder.CRM_Code__c += 'TY' + gjelder.behandlingstype;
+                    currentGjelder.Name += (currentGjelder.Name == '' ? '' : ' - ') + gjelder.behandlingstypeTerm;
+                }
+
+                currentGjelder.Name = currentGjelder.Name.abbreviate(80);
+                currentGjelder.CRM_UniqueKey__c = 'Gjelder' + currentGjelder.CRM_Code__c;
+                gjelderKeysInResponse.add(currentGjelder.CRM_Code__c);
+                insertGjelderList.add(currentGjelder);
             }
+        }
+
+        List<Common_code__c> insertSubcodeList = new List<Common_code__c>();
+        insertSubcodeList.addAll(createSubCodes(subthemeTermMap, 'Behandlingstema'));
+        insertSubcodeList.addAll(createSubCodes(subtypeTermMap, 'Behandlingstyper'));
+
+        // Go through all Subtheme, subtype and gjelders that were not in the respons and disable them
+        insertSubcodeList.addAll(disableUnusedCodes(subthemeTermMap.keySet(), 'Behandlingstema'));
+        insertSubcodeList.addAll(disableUnusedCodes(subtypeTermMap.keySet(), 'Behandlingstyper'));
+        insertSubcodeList.addAll(disableUnusedCodes(gjelderKeysInResponse, 'Gjelder'));
+
+        // Insert new subthemes and subtypes, and update old ones with new names or disable them
+        try {
+            upsert insertSubcodeList CRM_UniqueKey__c;
+        } catch (Exception er) {
+            logger.logMessage(
+                LoggerUtility.LogLevel.Error,
+                null,
+                null,
+                'Could not insert/update subthemes or subtypes: ' + er,
+                JSON.serialize(insertSubcodeList),
+                null,
+                CRM_ApplicationDomain.Domain.NKS
+            );
+        }
+        // Insert new gjelder and update disabled ones
+        try {
+            upsert insertGjelderList CRM_UniqueKey__c;
+        } catch (Exception e) {
+            logger.logMessage(
+                LoggerUtility.LogLevel.Error,
+                null,
+                null,
+                'Could not insert/update Gjelder: ' + e,
+                JSON.serialize(insertGjelderList),
+                null,
+                CRM_ApplicationDomain.Domain.NKS
+            );
         }
         logger.publish();
-        
-        upsert behandlingsList Common_Code__c.CRM_UniqueKey__c;
-        upsert gjelderList Common_Code__c.CRM_UniqueKey__c;
-        delete keyMap.values();
     }
 
-    private void createSubCode(String codeSet) {
-        String subcode = (String) gjelderMap.get(codeSet.substring(0,15).toLowerCase());
-        String term = (String) gjelderMap.get(codeSet.substring(0,15).toLowerCase() + 'Term');
-
-        if (codeSet == 'Behandlingstema') {
-            currentGjelder.CRM_Subtheme__r = new Common_Code__c(CRM_UniqueKey__c = codeSet + subcode);
-        } else if (codeSet == 'Behandlingstyper') {
-            currentGjelder.CRM_Subtype__r = new Common_Code__c(CRM_UniqueKey__c = codeSet + subcode);
-        }
-
-        // We don't want to create/update multiple records of the same subtheme/type
-        // The combination of codeSet + subCode is the same as the external ID
-        if (!processed.contains(codeSet + subcode)) {
-            Common_Code__c subCommonCode = new Common_Code__c(
-                CRM_UniqueKey__c = codeSet + subcode,
-                Name = term,
-                CRM_Code__c = subcode,
-                CRM_Active__c = true,
-                CRM_Code_Set__c = codeSet
+    private List<Common_code__c> createSubCodes(Map<String, String> subcodeTermMap, String codeType) {
+        List<Common_code__c> retList = new List<Common_code__c>();
+        for (String subcode : subcodeTermMap.keySet()) {
+            retList.add(
+                new Common_code__c(
+                    CRM_UniqueKey__c = codeType + subcode,
+                    Name = subcodeTermMap.get(subcode),
+                    CRM_Code__c = subcode,
+                    CRM_Active__c = true,
+                    CRM_Code_Set__c = codeType
+                )
             );
-            potentialSubList.add(subCommonCode);
-            processed.add(codeSet + subcode);
         }
+        return retList;
+    }
 
-        if (codeSet == 'Behandlingstema') {
-            currentGjelder.CRM_Code__c += 'TM' + subcode;
-            currentGjelder.Name += term;
-        } else if (codeSet == 'Behandlingstyper') {
-            currentGjelder.CRM_Code__c += 'TY' + subcode;
-            if (currentGjelder.Name != '') {
-                currentGjelder.Name += ' - ';
+    private List<Common_code__c> disableUnusedCodes(Set<String> codesInResponse, String type) {
+        List<Common_code__c> retList = new List<Common_code__c>();
+        if (!commonCodeMaps.containsKey(type))
+            return retList;
+        for (String codeInSF : commonCodeMaps.get(type).keySet()) {
+            if (!codesInResponse.contains(codeInSF)) {
+                Common_Code__c disabledSFCode = commonCodeMaps.get(type).get(codeInSF);
+                disabledSFCode.CRM_Active__c = false;
+                retList.add(disabledSFCode);
             }
-            currentGjelder.Name += term;
-            currentGjelder.Name = currentGjelder.Name.abbreviate(80);
         }
+        return retList;
+    }
+
+    public class ThemeInformation {
+        public Theme tema;
+        public List<TaskType> oppgavetyper;
+        public List<Gjelder> gjelderverdier;
+    }
+
+    public class Theme {
+        public String tema;
+        public String term;
+    }
+
+    public class TaskType {
+        public String oppgavetype;
+        public String term;
+    }
+
+    public class Gjelder {
+        public String behandlingstema;
+        public String behandlingstemaTerm;
+        public String behandlingstype;
+        public String behandlingstypeTerm;
     }
 }
