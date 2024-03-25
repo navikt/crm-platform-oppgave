@@ -19,66 +19,3275 @@
         <value xsi:type="xsd:string">{
   &quot;200&quot;: {
     &quot;headers&quot;: null,
-    &quot;body&quot;: {
-      &quot;PEN&quot;: [
+    &quot;body&quot;: [
         {
-          &quot;behandlingstema&quot;: null,
-          &quot;behandlingstemaTerm&quot;: null,
-          &quot;behandlingstype&quot;: &quot;ae0117&quot;,
-          &quot;behandlingstypeTerm&quot;: &quot;Veteran sak&quot;
+            &quot;tema&quot;: {
+                &quot;tema&quot;: &quot;RVE&quot;,
+                &quot;term&quot;: &quot;Rettferdsvederlag&quot;
+            },
+            &quot;oppgavetyper&quot;: [
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_NOTAT&quot;,
+                    &quot;term&quot;: &quot;Vurder notat&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_BREV&quot;,
+                    &quot;term&quot;: &quot;Vurder brev&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SAK_MK&quot;,
+                    &quot;term&quot;: &quot;Behandle sak (Manuell)&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR&quot;,
+                    &quot;term&quot;: &quot;Journalføring&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KON_UTG_SCA_DOK&quot;,
+                    &quot;term&quot;: &quot;Kontroller utgående skannet dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR&quot;,
+                    &quot;term&quot;: &quot;Vurder dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_SVAR&quot;,
+                    &quot;term&quot;: &quot;Vurder svar&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_HENV&quot;,
+                    &quot;term&quot;: &quot;Vurder henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_AVV_ADR&quot;,
+                    &quot;term&quot;: &quot;Behandle avvist adresse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;RETUR&quot;,
+                    &quot;term&quot;: &quot;Behandle returpost&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FDR&quot;,
+                    &quot;term&quot;: &quot;Fordeling&quot;
+                }
+            ],
+            &quot;gjelderverdier&quot;: []
         },
         {
-          &quot;behandlingstema&quot;: &quot;ab0011&quot;,
-          &quot;behandlingstemaTerm&quot;: &quot;Gjenlevendepensjon&quot;,
-          &quot;behandlingstype&quot;: &quot;ae0104&quot;,
-          &quot;behandlingstypeTerm&quot;: &quot;Bosatt Norge&quot;
-        }
-      ],
-      &quot;INF&quot;: [
-        {
-          &quot;behandlingstema&quot;: null,
-          &quot;behandlingstemaTerm&quot;: null,
-          &quot;behandlingstype&quot;: &quot;ae0004&quot;,
-          &quot;behandlingstypeTerm&quot;: &quot;Behandle vedtak&quot;
-        }
-      ],
-      &quot;RVE&quot;: [
-        {
-          &quot;behandlingstema&quot;: null,
-          &quot;behandlingstemaTerm&quot;: null,
-          &quot;behandlingstype&quot;: &quot;ae0004&quot;,
-          &quot;behandlingstypeTerm&quot;: &quot;Behandle vedtak&quot;
-        }
-      ],
-      &quot;REK&quot;: [
-        {
-          &quot;behandlingstema&quot;: null,
-          &quot;behandlingstemaTerm&quot;: null,
-          &quot;behandlingstype&quot;: &quot;ae0004&quot;,
-          &quot;behandlingstypeTerm&quot;: &quot;Behandle vedtak&quot;
+            &quot;tema&quot;: {
+                &quot;tema&quot;: &quot;OPP&quot;,
+                &quot;term&quot;: &quot;Oppfølging&quot;
+            },
+            &quot;oppgavetyper&quot;: [
+                {
+                    &quot;oppgavetype&quot;: &quot;INNH_DOK&quot;,
+                    &quot;term&quot;: &quot;Innhent dokumentasjon&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_NOTAT&quot;,
+                    &quot;term&quot;: &quot;Vurder notat&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_BREV&quot;,
+                    &quot;term&quot;: &quot;Vurder brev&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_AKT&quot;,
+                    &quot;term&quot;: &quot;Vurder aktivitetskrav&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_HENVIS&quot;,
+                    &quot;term&quot;: &quot;Behandle henvisning&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SED&quot;,
+                    &quot;term&quot;: &quot;Behandle SED&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_EL_LEG&quot;,
+                    &quot;term&quot;: &quot;Behandle elektronisk legeerklæring&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_HENV&quot;,
+                    &quot;term&quot;: &quot;Behandle henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FDR&quot;,
+                    &quot;term&quot;: &quot;Fordeling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR&quot;,
+                    &quot;term&quot;: &quot;Journalføring&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KON_UTG_SCA_DOK&quot;,
+                    &quot;term&quot;: &quot;Kontroller utgående skannet dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KONT_BRUK&quot;,
+                    &quot;term&quot;: &quot;Kontakt bruker&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;OPPINF&quot;,
+                    &quot;term&quot;: &quot;Registrer oppfølgingsinfo - sykefravær&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;RETUR&quot;,
+                    &quot;term&quot;: &quot;Behandle returpost&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;STARTV&quot;,
+                    &quot;term&quot;: &quot;Start vedtaksbehandling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;SVAR_IK_MOT&quot;,
+                    &quot;term&quot;: &quot;Svar ikke mottatt&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_SVAR&quot;,
+                    &quot;term&quot;: &quot;Vurder svar&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_HENV&quot;,
+                    &quot;term&quot;: &quot;Vurder henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_AVV_ADR&quot;,
+                    &quot;term&quot;: &quot;Behandle avvist adresse&quot;
+                }
+            ],
+            &quot;gjelderverdier&quot;: [
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0466&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Arbeidsrådgivning&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0467&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Senter for jobbmestring&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0468&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Rådgivende lege&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0004&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Behandle vedtak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0007&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utbetaling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0046&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Anke&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0114&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Tidligere hjemsendt sak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0115&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Hjemsendt til ny behandling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0116&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Meldekort&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0117&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Veteran sak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0229&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Til beslutter&quot;
+                }
+            ]
         },
         {
-          &quot;behandlingstema&quot;: null,
-          &quot;behandlingstemaTerm&quot;: null,
-          &quot;behandlingstype&quot;: &quot;ae0007&quot;,
-          &quot;behandlingstypeTerm&quot;: &quot;Utbetaling&quot;
+            &quot;tema&quot;: {
+                &quot;tema&quot;: &quot;STO&quot;,
+                &quot;term&quot;: &quot;Regnskap/utbetaling/årsoppgave&quot;
+            },
+            &quot;oppgavetyper&quot;: [
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_NOTAT&quot;,
+                    &quot;term&quot;: &quot;Vurder notat&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_BREV&quot;,
+                    &quot;term&quot;: &quot;Vurder brev&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;ARBEIDSG_REF&quot;,
+                    &quot;term&quot;: &quot;Refusjon arbeidsgiver&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;ARS&quot;,
+                    &quot;term&quot;: &quot;Årsoppgave&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;AVR&quot;,
+                    &quot;term&quot;: &quot;Avregning&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FEILUTB_TILT&quot;,
+                    &quot;term&quot;: &quot;Feilutbetaling tiltaksmidler&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FOR_UTB&quot;,
+                    &quot;term&quot;: &quot;Foreta utbetaling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FORESP_OM&quot;,
+                    &quot;term&quot;: &quot;Forespørsel om utbetaling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FORS_ARBGPER&quot;,
+                    &quot;term&quot;: &quot;Forskudd arbeidsgiverperiode&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FORV_INNB&quot;,
+                    &quot;term&quot;: &quot;FORV_INNB&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR&quot;,
+                    &quot;term&quot;: &quot;Journalføring&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KON_UTG_SCA_DOK&quot;,
+                    &quot;term&quot;: &quot;Kontroller utgående skannet dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KORR_REGN&quot;,
+                    &quot;term&quot;: &quot;Korriger regnskap/innberetning&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KORR_UTB&quot;,
+                    &quot;term&quot;: &quot;Korriger utbetaling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KORR_YT_IBT&quot;,
+                    &quot;term&quot;: &quot;Korriger ytelse - innbetaling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;NODUTBET&quot;,
+                    &quot;term&quot;: &quot;Nødutbetaling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;OKO_STOPP&quot;,
+                    &quot;term&quot;: &quot;Stopp&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;OMP_YTE&quot;,
+                    &quot;term&quot;: &quot;Ompostering AAP/DP&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;OPPF_UTB&quot;,
+                    &quot;term&quot;: &quot;Oppfølging utbetaling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;OVERG&quot;,
+                    &quot;term&quot;: &quot;Overgangssaker - SP/FA/BS&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;REGNSKAP&quot;,
+                    &quot;term&quot;: &quot;Regnskap&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;RETUR&quot;,
+                    &quot;term&quot;: &quot;Behandle returpost&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;SALDOFLYTT&quot;,
+                    &quot;term&quot;: &quot;Saldflytt&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;SETTVENT&quot;,
+                    &quot;term&quot;: &quot;Sett utbetaling på vent&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;SKATTEKORRIG&quot;,
+                    &quot;term&quot;: &quot;Skattekorrigering&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;STO_UTB&quot;,
+                    &quot;term&quot;: &quot;Stopp utbetaling i bank&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;SVAR_IK_MOT&quot;,
+                    &quot;term&quot;: &quot;Svar ikke mottatt&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_SVAR&quot;,
+                    &quot;term&quot;: &quot;Vurder svar&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_HENV&quot;,
+                    &quot;term&quot;: &quot;Vurder henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_AVV_ADR&quot;,
+                    &quot;term&quot;: &quot;Behandle avvist adresse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;REG_ARB_KONT&quot;,
+                    &quot;term&quot;: &quot;Registrer arbeidsgiverkontakt&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FDR&quot;,
+                    &quot;term&quot;: &quot;Fordeling&quot;
+                }
+            ],
+            &quot;gjelderverdier&quot;: [
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0071&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Erstatningskrav&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0093&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Saksomkostninger&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0165&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Arena teknisk&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0004&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Lønnsgarantimidler - dagpenger&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0014&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Arbeidsavklaringspenger&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0061&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Sykepenger&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0084&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Kontantstøtte&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0129&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Reiseutgifter&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0149&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Omsorgspenger&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0155&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Gravferdsstønad&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0231&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Hjelpemidler&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0266&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Grunn- og hjelpestønad&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0268&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Supplerende stønad&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0270&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Barnetrygd&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0271&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Omsorgspenger, Pleiepenger og opplæringspenger&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0272&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Enslig forsørger&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0273&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Foreldre- og svangerskapspenger&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0276&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Yrkesskade / Menerstatning&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0328&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Bidrag ekskl. farskap&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0356&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Dagpenger&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0358&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Helsetjenester og ortopediske hjelpemidler&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0359&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Tilleggsstønad&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0360&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Tiltakspenger&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0361&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Trygdeavgift&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0436&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Kompensasjon selvstendig næringsdrivende/frilansere&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0237&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;EU-EØS praksisendring ny behandling&quot;
+                }
+            ]
         },
         {
-          &quot;behandlingstema&quot;: null,
-          &quot;behandlingstemaTerm&quot;: null,
-          &quot;behandlingstype&quot;: &quot;ae0116&quot;,
-          &quot;behandlingstypeTerm&quot;: &quot;Meldekort&quot;
-        }
-      ],
-      &quot;AAP&quot;: [
+            &quot;tema&quot;: {
+                &quot;tema&quot;: &quot;SYK&quot;,
+                &quot;term&quot;: &quot;Sykepenger&quot;
+            },
+            &quot;oppgavetyper&quot;: [
+                {
+                    &quot;oppgavetype&quot;: &quot;INNH_DOK&quot;,
+                    &quot;term&quot;: &quot;Innhent dokumentasjon&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_NOTAT&quot;,
+                    &quot;term&quot;: &quot;Vurder notat&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_BREV&quot;,
+                    &quot;term&quot;: &quot;Vurder brev&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_HENV&quot;,
+                    &quot;term&quot;: &quot;Behandle henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_REF&quot;,
+                    &quot;term&quot;: &quot;Behandle refusjonskrav&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SAK&quot;,
+                    &quot;term&quot;: &quot;Behandle sak&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SAK_MK&quot;,
+                    &quot;term&quot;: &quot;Behandle sak (Manuell)&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SED&quot;,
+                    &quot;term&quot;: &quot;Behandle SED&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FDR&quot;,
+                    &quot;term&quot;: &quot;Fordeling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FLY&quot;,
+                    &quot;term&quot;: &quot;Flyttesak&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;INNT&quot;,
+                    &quot;term&quot;: &quot;Inntektsopplysninger&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR&quot;,
+                    &quot;term&quot;: &quot;Journalføring&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR_UT&quot;,
+                    &quot;term&quot;: &quot;Journalføring utgående&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KON_UTG_SCA_DOK&quot;,
+                    &quot;term&quot;: &quot;Kontroller utgående skannet dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KONT_BRUK&quot;,
+                    &quot;term&quot;: &quot;Kontakt bruker&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;NOEK&quot;,
+                    &quot;term&quot;: &quot;Nøkkelkontroll&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;RETUR&quot;,
+                    &quot;term&quot;: &quot;Behandle returpost&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;ROB_BEH&quot;,
+                    &quot;term&quot;: &quot;Robotbehandling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;SOK&quot;,
+                    &quot;term&quot;: &quot;Søknad om sykepenger&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;SVAR_IK_MOT&quot;,
+                    &quot;term&quot;: &quot;Svar ikke mottatt&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR&quot;,
+                    &quot;term&quot;: &quot;Vurder dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_KONS_YTE&quot;,
+                    &quot;term&quot;: &quot;Vurder konsekvens for ytelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_SVAR&quot;,
+                    &quot;term&quot;: &quot;Vurder svar&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_HENV&quot;,
+                    &quot;term&quot;: &quot;Vurder henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_AVV_ADR&quot;,
+                    &quot;term&quot;: &quot;Behandle avvist adresse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;REG_ARB_KONT&quot;,
+                    &quot;term&quot;: &quot;Registrer arbeidsgiverkontakt&quot;
+                }
+            ],
+            &quot;gjelderverdier&quot;: [
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0494&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Utenlandsk sykmelding&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0472&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Renter, erstatning og saksomkostninger&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0472&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Renter, erstatning og saksomkostninger&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0471&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Behandlingsdager&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0470&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Speil&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0469&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Refusjonskrav §8-20&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0042&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Dokumentinnsyn&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0071&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Erstatningskrav&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0463&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Feilsendt refusjonskrav&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0267&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Forsinket behandling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0266&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Samhandling AAP-SP-DP&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0004&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Behandle vedtak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0007&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utbetaling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0046&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Anke&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0114&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Tidligere hjemsendt sak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0115&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Hjemsendt til ny behandling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0117&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Veteran sak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0119&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Samhandling BS-FA-SP&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0200&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Risiko sykefravær&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0121&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Refusjon&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0160&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Feilutbetaling - utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0161&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Feilutbetaling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0351&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Enkeltstående behandlingsdager&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0061&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Sykepenger&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0200&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Risiko sykefravær&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0237&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Reisetilskudd&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0314&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Sykepenger under utenlandsopphold&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0338&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Unntak fra arbeidsgiverperiode&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0339&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Yrkesskade&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0352&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Friskmelding til arbeidsformidling&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0224&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Partsinnsyn&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0421&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Bestridelse av sykmelding&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0230&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Aktivitetskrav&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0237&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;EU-EØS praksisendring ny behandling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0426&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Sykepenger for arbeidsledig&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0430&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Papirmeldekort&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0247&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Forkortet ventetid&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0434&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Del D&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0269&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Medlemskap&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0444&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Korrigering ny løsning&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0239&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Tilbakedatering&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0338&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Unntak fra arbeidsgiverperiode&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0227&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Digital søknad&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0421&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Bestridelse av sykmelding&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0339&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Yrkesskade&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0237&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Reisetilskudd&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0438&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Lønnskompensasjon&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0258&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage - tilbakedatering&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0446&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Manglende innbetaling § 8-22&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0237&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Reisetilskudd&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0121&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Refusjon&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0447&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Inntektssikring EØS - refusjonskrav&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0448&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Inntektssikring EØS - annullering&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0449&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Ikke opprettet T-sak&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0447&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Inntektssikring EØS - refusjonskrav&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0264&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Manuell&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0455&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Overgangssak fra Speil&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0458&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Utbetaling bruker&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0474&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Feilutbetaling - Speil&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0508&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Samhandling SP-YS&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0338&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Unntak fra arbeidsgiverperiode&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                }
+            ]
+        },
         {
-          &quot;behandlingstema&quot;: &quot;ab0241&quot;,
-          &quot;behandlingstemaTerm&quot;: &quot;Dagliglivet&quot;,
-          &quot;behandlingstype&quot;: &quot;ae0106&quot;,
-          &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+            &quot;tema&quot;: {
+                &quot;tema&quot;: &quot;FOR&quot;,
+                &quot;term&quot;: &quot;Foreldre- og svangerskapspenger&quot;
+            },
+            &quot;oppgavetyper&quot;: [
+                {
+                    &quot;oppgavetype&quot;: &quot;INNH_DOK&quot;,
+                    &quot;term&quot;: &quot;Innhent dokumentasjon&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_NOTAT&quot;,
+                    &quot;term&quot;: &quot;Vurder notat&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_BREV&quot;,
+                    &quot;term&quot;: &quot;Vurder brev&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SAK&quot;,
+                    &quot;term&quot;: &quot;Behandle sak&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SED&quot;,
+                    &quot;term&quot;: &quot;Behandle SED&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR&quot;,
+                    &quot;term&quot;: &quot;Journalføring&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR_UT&quot;,
+                    &quot;term&quot;: &quot;Journalføring utgående&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KON_UTG_SCA_DOK&quot;,
+                    &quot;term&quot;: &quot;Kontroller utgående skannet dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KONT_BRUK&quot;,
+                    &quot;term&quot;: &quot;Kontakt bruker&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;NOEK&quot;,
+                    &quot;term&quot;: &quot;Nøkkelkontroll&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;RETUR&quot;,
+                    &quot;term&quot;: &quot;Behandle returpost&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;SVAR_IK_MOT&quot;,
+                    &quot;term&quot;: &quot;Svar ikke mottatt&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR&quot;,
+                    &quot;term&quot;: &quot;Vurder dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_KONS_YTE&quot;,
+                    &quot;term&quot;: &quot;Vurder konsekvens for ytelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_SVAR&quot;,
+                    &quot;term&quot;: &quot;Vurder svar&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_HENV&quot;,
+                    &quot;term&quot;: &quot;Vurder henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_AVV_ADR&quot;,
+                    &quot;term&quot;: &quot;Behandle avvist adresse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FDR&quot;,
+                    &quot;term&quot;: &quot;Fordeling&quot;
+                }
+            ],
+            &quot;gjelderverdier&quot;: [
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0150&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Tvungen forvaltning&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0042&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Dokumentinnsyn&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0046&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Anke&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0326&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Foreldrepenger&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0327&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Engangsstønad&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0342&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Fedrekvote&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0114&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Tidligere hjemsendt sak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0115&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Hjemsendt til ny behandling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0119&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Samhandling BS-FA-SP&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0160&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Feilutbetaling - utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0161&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Feilutbetaling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0126&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Svangerskapspenger&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0326&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Foreldrepenger&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0327&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Engangsstønad&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0342&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Fedrekvote&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0343&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Gradering&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0344&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Utsettelse&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0224&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Partsinnsyn&quot;
+                }
+            ]
+        },
+        {
+            &quot;tema&quot;: {
+                &quot;tema&quot;: &quot;AAP&quot;,
+                &quot;term&quot;: &quot;Arbeidsavklaringspenger&quot;
+            },
+            &quot;oppgavetyper&quot;: [
+                {
+                    &quot;oppgavetype&quot;: &quot;INNH_DOK&quot;,
+                    &quot;term&quot;: &quot;Innhent dokumentasjon&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_NOTAT&quot;,
+                    &quot;term&quot;: &quot;Vurder notat&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_BREV&quot;,
+                    &quot;term&quot;: &quot;Vurder brev&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_HENV&quot;,
+                    &quot;term&quot;: &quot;Behandle henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SED&quot;,
+                    &quot;term&quot;: &quot;Behandle SED&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FDR&quot;,
+                    &quot;term&quot;: &quot;Fordeling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR&quot;,
+                    &quot;term&quot;: &quot;Journalføring&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR_UT&quot;,
+                    &quot;term&quot;: &quot;Journalføring utgående&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KON_UTG_SCA_DOK&quot;,
+                    &quot;term&quot;: &quot;Kontroller utgående skannet dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KONT_BRUK&quot;,
+                    &quot;term&quot;: &quot;Kontakt bruker&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;RETUR&quot;,
+                    &quot;term&quot;: &quot;Behandle returpost&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;STARTV&quot;,
+                    &quot;term&quot;: &quot;Start vedtaksbehandling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;SVAR_IK_MOT&quot;,
+                    &quot;term&quot;: &quot;Svar ikke mottatt&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_KONS_YTE&quot;,
+                    &quot;term&quot;: &quot;Vurder konsekvens for ytelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_SVAR&quot;,
+                    &quot;term&quot;: &quot;Vurder svar&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_HENV&quot;,
+                    &quot;term&quot;: &quot;Vurder henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_AVV_ADR&quot;,
+                    &quot;term&quot;: &quot;Behandle avvist adresse&quot;
+                }
+            ],
+            &quot;gjelderverdier&quot;: [
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0004&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Behandle vedtak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0498&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Ferdig avklart mot arbeid&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0499&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Arbeidsutprøving&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0500&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Etablering&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0501&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Lærling&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0502&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Institusjonsopphold&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0504&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Refusjonskrav&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0465&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Etterbetaling ung ufør&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0266&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Samhandling AAP-SP-DP&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0007&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utbetaling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0046&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Anke&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0047&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Gjenopptak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0114&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Tidligere hjemsendt sak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0115&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Hjemsendt til ny behandling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0116&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Meldekort&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0124&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Mangler opplysninger&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0269&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Medlemskap&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0297&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Reisestønader til arbeidssøkere&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0339&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Yrkesskade&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0362&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Studentbestemmelsen&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0364&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Sykepengeerstatning&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0032&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Stans&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0224&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Partsinnsyn&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0430&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Papirmeldekort&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0248&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Unntak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0194&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Uføretrygd&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0507&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Ny maksdato sykepenger&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0048&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Barnetillegg&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                }
+            ]
+        },
+        {
+            &quot;tema&quot;: {
+                &quot;tema&quot;: &quot;OVR&quot;,
+                &quot;term&quot;: &quot;4 - Øvrig&quot;
+            },
+            &quot;oppgavetyper&quot;: [
+                {
+                    &quot;oppgavetype&quot;: &quot;DK&quot;,
+                    &quot;term&quot;: &quot;Div. kundesenter&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KON_UTG_SCA_DOK&quot;,
+                    &quot;term&quot;: &quot;Kontroller utgående skannet dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KONT_BRUK&quot;,
+                    &quot;term&quot;: &quot;Kontakt bruker&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;MEDL&quot;,
+                    &quot;term&quot;: &quot;Medlemskap&quot;
+                }
+            ],
+            &quot;gjelderverdier&quot;: [
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0118&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Nasjonal&quot;
+                }
+            ]
+        },
+        {
+            &quot;tema&quot;: {
+                &quot;tema&quot;: &quot;YRK&quot;,
+                &quot;term&quot;: &quot;Yrkesskade og menerstatning&quot;
+            },
+            &quot;oppgavetyper&quot;: [
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_NOTAT&quot;,
+                    &quot;term&quot;: &quot;Vurder notat&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_BREV&quot;,
+                    &quot;term&quot;: &quot;Vurder brev&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SAK&quot;,
+                    &quot;term&quot;: &quot;Behandle sak&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SAK_MK&quot;,
+                    &quot;term&quot;: &quot;Behandle sak (Manuell)&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SED&quot;,
+                    &quot;term&quot;: &quot;Behandle SED&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FDR&quot;,
+                    &quot;term&quot;: &quot;Fordeling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FLY&quot;,
+                    &quot;term&quot;: &quot;Flyttesak&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;INNH_DOK&quot;,
+                    &quot;term&quot;: &quot;Innhent dokumentasjon&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR&quot;,
+                    &quot;term&quot;: &quot;Journalføring&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KON_UTG_SCA_DOK&quot;,
+                    &quot;term&quot;: &quot;Kontroller utgående skannet dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KONT_BRUK&quot;,
+                    &quot;term&quot;: &quot;Kontakt bruker&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;RETUR&quot;,
+                    &quot;term&quot;: &quot;Behandle returpost&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;SVAR_IK_MOT&quot;,
+                    &quot;term&quot;: &quot;Svar ikke mottatt&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR&quot;,
+                    &quot;term&quot;: &quot;Vurder dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_KONS_YTE&quot;,
+                    &quot;term&quot;: &quot;Vurder konsekvens for ytelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_SVAR&quot;,
+                    &quot;term&quot;: &quot;Vurder svar&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_HENV&quot;,
+                    &quot;term&quot;: &quot;Vurder henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_AVV_ADR&quot;,
+                    &quot;term&quot;: &quot;Behandle avvist adresse&quot;
+                }
+            ],
+            &quot;gjelderverdier&quot;: [
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0150&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Tvungen forvaltning&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0046&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Anke&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0276&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Yrkesskade / Menerstatning&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0305&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Skademelding sykdom&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0114&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Tidligere hjemsendt sak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0115&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Hjemsendt til ny behandling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0117&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Veteran sak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0160&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Feilutbetaling - utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0161&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Feilutbetaling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0085&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Frivillig yrkesskade selvstendig næringsdrivende&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0106&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Skademelding&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0185&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Arbeidstilsynsmelding&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0259&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Menerstatning&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0276&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Yrkesskade / Menerstatning&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0304&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Menerstatning sykdom&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0305&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Skademelding sykdom&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0508&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Samhandling SP-YS&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0224&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Partsinnsyn&quot;
+                }
+            ]
+        },
+        {
+            &quot;tema&quot;: {
+                &quot;tema&quot;: &quot;UFO&quot;,
+                &quot;term&quot;: &quot;Uføretrygd&quot;
+            },
+            &quot;oppgavetyper&quot;: [
+                {
+                    &quot;oppgavetype&quot;: &quot;INNH_DOK&quot;,
+                    &quot;term&quot;: &quot;Innhent dokumentasjon&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_NOTAT&quot;,
+                    &quot;term&quot;: &quot;Vurder notat&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_BREV&quot;,
+                    &quot;term&quot;: &quot;Vurder brev&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_HENV&quot;,
+                    &quot;term&quot;: &quot;Behandle henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SAK&quot;,
+                    &quot;term&quot;: &quot;Behandle sak&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SAK_MK&quot;,
+                    &quot;term&quot;: &quot;Behandle sak (Manuell)&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SED&quot;,
+                    &quot;term&quot;: &quot;Behandle SED&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FDR&quot;,
+                    &quot;term&quot;: &quot;Fordeling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR&quot;,
+                    &quot;term&quot;: &quot;Journalføring&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR_UT&quot;,
+                    &quot;term&quot;: &quot;Journalføring utgående&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KONT_BRUK&quot;,
+                    &quot;term&quot;: &quot;Kontakt bruker&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;RETUR&quot;,
+                    &quot;term&quot;: &quot;Behandle returpost&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;SVAR_IK_MOT&quot;,
+                    &quot;term&quot;: &quot;Svar ikke mottatt&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;TVU_FOR&quot;,
+                    &quot;term&quot;: &quot;Tvungen forvaltning&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR&quot;,
+                    &quot;term&quot;: &quot;Vurder dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_SVAR&quot;,
+                    &quot;term&quot;: &quot;Vurder svar&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_HENV&quot;,
+                    &quot;term&quot;: &quot;Vurder henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_AVV_ADR&quot;,
+                    &quot;term&quot;: &quot;Behandle avvist adresse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_KONS_YTE&quot;,
+                    &quot;term&quot;: &quot;Vurder konsekvens for ytelse&quot;
+                }
+            ],
+            &quot;gjelderverdier&quot;: [
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0046&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Anke&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0268&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Renter&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0004&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Behandle vedtak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0007&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utbetaling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0117&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Veteran sak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0160&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Feilutbetaling - utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0150&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Tvungen forvaltning&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0339&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Yrkesskade&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0405&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Forespørsel norsk trygdetid&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0406&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Beregning, etter utland&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0407&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Beregning, før utland&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0408&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Dialog ang. AEV&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0409&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;AEV mangler&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0224&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Partsinnsyn&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0002&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Eksport&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0269&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Medlemskap&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0194&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Uføretrygd&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                }
+            ]
+        },
+        {
+            &quot;tema&quot;: {
+                &quot;tema&quot;: &quot;DAG&quot;,
+                &quot;term&quot;: &quot;Dagpenger&quot;
+            },
+            &quot;oppgavetyper&quot;: [
+                {
+                    &quot;oppgavetype&quot;: &quot;INNH_DOK&quot;,
+                    &quot;term&quot;: &quot;Innhent dokumentasjon&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_NOTAT&quot;,
+                    &quot;term&quot;: &quot;Vurder notat&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_BREV&quot;,
+                    &quot;term&quot;: &quot;Vurder brev&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_HENV&quot;,
+                    &quot;term&quot;: &quot;Behandle henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SED&quot;,
+                    &quot;term&quot;: &quot;Behandle SED&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FDR&quot;,
+                    &quot;term&quot;: &quot;Fordeling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR&quot;,
+                    &quot;term&quot;: &quot;Journalføring&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR_UT&quot;,
+                    &quot;term&quot;: &quot;Journalføring utgående&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KON_UTG_SCA_DOK&quot;,
+                    &quot;term&quot;: &quot;Kontroller utgående skannet dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KONT_BRUK&quot;,
+                    &quot;term&quot;: &quot;Kontakt bruker&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;RETUR&quot;,
+                    &quot;term&quot;: &quot;Behandle returpost&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;STARTV&quot;,
+                    &quot;term&quot;: &quot;Start vedtaksbehandling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;SVAR_IK_MOT&quot;,
+                    &quot;term&quot;: &quot;Svar ikke mottatt&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_KONS_YTE&quot;,
+                    &quot;term&quot;: &quot;Vurder konsekvens for ytelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_SVAR&quot;,
+                    &quot;term&quot;: &quot;Vurder svar&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_HENV&quot;,
+                    &quot;term&quot;: &quot;Vurder henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_AVV_ADR&quot;,
+                    &quot;term&quot;: &quot;Behandle avvist adresse&quot;
+                }
+            ],
+            &quot;gjelderverdier&quot;: [
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0266&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Samhandling AAP-SP-DP&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0004&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Behandle vedtak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0007&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utbetaling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0046&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Anke&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0002&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Eksport&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0005&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Dagpenger under permittering&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0307&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Import&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0308&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Perioder inn&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0309&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Perioder ut&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0310&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Refusjon inn&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0311&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Refusjon ut&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0114&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Tidligere hjemsendt sak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0115&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Hjemsendt til ny behandling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0116&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Meldekort&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0117&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Veteran sak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0121&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Refusjon&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0002&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Eksport&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0005&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Dagpenger under permittering&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0365&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Import&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0366&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Perioder&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0224&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Partsinnsyn&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0430&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Papirmeldekort&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0438&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Lønnskompensasjon&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0269&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Medlemskap&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0438&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Lønnskompensasjon&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0451&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Klage og anke - Forskudd&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0452&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Klage og anke - Feriepenger&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                }
+            ]
+        },
+        {
+            &quot;tema&quot;: {
+                &quot;tema&quot;: &quot;KON&quot;,
+                &quot;term&quot;: &quot;Kontantstøtte&quot;
+            },
+            &quot;oppgavetyper&quot;: [
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_NOTAT&quot;,
+                    &quot;term&quot;: &quot;Vurder notat&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_BREV&quot;,
+                    &quot;term&quot;: &quot;Vurder brev&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SAK&quot;,
+                    &quot;term&quot;: &quot;Behandle sak&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SAK_MK&quot;,
+                    &quot;term&quot;: &quot;Behandle sak (Manuell)&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SED&quot;,
+                    &quot;term&quot;: &quot;Behandle SED&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_UND_VED&quot;,
+                    &quot;term&quot;: &quot;Behandle underkjent vedtak&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FLY&quot;,
+                    &quot;term&quot;: &quot;Flyttesak&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FREM&quot;,
+                    &quot;term&quot;: &quot;Fremlegg&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;GOD_VED&quot;,
+                    &quot;term&quot;: &quot;Godkjenne vedtak&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;INNH_DOK&quot;,
+                    &quot;term&quot;: &quot;Innhent dokumentasjon&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR&quot;,
+                    &quot;term&quot;: &quot;Journalføring&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR_UT&quot;,
+                    &quot;term&quot;: &quot;Journalføring utgående&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KON_UTG_SCA_DOK&quot;,
+                    &quot;term&quot;: &quot;Kontroller utgående skannet dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KONT_BRUK&quot;,
+                    &quot;term&quot;: &quot;Kontakt bruker&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;RETUR&quot;,
+                    &quot;term&quot;: &quot;Behandle returpost&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;SVAR_IK_MOT&quot;,
+                    &quot;term&quot;: &quot;Svar ikke mottatt&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR&quot;,
+                    &quot;term&quot;: &quot;Vurder dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_KONS_YTE&quot;,
+                    &quot;term&quot;: &quot;Vurder konsekvens for ytelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_SVAR&quot;,
+                    &quot;term&quot;: &quot;Vurder svar&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_HENV&quot;,
+                    &quot;term&quot;: &quot;Vurder henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_AVV_ADR&quot;,
+                    &quot;term&quot;: &quot;Behandle avvist adresse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FDR&quot;,
+                    &quot;term&quot;: &quot;Fordeling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_LIVS&quot;,
+                    &quot;term&quot;: &quot;Vurder livshendelse&quot;
+                }
+            ],
+            &quot;gjelderverdier&quot;: [
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0237&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;EU-EØS praksisendring ny behandling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0118&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Nasjonal&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0150&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Tvungen forvaltning&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0004&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Behandle vedtak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0046&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Anke&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0114&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Tidligere hjemsendt sak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0115&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Hjemsendt til ny behandling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0120&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;EØS&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0160&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Feilutbetaling - utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0161&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Feilutbetaling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0084&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Kontantstøtte&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0098&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Kontantstøtte ved adopsjon&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0224&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Partsinnsyn&quot;
+                }
+            ]
+        },
+        {
+            &quot;tema&quot;: {
+                &quot;tema&quot;: &quot;OKO&quot;,
+                &quot;term&quot;: &quot;Økonomi&quot;
+            },
+            &quot;oppgavetyper&quot;: [
+                {
+                    &quot;oppgavetype&quot;: &quot;FAGF_TREKK&quot;,
+                    &quot;term&quot;: &quot;Fagforeningstrekk&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;HUSL_TREKK&quot;,
+                    &quot;term&quot;: &quot;Husleietrekk&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FORVALT_TREKK&quot;,
+                    &quot;term&quot;: &quot;Forvaltningstrekk&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;PRIOR_TREKK&quot;,
+                    &quot;term&quot;: &quot;Prioriterte trekk&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;ADR_BANK&quot;,
+                    &quot;term&quot;: &quot;Adresse + kontoinformasjon&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;ANALYSE&quot;,
+                    &quot;term&quot;: &quot;Analyse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FORVALT_KONTO&quot;,
+                    &quot;term&quot;: &quot;Forvaltningskonto&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FRIV_SKATTETREKK&quot;,
+                    &quot;term&quot;: &quot;Frivillig skattetrekk&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;GEN&quot;,
+                    &quot;term&quot;: &quot;Generell&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;HAST_ADR_OPPLYS&quot;,
+                    &quot;term&quot;: &quot;Haster adresseopplysninger&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;HAST_BANK_OPPLYS&quot;,
+                    &quot;term&quot;: &quot;Haster bankopplysninger&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR&quot;,
+                    &quot;term&quot;: &quot;Journalføring&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KON_UTG_SCA_DOK&quot;,
+                    &quot;term&quot;: &quot;Kontroller utgående skannet dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KONT_BRUK&quot;,
+                    &quot;term&quot;: &quot;Kontakt bruker&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;OKO&quot;,
+                    &quot;term&quot;: &quot;Utbetaling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;OKO_OS&quot;,
+                    &quot;term&quot;: &quot;Oppdrag (OS)&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;OKO_REF_KR&quot;,
+                    &quot;term&quot;: &quot;Refusjonskrav&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;OKO_STOPP&quot;,
+                    &quot;term&quot;: &quot;Stopp&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;OKO_TBK&quot;,
+                    &quot;term&quot;: &quot;Tilbakekreving&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;OKO_TREKK&quot;,
+                    &quot;term&quot;: &quot;Trekk&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;OKO_UR&quot;,
+                    &quot;term&quot;: &quot;Utbetalingsreskontro (UR)&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;REGNSKAP&quot;,
+                    &quot;term&quot;: &quot;Regnskap&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;TREKKFORESPOR&quot;,
+                    &quot;term&quot;: &quot;Trekkforespørsel&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VTR&quot;,
+                    &quot;term&quot;: &quot;Vederlagstrekk&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_HENV&quot;,
+                    &quot;term&quot;: &quot;Vurder henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;RETUR&quot;,
+                    &quot;term&quot;: &quot;Behandle returpost&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FDR&quot;,
+                    &quot;term&quot;: &quot;Fordeling&quot;
+                }
+            ],
+            &quot;gjelderverdier&quot;: [
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0495&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Omstillingsstønad&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0117&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Veteran sak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0170&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Sammenslåtte utbetalinger&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0171&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Nødutbetalinger&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0197&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Ikke trekkoppgjør&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0198&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Kreditoroppgjør til nav-kontor&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0199&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Skatteoppgjør fra skatt og trekkomponent&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0200&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Negative skatteoppgjør&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0201&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Negative kreditoroppgjør&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0202&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Tilbakekreving, betalt&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0203&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Tilbakekreving&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0204&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Memoposteringer uføretrygd&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0205&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Helserefusjoner&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0206&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Skatteoppgjør og utbetalinger til kreditorer i Infotrygd&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0207&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Oslo kommune ytelse&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0208&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utgiftsrefusjoner&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0209&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Memopostering SR&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0210&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Manuelle returer utbetalt pånytt&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0211&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Pensjon fra posteringsbildet&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0212&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;SPK ytelse&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0213&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Korttidsytelser&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0215&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Arbeidsgiverrefusjon&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0216&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Pensjonsutbetalinger&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0218&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Innrapportering&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0220&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Manuell opprydding skatt&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0179&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Annet&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0084&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Kontantstøtte&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0131&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Krigspensjon&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0155&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Gravferdsstønad&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0174&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Avtalefestet pensjon&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0238&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Familiepleierstønad&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0254&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Alderspensjon&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0255&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Barnepensjon&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0256&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Sjømannspensjon&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0266&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Grunn- og hjelpestønad&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0268&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Supplerende stønad&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0270&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Barnetrygd&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0272&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Enslig forsørger&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0339&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Yrkesskade&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0354&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Gammel yrkesskade&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0357&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Avtalefestet pensjon - privat&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0413&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Gjenlevende ektefelle&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0414&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Tidsbegrenset uførestønad&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0303&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Supplerende stønad til enslig voksen&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0194&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Uføretrygd&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0473&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Arbeidsytelser&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                }
+            ]
+        },
+        {
+            &quot;tema&quot;: {
+                &quot;tema&quot;: &quot;BAR&quot;,
+                &quot;term&quot;: &quot;Barnetrygd&quot;
+            },
+            &quot;oppgavetyper&quot;: [
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_NOTAT&quot;,
+                    &quot;term&quot;: &quot;Vurder notat&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_BREV&quot;,
+                    &quot;term&quot;: &quot;Vurder brev&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SAK&quot;,
+                    &quot;term&quot;: &quot;Behandle sak&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SAK_MK&quot;,
+                    &quot;term&quot;: &quot;Behandle sak (Manuell)&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SED&quot;,
+                    &quot;term&quot;: &quot;Behandle SED&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_UND_VED&quot;,
+                    &quot;term&quot;: &quot;Behandle underkjent vedtak&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FDR&quot;,
+                    &quot;term&quot;: &quot;Fordeling&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FLY&quot;,
+                    &quot;term&quot;: &quot;Flyttesak&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FREM&quot;,
+                    &quot;term&quot;: &quot;Fremlegg&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;GOD_VED&quot;,
+                    &quot;term&quot;: &quot;Godkjenne vedtak&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;INNH_DOK&quot;,
+                    &quot;term&quot;: &quot;Innhent dokumentasjon&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR&quot;,
+                    &quot;term&quot;: &quot;Journalføring&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR_UT&quot;,
+                    &quot;term&quot;: &quot;Journalføring utgående&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KON_UTG_SCA_DOK&quot;,
+                    &quot;term&quot;: &quot;Kontroller utgående skannet dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KONT_BRUK&quot;,
+                    &quot;term&quot;: &quot;Kontakt bruker&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;RETUR&quot;,
+                    &quot;term&quot;: &quot;Behandle returpost&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;SVAR_IK_MOT&quot;,
+                    &quot;term&quot;: &quot;Svar ikke mottatt&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR&quot;,
+                    &quot;term&quot;: &quot;Vurder dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_KONS_YTE&quot;,
+                    &quot;term&quot;: &quot;Vurder konsekvens for ytelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_SVAR&quot;,
+                    &quot;term&quot;: &quot;Vurder svar&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_HENV&quot;,
+                    &quot;term&quot;: &quot;Vurder henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KON_INFO&quot;,
+                    &quot;term&quot;: &quot;Kontroller informasjon&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_AVV_ADR&quot;,
+                    &quot;term&quot;: &quot;Behandle avvist adresse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_LIVS&quot;,
+                    &quot;term&quot;: &quot;Vurder livshendelse&quot;
+                }
+            ],
+            &quot;gjelderverdier&quot;: [
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0237&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;EU-EØS praksisendring ny behandling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0150&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Tvungen forvaltning&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0046&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Anke&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0106&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0114&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Tidligere hjemsendt sak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0115&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Hjemsendt til ny behandling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0058&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Barnetrygd, EØS&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0160&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Feilutbetaling - utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0161&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Feilutbetaling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0096&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Utvidet barnetrygd&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0180&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Ordinær barnetrygd&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0224&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Partsinnsyn&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0118&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Nasjonal&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0180&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Ordinær barnetrygd&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0118&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Nasjonal&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0096&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Utvidet barnetrygd&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0118&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Nasjonal&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0437&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Institusjon barnetrygd&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0437&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Institusjon barnetrygd&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0118&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Nasjonal&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0180&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Ordinær barnetrygd&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0120&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;EØS&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0096&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Utvidet barnetrygd&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0120&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;EØS&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0439&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Fødselshendelse&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                }
+            ]
+        },
+        {
+            &quot;tema&quot;: {
+                &quot;tema&quot;: &quot;PEN&quot;,
+                &quot;term&quot;: &quot;Pensjon&quot;
+            },
+            &quot;oppgavetyper&quot;: [
+                {
+                    &quot;oppgavetype&quot;: &quot;INNH_DOK&quot;,
+                    &quot;term&quot;: &quot;Innhent dokumentasjon&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_NOTAT&quot;,
+                    &quot;term&quot;: &quot;Vurder notat&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_BREV&quot;,
+                    &quot;term&quot;: &quot;Vurder brev&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;ATT&quot;,
+                    &quot;term&quot;: &quot;Attestering&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;AUT&quot;,
+                    &quot;term&quot;: &quot;Automatisk kontroll&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_INNT_ENDR&quot;,
+                    &quot;term&quot;: &quot;Behandle inntektsendring&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_INNT_OPP&quot;,
+                    &quot;term&quot;: &quot;Behandle inntektsoppdatering&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SAK&quot;,
+                    &quot;term&quot;: &quot;Behandle sak&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_SED&quot;,
+                    &quot;term&quot;: &quot;Behandle SED&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;GEN&quot;,
+                    &quot;term&quot;: &quot;Generell&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;IVE&quot;,
+                    &quot;term&quot;: &quot;Iverksettelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR&quot;,
+                    &quot;term&quot;: &quot;Journalføring&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KONT_BRUK&quot;,
+                    &quot;term&quot;: &quot;Kontakt bruker&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KRA&quot;,
+                    &quot;term&quot;: &quot;Krav&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KRA_DOD&quot;,
+                    &quot;term&quot;: &quot;Død&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;REGULERING&quot;,
+                    &quot;term&quot;: &quot;Regulering av pensjon&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;RETUR&quot;,
+                    &quot;term&quot;: &quot;Behandle returpost&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;SVAR_IK_MOT&quot;,
+                    &quot;term&quot;: &quot;Svar ikke mottatt&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;TPS&quot;,
+                    &quot;term&quot;: &quot;TPS-melding&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;TVU_FOR&quot;,
+                    &quot;term&quot;: &quot;Tvungen forvaltning&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_KONS_YTE&quot;,
+                    &quot;term&quot;: &quot;Vurder konsekvens for ytelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VUR_SVAR&quot;,
+                    &quot;term&quot;: &quot;Vurder svar&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_HENV&quot;,
+                    &quot;term&quot;: &quot;Vurder henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_AVV_ADR&quot;,
+                    &quot;term&quot;: &quot;Behandle avvist adresse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KON_UTG_SCA_DOK&quot;,
+                    &quot;term&quot;: &quot;Kontroller utgående skannet dokument&quot;
+                }
+            ],
+            &quot;gjelderverdier&quot;: [
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0058&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Klage&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0046&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Anke&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0150&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Tvungen forvaltning&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0011&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Gjenlevendepensjon&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0104&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Bosatt Norge&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0194&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Uføretrygd&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0104&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Bosatt Norge&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0254&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Alderspensjon&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0104&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Bosatt Norge&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0255&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Barnepensjon&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0104&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Bosatt Norge&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0011&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Gjenlevendepensjon&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0107&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Bosatt utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0194&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Uføretrygd&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0107&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Bosatt utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0254&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Alderspensjon&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0107&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Bosatt utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0255&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Barnepensjon&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0107&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Bosatt utland&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0117&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Veteran sak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0011&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Gjenlevendepensjon&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0118&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Nasjonal&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0194&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Uføretrygd&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0118&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Nasjonal&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0254&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Alderspensjon&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0118&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Nasjonal&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0255&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Barnepensjon&quot;,
+                    &quot;behandlingstype&quot;: &quot;ae0118&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Nasjonal&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0011&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Gjenlevendepensjon&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0131&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Krigspensjon&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0174&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Avtalefestet pensjon&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0238&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Familiepleierstønad&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0254&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Alderspensjon&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0255&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Barnepensjon&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0341&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Omsorgspoeng&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0357&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Avtalefestet pensjon - privat&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0354&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Gammel yrkesskade&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                },
+                {
+                    &quot;behandlingstema&quot;: &quot;ab0194&quot;,
+                    &quot;behandlingstemaTerm&quot;: &quot;Uføretrygd&quot;,
+                    &quot;behandlingstype&quot;: null,
+                    &quot;behandlingstypeTerm&quot;: null
+                }
+            ]
+        },
+        {
+            &quot;tema&quot;: {
+                &quot;tema&quot;: &quot;REK&quot;,
+                &quot;term&quot;: &quot;Rekruttering &quot;
+            },
+            &quot;oppgavetyper&quot;: [
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_NOTAT&quot;,
+                    &quot;term&quot;: &quot;Vurder notat&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_BREV&quot;,
+                    &quot;term&quot;: &quot;Vurder brev&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;JFR&quot;,
+                    &quot;term&quot;: &quot;Journalføring&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KON_UTG_SCA_DOK&quot;,
+                    &quot;term&quot;: &quot;Kontroller utgående skannet dokument&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;KONT_BRUK&quot;,
+                    &quot;term&quot;: &quot;Kontakt bruker&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;VURD_HENV&quot;,
+                    &quot;term&quot;: &quot;Vurder henvendelse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;BEH_AVV_ADR&quot;,
+                    &quot;term&quot;: &quot;Behandle avvist adresse&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;REG_ARB_KONT&quot;,
+                    &quot;term&quot;: &quot;Registrer arbeidsgiverkontakt&quot;
+                },
+                {
+                    &quot;oppgavetype&quot;: &quot;FDR&quot;,
+                    &quot;term&quot;: &quot;Fordeling&quot;
+                }
+            ],
+            &quot;gjelderverdier&quot;: [
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0004&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Behandle vedtak&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0007&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Utbetaling&quot;
+                },
+                {
+                    &quot;behandlingstema&quot;: null,
+                    &quot;behandlingstemaTerm&quot;: null,
+                    &quot;behandlingstype&quot;: &quot;ae0116&quot;,
+                    &quot;behandlingstypeTerm&quot;: &quot;Meldekort&quot;
+                }
+            ]
         }
-      ]
-    }
+    ]
   },
   &quot;401&quot;: {
     &quot;headers&quot;: null,
@@ -96,6 +3305,6 @@
     </values>
     <values>
         <field>Service_Path__c</field>
-        <value xsi:type="xsd:string">/oppgave/api/v1/kodeverk/gjelder</value>
+        <value xsi:type="xsd:string">/oppgave/api/v1/kodeverk</value>
     </values>
 </CustomMetadata>
