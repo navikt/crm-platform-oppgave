@@ -49,13 +49,16 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
             return;
         }
 
-        List<ThemeInformation> geirArne = (List<ThemeInformation>) JSON.deserialize(resp, List<ThemeInformation>.class);
+        List<ThemeInformation> responseInformation = (List<ThemeInformation>) JSON.deserialize(
+            resp,
+            List<ThemeInformation>.class
+        );
         Set<String> gjelderKeysInResponse = new Set<String>();
         List<Common_code__c> insertGjelderList = new List<Common_code__c>();
         Map<String, String> subthemeTermMap = new Map<String, String>();
         Map<String, String> subtypeTermMap = new Map<String, String>();
 
-        for (ThemeInformation themeInformation : geirArne) {
+        for (ThemeInformation themeInformation : responseInformation) {
             if (!commonCodeMaps.get('Tema').containsKey(themeInformation.tema.tema)) {
                 logger.Error(
                     'Missing theme: ' +
