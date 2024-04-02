@@ -93,12 +93,12 @@ public class CRM_GjelderSynchroniser_Test {
     @isTest
     static void testDMLError() {
         CRM_GjelderSynchroniser sync = new CRM_GjelderSynchroniser();
-        List<Common_Code__c> insertList = new List<Common_code__c>();
+        List<Common_Code__c> listToUpsert = new List<Common_code__c>();
         Common_code__c duplicateCode = new Common_Code__c(CRM_UniqueKey__c = 'Duplicate', Name = 'Duplicate');
-        insertList.add(duplicateCode);
-        insertList.add(duplicateCode);
+        listToUpsert.add(duplicateCode);
+        listToUpsert.add(duplicateCode);
         Test.startTest();
-        sync.insertCommonCodes(insertList, insertList);
+        sync.upsertCommonCodes(listToUpsert, listToUpsert);
         Test.stopTest();
         Assert.isTrue(
             [
