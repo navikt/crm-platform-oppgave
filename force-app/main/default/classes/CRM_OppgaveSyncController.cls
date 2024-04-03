@@ -145,7 +145,7 @@ public without sharing class CRM_OppgaveSyncController {
                 for (String extRef : commentsMap.keySet()) {
                     NavTask__c oppgave = new NavTask__c();
                     oppgave.INT_External_Reference__c = Decimal.valueOf(extRef);
-                    oppgave.Comment__c = String.join(commentsMap.get(extRef), '\n');
+                    oppgave.CRM_Comment__c = String.join(commentsMap.get(extRef), '\n');
                     navTaskList.add(oppgave);
                 }
 
@@ -208,8 +208,6 @@ public without sharing class CRM_OppgaveSyncController {
      * @param tasksToUpsert
      **/
     public static void doNavTaskUpsert(List<NavTask__c> tasksToUpsert) {
-        System.debug('doNavTaskUpsert johnny');
-        System.debug('Liste: ' + tasksToUpsert);
         Map<Decimal, NavTask__c> navTaskMap = new Map<Decimal, NavTask__c>();
 
         for (NavTask__c navTask : tasksToUpsert) {
@@ -226,7 +224,6 @@ public without sharing class CRM_OppgaveSyncController {
             mapTask.Id = dbNavTask.Id;
             navTaskMap.put(mapTask.INT_External_Reference__c, mapTask);
         }
-        System.debug('tasksToUpsert: ' + tasksToUpsert  );
         
         List<Database.UpsertResult> upsList = Database.upsert(tasksToUpsert, false);
         verifyUpsertResults(upsList, tasksToUpsert);
