@@ -111,15 +111,43 @@ public without sharing class CRM_OppgaveSyncController {
     public static void syncOppgaveOppfolgingByExtRef(String oppgaveRef) {
         CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
 
+        HttpResponse response;
         try {
-            HttpResponse response = oppgaveService.getOppgaveOppfolgingById(oppgaveRef);
+            response = oppgaveService.getOppgaveOppfolgingById(oppgaveRef);
             Integer statusCode = response.getStatusCode();
+            String responseBody = response.getBody();
+
             if (statusCode == 200 || statusCode == 201) {
-                CRM_OppgaveOppfolging oppfolgingOppgave = (CRM_OppgaveOppfolging) JSON.deserialize(
-                    response.getBody(),
-                    CRM_OppgaveOppfolging.class
+                List<CRM_OppgaveOppfolging> oppfolgingList = (List<CRM_OppgaveOppfolging>) JSON.deserialize(
+                    responseBody,
+                    List<CRM_OppgaveOppfolging>.class
                 );
-                List<NavTask__c> navTaskList = oppfolgingOppgave.convertToNavTasks();
+                if (oppfolgingList.isEmpty()) {
+                    System.debug('Empty response received.');
+                    return;
+                }
+
+                Map<String, List<String>> commentsMap = new Map<String, List<String>>();
+
+                for (CRM_OppgaveOppfolging oppfolgingOppgave : oppfolgingList) {
+                    Datetime createdTime = Datetime.valueofGMT(oppfolgingOppgave.opprettetTidspunkt.replace('T', ' '));
+                    String formattedDateTime = createdTime.format('dd.MM.yyyy HH:mm', 'Norway/Oslo');
+                    String kommentar = '--- ' + formattedDateTime + ' ' + '(' + oppfolgingOppgave.opprettetAv + ') ---\n' + oppfolgingOppgave.kommentar;
+
+                    if (!commentsMap.containsKey(oppgaveRef)) {
+                        commentsMap.put(oppgaveRef, new List<String>());
+                    }
+                    commentsMap.get(oppgaveRef).add(kommentar);
+                }
+
+                List<NavTask__c> navTaskList = new List<NavTask__c>();
+
+                for (String extRef : commentsMap.keySet()) {
+                    NavTask__c oppgave = new NavTask__c();
+                    oppgave.INT_External_Reference__c = Decimal.valueOf(extRef);
+                    oppgave.Comment__c = String.join(commentsMap.get(extRef), '\n');
+                    navTaskList.add(oppgave);
+                }
 
                 doNavTaskUpsert(navTaskList);
             } else {
@@ -133,7 +161,7 @@ public without sharing class CRM_OppgaveSyncController {
             }
         } catch (Exception ex) {
             System.debug(ex);
-            logger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
+            logger.error(ex + '. Body: ' + response.getBody(), null, CRM_ApplicationDomain.Domain.NKS);
         } finally {
             logger.publish();
         }
@@ -180,6 +208,8 @@ public without sharing class CRM_OppgaveSyncController {
      * @param tasksToUpsert
      **/
     public static void doNavTaskUpsert(List<NavTask__c> tasksToUpsert) {
+        System.debug('doNavTaskUpsert johnny');
+        System.debug('Liste: ' + tasksToUpsert);
         Map<Decimal, NavTask__c> navTaskMap = new Map<Decimal, NavTask__c>();
 
         for (NavTask__c navTask : tasksToUpsert) {
@@ -196,7 +226,8 @@ public without sharing class CRM_OppgaveSyncController {
             mapTask.Id = dbNavTask.Id;
             navTaskMap.put(mapTask.INT_External_Reference__c, mapTask);
         }
-
+        System.debug('tasksToUpsert: ' + tasksToUpsert  );
+        
         List<Database.UpsertResult> upsList = Database.upsert(tasksToUpsert, false);
         verifyUpsertResults(upsList, tasksToUpsert);
     }
