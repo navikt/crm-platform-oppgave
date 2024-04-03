@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <label>GET_OPPGAVEOPPFOLGING_BY_ID</label>
     <protected>false</protected>
     <values>
@@ -21,14 +19,14 @@
         <value xsi:type="xsd:string">{
             &quot;200&quot;: {
             &quot;headers&quot;: null,
-            &quot;body&quot;: {
-            "id": 5436732,
-            "kommentar": "test kommentar",
-            "opprettetAv": "string",
-            "endretAv": "string",
-            "opprettetTidspunkt": "2022-03-21T20:16:17.538Z",
-            "endretTidspunkt": "2022-03-21T20:16:17.538Z"
-            }
+            &quot;body&quot;: [{
+            &quot;id&quot;: 5436732,
+            &quot;kommentar&quot;: &quot;test kommentar&quot;,
+            &quot;opprettetAv&quot;: &quot;string&quot;,
+            &quot;endretAv&quot;: &quot;string&quot;,
+            &quot;opprettetTidspunkt&quot;: &quot;2022-03-21T20:16:17.538Z&quot;,
+            &quot;endretTidspunkt&quot;: &quot;2022-03-21T20:16:17.538Z&quot;
+            }]
             },
             &quot;401&quot;: {
             &quot;headers&quot;: null,
