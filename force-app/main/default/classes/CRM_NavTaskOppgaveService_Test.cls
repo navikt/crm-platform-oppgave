@@ -82,6 +82,18 @@ public class CRM_NavTaskOppgaveService_Test {
     }
 
     @isTest
+    static void testGetOppgaveOppfolgingById() {
+        ApiMock.setTestMock('GET_OPPGAVEOPPFOLGING_BY_ID', 200, 'OK');
+
+        Test.startTest();
+        HttpResponse resp = service.getOppgaveOppfolgingById('DummyId');
+        Test.stopTest();
+
+        System.assertEquals(200, resp.getStatusCode());
+        System.assert(resp.getBody() != null);
+    }
+
+    @isTest
     static void testGetOppgaveQuery() {
         ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
 

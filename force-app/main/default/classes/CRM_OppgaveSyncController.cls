@@ -107,6 +107,57 @@ public without sharing class CRM_OppgaveSyncController {
         }
     }
 
+    @AuraEnabled
+    public static void syncOppgaveOppfolgingByExtRef(String oppgaveRef) {
+        CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
+
+        HttpResponse response;
+        try {
+            response = oppgaveService.getOppgaveOppfolgingById(oppgaveRef);
+            Integer statusCode = response.getStatusCode();
+            String responseBody = response.getBody();
+            
+            if (statusCode == 200 || statusCode == 201) {
+                List<CRM_OppgaveOppfolging> oppfolgingList = (List<CRM_OppgaveOppfolging>) JSON.deserialize(
+                    responseBody,
+                    List<CRM_OppgaveOppfolging>.class
+                );
+                if (oppfolgingList.isEmpty()) {
+                    System.debug('Empty response received.');
+                    return;
+                }
+
+                List<NavTask__c> navTaskList = new List<NavTask__c>();
+                String comment = '';
+
+                for (CRM_OppgaveOppfolging oppfolgingOppgave : oppfolgingList) {
+                    Datetime createdTime = Datetime.valueofGMT(oppfolgingOppgave.opprettetTidspunkt.replace('T', ' '));
+                    String formattedDateTime = createdTime.format('dd.MM.yyyy HH:mm', 'Norway/Oslo');
+                    comment += '--- ' + formattedDateTime + ' ' + '(' + oppfolgingOppgave.opprettetAv + ') ---\n' + oppfolgingOppgave.kommentar + '\n\n';
+                }
+                NavTask__c oppgave = new NavTask__c();
+                oppgave.INT_External_Reference__c = Decimal.valueOf(oppgaveRef);
+                oppgave.CRM_Comment__c = comment.trim();
+                navTaskList.add(oppgave);
+
+                doNavTaskUpsert(navTaskList);
+            } else {
+                logger.httpError(
+                    'Error getting oppgaveOppfolging by ID',
+                    response,
+                    null,
+                    CRM_ApplicationDomain.Domain.NKS,
+                    oppgaveService.getTransactionId()
+                );
+            }
+        } catch (Exception ex) {
+            System.debug(ex);
+            logger.error(ex + '. Body: ' + response.getBody(), null, CRM_ApplicationDomain.Domain.NKS);
+        } finally {
+            logger.publish();
+        }
+    }
+
     public static void doMassOppgaveSync(CRM_OppgaveQueryList query) {
         CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
         oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
@@ -164,7 +215,7 @@ public without sharing class CRM_OppgaveSyncController {
             mapTask.Id = dbNavTask.Id;
             navTaskMap.put(mapTask.INT_External_Reference__c, mapTask);
         }
-
+        
         List<Database.UpsertResult> upsList = Database.upsert(tasksToUpsert, false);
         verifyUpsertResults(upsList, tasksToUpsert);
     }
