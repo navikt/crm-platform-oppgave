@@ -14,10 +14,13 @@ export default class CrmOppgaveRecordSyncer extends LightningElement {
     wiredRecordInfo({ error, data }) {
         if (data) {
             const oppgaveRef = getFieldValue(data, EXTERNAL_REF_FIELD);
-            Promise.all([syncOppgaveById(oppgaveRef), syncOppgaveOppfolgingById(oppgaveRef)])
-                .then(() => {
-                    // Both syncs completed successfully
-                    notifyRecordUpdateAvailable([{ recordId: this.recordId }]);
+            Promise.allSettled([syncOppgaveById(oppgaveRef), syncOppgaveOppfolgingById(oppgaveRef)])
+                .then((results) => {
+                    const success = results.some(result => result.status === 'fulfilled');
+                    if (success) {
+                        // One or both syncs completed successfully
+                        notifyRecordUpdateAvailable([{ recordId: this.recordId }]);
+                    }
                 })
                 .catch((error) => {
                     console.error('Error syncing oppgave and/or oppfølging: ' + JSON.stringify(error, null, 2));
