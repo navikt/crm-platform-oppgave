@@ -116,7 +116,7 @@ public without sharing class CRM_OppgaveSyncController {
             response = oppgaveService.getOppgaveOppfolgingById(oppgaveRef);
             Integer statusCode = response.getStatusCode();
             String responseBody = response.getBody();
-
+            
             if (statusCode == 200 || statusCode == 201) {
                 List<CRM_OppgaveOppfolging> oppfolgingList = (List<CRM_OppgaveOppfolging>) JSON.deserialize(
                     responseBody,
@@ -127,27 +127,18 @@ public without sharing class CRM_OppgaveSyncController {
                     return;
                 }
 
-                Map<String, List<String>> commentsMap = new Map<String, List<String>>();
+                List<NavTask__c> navTaskList = new List<NavTask__c>();
+                String comment = '';
 
                 for (CRM_OppgaveOppfolging oppfolgingOppgave : oppfolgingList) {
                     Datetime createdTime = Datetime.valueofGMT(oppfolgingOppgave.opprettetTidspunkt.replace('T', ' '));
                     String formattedDateTime = createdTime.format('dd.MM.yyyy HH:mm', 'Norway/Oslo');
-                    String kommentar = '--- ' + formattedDateTime + ' ' + '(' + oppfolgingOppgave.opprettetAv + ') ---\n' + oppfolgingOppgave.kommentar;
-
-                    if (!commentsMap.containsKey(oppgaveRef)) {
-                        commentsMap.put(oppgaveRef, new List<String>());
-                    }
-                    commentsMap.get(oppgaveRef).add(kommentar);
+                    comment += '--- ' + formattedDateTime + ' ' + '(' + oppfolgingOppgave.opprettetAv + ') ---\n' + oppfolgingOppgave.kommentar + '\n\n';
                 }
-
-                List<NavTask__c> navTaskList = new List<NavTask__c>();
-
-                for (String extRef : commentsMap.keySet()) {
-                    NavTask__c oppgave = new NavTask__c();
-                    oppgave.INT_External_Reference__c = Decimal.valueOf(extRef);
-                    oppgave.CRM_Comment__c = String.join(commentsMap.get(extRef), '\n');
-                    navTaskList.add(oppgave);
-                }
+                NavTask__c oppgave = new NavTask__c();
+                oppgave.INT_External_Reference__c = Decimal.valueOf(oppgaveRef);
+                oppgave.CRM_Comment__c = comment.trim();
+                navTaskList.add(oppgave);
 
                 doNavTaskUpsert(navTaskList);
             } else {
