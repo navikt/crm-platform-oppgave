@@ -1,6 +1,5 @@
 public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
     private Map<String, Map<String, Common_code__c>> commonCodeMaps;
-
     private LoggerUtility logger;
     private CRM_NavTaskOppgaveService service;
 
@@ -14,8 +13,7 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
 
     @future(callout=true)
     public static void executeSync() {
-        CRM_GjelderSynchroniser sync = new CRM_GjelderSynchroniser();
-        sync.startSync();
+        new CRM_GjelderSynchroniser().startSync();
     }
 
     public String getGjelderHierarchy() {
@@ -48,9 +46,8 @@ public with sharing class CRM_GjelderSynchroniser implements CRM_SyncInterface {
     public void startSync() {
         populateSoqlMap();
         String resp = getGjelderHierarchy();
-        if (resp == null) {
+        if (resp == null)
             return;
-        }
 
         List<ThemeInformation> responseInformation = (List<ThemeInformation>) JSON.deserialize(
             resp,
