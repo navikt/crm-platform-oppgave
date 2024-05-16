@@ -105,4 +105,33 @@ public class CRM_OppgaveSyncController_Test {
 
         System.assert([SELECT COUNT() FROM NavTask__c] > 0);
     }
+
+    @isTest
+    static void testInvocableLogError() {
+        ApiMock.setTestMock('GET_OPPGAVE_BY_ID', 500, 'Internal Server Error');
+        CRM_OPPGAVE_TestDataFactory.createRecord(new Person__c(INT_ActorId__c = '1234567891113'));
+
+        Test.startTest();
+        CRM_OppgaveSyncController.handleNavTaskRequests(new List<String>{ '5436732' });
+        Test.stopTest();
+
+        System.assert([SELECT COUNT() FROM NavTask__c] == 0);
+    }
+
+    @isTest
+    static void testDoMassOppgaveSync() {
+        ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
+
+        CRM_OppgaveQueryList query = new CRM_OppgaveQueryList();
+        query.aktoerId = new List<String>{ 'Test' };
+        query.statuskategori = OppgaveStatuskategori.AAPEN;
+        query.tildeltEnhetsnr = '4100';
+        query.tilordnetRessurs = 'Z999999';
+        query.fristFom = System.today().addYears(-1);
+        query.returnlimit = 100;
+
+        Test.startTest();
+        CRM_OppgaveSyncController.doMassOppgaveSync(query);
+        Test.stopTest();
+    }
 }

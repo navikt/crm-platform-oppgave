@@ -131,4 +131,16 @@ public class CRM_NavTaskOppgaveService_Test {
         System.assertEquals(200, resp.getStatusCode());
         System.assert(resp.getBody() != null);
     }
+
+    @isTest
+    static void testGetGjelderValues() {
+        ApiMock.setTestMock('GET_OPPGAVE_GJELDER', 200, 'OK');
+
+        Test.startTest();
+        HttpResponse resp = service.getGjelderValues();
+        Test.stopTest();
+
+        System.assertEquals(200, resp.getStatusCode());
+        System.assert(resp.getBody() != null);
+    }
 }

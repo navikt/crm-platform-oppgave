@@ -182,4 +182,69 @@ public class CRM_KafkaOppgaveHandler_Test {
             [SELECT COUNT() FROM NavTask__c WHERE NKS_Subtheme__c = :beggeTemaId AND CRM_Subtype__c = :beggeTypeId] != 0
         );
     }
+
+    @isTest
+    static void testCompareTo() {
+        CRM_KafkaOppgave.LegacyIdent idt = new CRM_KafkaOppgave.LegacyIdent();
+        idt.identType = 'AKTOERID';
+        idt.verdi = '123456789';
+
+        CRM_KafkaOppgave testOppgave = new CRM_KafkaOppgave();
+        testOppgave.id = 53336;
+        testOppgave.tildeltEnhetsnr = '2990';
+        testOppgave.tilordnetRessurs = 'Z994995';
+        testOppgave.tema = 'BAR';
+        testOppgave.oppgavetype = 'KONT_BRUK';
+        testOppgave.versjon = 1;
+        testOppgave.beskrivelse = 'TEST DESCRIPTION';
+        testOppgave.fristFerdigstillelse = '2021-01-14';
+        testOppgave.opprettetTidspunkt = '2021-01-12';
+        testOppgave.prioritet = 'NORM';
+        testOppgave.status = 'AAPNET';
+        testOppgave.ident = idt;
+
+        CRM_KafkaOppgave version2 = testOppgave.clone();
+
+        Test.startTest();
+        testOppgave.compareTo(version2);
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testGetActorId() {
+        CRM_KafkaOppgave.LegacyIdent idt = new CRM_KafkaOppgave.LegacyIdent();
+        idt.identType = 'AKTOERID';
+        idt.verdi = '123456789';
+
+        CRM_KafkaOppgave testOppgave = new CRM_KafkaOppgave();
+        testOppgave.ident = idt;
+
+        Test.startTest();
+        testOppgave.getActorId();
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testGetActorIdWithAktoerId() {
+        CRM_KafkaOppgave testOppgave = new CRM_KafkaOppgave();
+        testOppgave.aktoerId = 'testId';
+
+        Test.startTest();
+        testOppgave.getActorId();
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testGetActorIdElseClause() {
+        CRM_KafkaOppgave testOppgave = new CRM_KafkaOppgave();
+        CRM_KafkaOppgave.Ident idt = new CRM_KafkaOppgave.Ident();
+        idt.gruppe = 'AKTOERID';
+        idt.ident = '123456789';
+
+
+        testOppgave.identer = new List<CRM_KafkaOppgave.Ident> { idt };
+        Test.startTest();
+        testOppgave.getActorId();
+        Test.stopTest();
+    }
 }
