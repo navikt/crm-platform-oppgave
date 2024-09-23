@@ -5,29 +5,29 @@ public without sharing class CRM_NavTaskListViewCtrl {
     public class UnsupportedOperandException extends Exception {
     }
 
-    @AuraEnabled
+    @AuraEnabled(cacheable=true)
     public static List<NavTask__c> getRecords(
         List<String> fieldsToQuery,
         String filterString,
         Boolean ownedByRunningUser,
         Integer numRecords
     ) {
-        String query = 'SELECT Id, INT_External_Reference__c, ';
+        List<String> fields = new List<String>{'Id', 'INT_External_Reference__c'};
+        fields.addAll(fieldsToQuery);
+        String query = 'SELECT ' + String.join(fields, ', ') + ' FROM NavTask__c';
 
-        for (String queryField : fieldsToQuery) {
-            query += queryField + ',';
+        List<String> filters = new List<String>();
+        if (ownedByRunningUser) {
+            filters.add('OwnerId = \'' + UserInfo.getUserId() + '\'');
         }
-        query = query.removeEnd(',');
-        query += ' FROM NavTask__c';
-        if (String.isNotBlank(filterString) || ownedByRunningUser)
-            query += ' WHERE ';
 
-        if (ownedByRunningUser == true)
-            query += ' OwnerId = \'' + UserInfo.getUserId() + '\' AND ';
+        if (String.isNotBlank(filterString)) {
+            filters.add(filterString);
+        }
 
-        query += filterString != null ? filterString : '';
-        query = query.removeEnd('AND ');
-
+        if (!filters.isEmpty()) {
+            query += ' WHERE ' + String.join(filters, ' AND ');
+        }
         query += ' ORDER BY CRM_DueDate__c DESC LIMIT ' + String.valueOf(numRecords);
         return (List<NavTask__c>) Database.query(query);
     }
@@ -62,7 +62,7 @@ public without sharing class CRM_NavTaskListViewCtrl {
             oppgQuery.tilordnetRessurs = runningUser.CRM_NAV_Ident__c;
             oppgQuery.statuskategori = OppgaveStatuskategori.AAPEN;
 
-            oppgQuery.opprettetFom = oppgQuery.opprettetFom == null ? System.now().addYears(-1) : null; //Get oppgaver for the given actor created maximum og one year back in time
+            oppgQuery.opprettetFom = oppgQuery.opprettetFom == null ? System.now().addYears(-1) : null; // Get oppgaver for the given actor created maximum of one year back in time
             oppgQuery.returnlimit = 100;
             CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
             oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
@@ -76,7 +76,7 @@ public without sharing class CRM_NavTaskListViewCtrl {
                     CRM_OppgaveQueryResponse.class
                 );
                 List<NavTask__c> serviceTasks = oppgaveResp.convertToNavTasks();
-                handleRecordDiff(sfRecords, serviceTasks); //Delete records not returned by service, might be missing som kafka message updates
+                handleRecordDiff(sfRecords, serviceTasks); // Delete records not returned by service, might be missing som kafka message updates
                 CRM_OppgaveSyncController.doNavTaskUpsert(serviceTasks);
             } else {
                 throw new AuraHandledException('Error getting oppgaver');
@@ -87,25 +87,25 @@ public without sharing class CRM_NavTaskListViewCtrl {
     }
 
     /**
-     * Removed close the tasks in case of the state being incorrect as a result from failed updates via kafka
+     * Delete records not returned by service, might be missing som kafka message updates
      * @author Stian Ruud Schikora | 10-12-2022
      * @param records
      **/
     private static void handleRecordDiff(List<NavTask__c> sfRecords, List<NavTask__c> serviceRecords) {
-        Boolean inServiceRecords = false;
+        Set<Decimal> serviceExternalRefs = new Set<Decimal>();
+        for (NavTask__c serviceRecord : serviceRecords) {
+            serviceExternalRefs.add(serviceRecord.INT_External_Reference__c);
+        }
+    
         List<NavTask__c> recordsToDelete = new List<NavTask__c>();
         for (NavTask__c sfRecord : sfRecords) {
-            for (NavTask__c serviceRecord : serviceRecords) {
-                if (sfRecord.INT_External_Reference__c == serviceRecord.INT_External_Reference__c) {
-                    inServiceRecords = true;
-                    break;
-                }
-            }
-            if (!inServiceRecords)
+            if (!serviceExternalRefs.contains(sfRecord.INT_External_Reference__c)) {
                 recordsToDelete.add(sfRecord);
+            }
         }
-
-        if (!recordsToDelete.isEmpty())
+    
+        if (!recordsToDelete.isEmpty()) {
             delete recordsToDelete;
+        }
     }
 }

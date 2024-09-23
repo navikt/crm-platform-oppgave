@@ -1,67 +1,76 @@
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api, wire } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import getNavTaskRecords from '@salesforce/apex/CRM_NavTaskListViewCtrl.getRecords';
 import syncNavTasks from '@salesforce/apex/CRM_NavTaskListViewCtrl.syncOpenAndAssigned';
 import refreshAndSyncNavTasks from '@salesforce/apex/CRM_NavTaskListViewCtrl.refresh_syncOpenAndAssigned';
+import { refreshApex } from '@salesforce/apex';
 
 export default class CrmNavTaskListView extends NavigationMixin(LightningElement) {
-    @api fieldsToDisplay;
+    @api fieldsToDisplay = '';
     @api colHeaders;
-    @api filterString;
+    @api filterString = '';
     @api listTitle;
     @api ownedByRunningUser = false;
     @api numRecords = 10;
     @api listViewApiName;
 
     records = [];
+    wiredNavTaskResult;
+    isRefreshDisabled = false;
     isLoading = false;
 
     connectedCallback() {
-        this.isLoading = true;
+        console.log('connectedcallback');
         this.syncTasks();
     }
 
     syncTasks() {
+        this.isLoading = true;
         syncNavTasks({})
             .then(() => {
-                //Success
-                this.getNavTasks();
+                refreshApex(this.wiredNavTaskResult);
             })
             .catch((error) => {
-                //Failed to sync
-                console.log(JSON.stringify(error, null, 2));
-            });
-    }
-
-    handleRefresh() {
-        this.isLoading = true;
-        refreshAndSyncNavTasks({ sfRecords: this.records })
-            .then(() => {
-                this.getNavTasks();
-            })
-            .catch((error) => {
-                //Failed to sync
-                console.log(JSON.stringify(error, null, 2));
-                this.isLoading = false;
-            });
-    }
-
-    getNavTasks() {
-        getNavTaskRecords({
-            fieldsToQuery: this.displayFields,
-            filterString: this.filterString,
-            ownedByRunningUser: this.ownedByRunningUser,
-            numRecords: this.numRecords
-        })
-            .then((data) => {
-                this.records = data;
-            })
-            .catch((error) => {
-                console.log(JSON.stringify(error, null, 2));
+                console.error('Error syncing tasks:', error);
             })
             .finally(() => {
                 this.isLoading = false;
             });
+    }
+
+    handleRefresh() {
+        if (this.isLoading || this.isRefreshDisabled) return;
+        this.isLoading = true;
+        this.isRefreshDisabled = true;
+
+        refreshAndSyncNavTasks({ sfRecords: this.records })
+            .then(() => {
+                refreshApex(this.wiredNavTaskResult);
+            })
+            .catch((error) => {
+                console.error('Error syncing tasks:', error);
+            })
+            .finally(() => {
+                this.isLoading = false;
+                setTimeout(() => { // 10 sec delay to avoid spamming requests
+                    this.isRefreshDisabled = false;
+                }, 10000);
+            });
+        }
+
+    @wire(getNavTaskRecords, { 
+        fieldsToQuery: '$displayFields',
+        filterString: '$filterString',
+        ownedByRunningUser: '$ownedByRunningUser',
+        numRecords: '$numRecords'
+    })
+    wiredTasks(result) {
+        this.wiredNavTaskResult = result; 
+        if (result.data) {
+            this.records = result.data;
+        } else if (result.error) {
+            console.error('Error fetching tasks:', error);
+        }
     }
 
     navigateToListView() {
@@ -82,13 +91,11 @@ export default class CrmNavTaskListView extends NavigationMixin(LightningElement
     }
 
     get emptyState() {
-        return this.records.length == 0 && this.isLoading == false;
+        return !this.hasRecords && !this.isLoading;
     }
 
     get columnHeaders() {
-        if (this.colHeaders) {
-            return this.colHeaders.split(',');
-        }
+        return this.colHeaders?.split(',') || [];
     }
 
     get colHeaderSize() {
@@ -96,8 +103,6 @@ export default class CrmNavTaskListView extends NavigationMixin(LightningElement
     }
 
     get displayFields() {
-        if (this.fieldsToDisplay) {
-            return this.fieldsToDisplay.replace(/\s+/g, '').split(',');
-        }
+        return this.fieldsToDisplay?.replace(/\s+/g, '').split(',') || [];
     }
 }
