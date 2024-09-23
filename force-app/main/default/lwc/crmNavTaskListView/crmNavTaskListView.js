@@ -20,7 +20,6 @@ export default class CrmNavTaskListView extends NavigationMixin(LightningElement
     isLoading = false;
 
     connectedCallback() {
-        console.log('connectedcallback');
         this.syncTasks();
     }
 
