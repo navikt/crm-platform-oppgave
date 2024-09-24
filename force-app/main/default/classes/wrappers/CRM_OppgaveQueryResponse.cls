@@ -1,17 +1,6 @@
 public class CRM_OppgaveQueryResponse {
     public List<CRM_KafkaOppgave> oppgaver;
 
-    private Map<String, Common_Code__c> commonCodeMap;
-    private Map<String, Id> actorAccMap;
-    private Map<String, Id> navUnitMap;
-
-    public CRM_OppgaveQueryResponse(List<CRM_KafkaOppgave> oppgaver) {
-        this.oppgaver = oppgaver;
-        this.initializeCommonCodeMap();
-        this.initializeActorAccMap();
-        this.initializeNavUnitMap();
-    }
-
     public List<NavTask__c> convertToNavTasks() {
         if (this.oppgaver == null || this.oppgaver.isEmpty()) {
             return null;
@@ -65,64 +54,78 @@ public class CRM_OppgaveQueryResponse {
         return navTask;
     }
 
-    private void initializeCommonCodeMap() {
-        if (this.commonCodeMap == null) {
-            this.commonCodeMap = new Map<String, Common_Code__c>();
-            for (Common_Code__c comCode : [
-                SELECT Id, Name, CRM_Code__c, CRM_Code_Set__c
-                FROM Common_Code__c
-                WHERE CRM_Code_Set__c IN ('Tema', 'Behandlingstema', 'Behandlingstyper', 'Oppgavetyper')
-            ]) {
-                this.commonCodeMap.put(comCode.CRM_Code_Set__c + comCode.CRM_Code__c, comCode);
+    // Internal map of relevant common codes for oppgave
+    private Map<String, Common_Code__c> commonCodeMap {
+        get {
+            if (this.commonCodeMap == null) {
+                this.commonCodeMap = new Map<String, Common_Code__c>();
+                for (Common_Code__c comCode : [
+                    SELECT Id, Name, CRM_Code__c, CRM_Code_Set__c
+                    FROM Common_Code__c
+                    WHERE CRM_Code_Set__c IN ('Tema', 'Behandlingstema', 'Behandlingstyper', 'Oppgavetyper')
+                ]) {
+                    this.commonCodeMap.put(comCode.CRM_Code_Set__c + comCode.CRM_Code__c, comCode);
+                }
             }
+            return this.commonCodeMap;
+        }
+        private set {
         }
     }
 
     // Internal mapping of an actorId to a SF account ID
-    private void initializeActorAccMap() {
-        if (this.oppgaver == null || this.oppgaver.isEmpty()) {
-            return;
-        }
-        if (this.actorAccMap == null) {
-            this.actorAccMap = new Map<String, Id>();
-            Set<String> actorIdSet = new Set<String>();
+    private Map<String, Id> actorAccMap {
+        get {
+            if (this.oppgaver == null || this.oppgaver.isEmpty())
+                return null;
+            if (this.actorAccMap == null) {
+                this.actorAccMap = new Map<String, Id>();
+                Set<String> actorIdSet = new Set<String>();
 
-            for (CRM_KafkaOppgave oppg : this.oppgaver) {
-                if (String.isBlank(oppg.orgnr)) {
-                    actorIdSet.add(oppg.getActorId());
+                for (CRM_KafkaOppgave kfOppg : this.oppgaver) {
+                    if (String.isBlank(kfOppg.orgnr)) {
+                        actorIdSet.add(kfOppg.getActorId());
+                    }
+                }
+                
+                for (Person__c person : [
+                    SELECT CRM_Account__c, INT_ActorId__c
+                    FROM Person__c
+                    WHERE INT_ActorId__c IN :actorIdSet
+                ]) {
+                    this.actorAccMap.put(person.INT_ActorId__c, person.CRM_Account__c);
                 }
             }
-
-            for (Person__c person : [
-                SELECT CRM_Account__c, INT_ActorId__c
-                FROM Person__c
-                WHERE INT_ActorId__c IN :actorIdSet
-            ]) {
-                this.actorAccMap.put(person.INT_ActorId__c, person.CRM_Account__c);
-            }
+            return this.actorAccMap;
+        }
+        private set {
         }
     }
 
     // Mapping the NAV Unit number to the Ids of the SF NavUnit__c records
-    private void initializeNavUnitMap() {
-        if (this.oppgaver == null || this.oppgaver.isEmpty()) {
-            return;
+    private Map<String, Id> navUnitMap {
+        get {
+            if (this.oppgaver == null || this.oppgaver.isEmpty())
+                return null;
+            if (this.navUnitMap == null) {
+                this.navUnitMap = new Map<String, Id>();
+                Set<String> navUnitNumberSet = new Set<String>();
+
+                for (CRM_KafkaOppgave kfOppg : this.oppgaver) {
+                    navUnitNumberSet.add(kfOppg.tildeltEnhetsnr);
+                }
+
+                for (NavUnit__c navUnit : [
+                    SELECT INT_UnitNumber__c, Id
+                    FROM NavUnit__c
+                    WHERE INT_UnitNumber__c IN :navUnitNumberSet
+                ]) {
+                    this.navUnitMap.put(navUnit.INT_UnitNumber__c, navUnit.Id);
+                }
+            }
+            return this.navUnitMap;
         }
-        if (this.navUnitMap == null) {
-            this.navUnitMap = new Map<String, Id>();
-            Set<String> navUnitNumberSet = new Set<String>();
-
-            for (CRM_KafkaOppgave oppg : this.oppgaver) {
-                navUnitNumberSet.add(oppg.tildeltEnhetsnr);
-            }
-
-            for (NavUnit__c navUnit : [
-                SELECT INT_UnitNumber__c, Id
-                FROM NavUnit__c
-                WHERE INT_UnitNumber__c IN :navUnitNumberSet
-            ]) {
-                this.navUnitMap.put(navUnit.INT_UnitNumber__c, navUnit.Id);
-            }
+        private set {
         }
     }
 }
