@@ -191,7 +191,11 @@ public without sharing class CRM_OppgaveSyncController {
         }
     }
 
-    
+     /**
+     * Performing a database upsert to update exisiting tasks (using SF ID) and create new ones
+     * @author Stian Ruud Schikora | 03-28-2022
+     * @param tasksToUpsert
+     **/
     public static void doNavTaskUpsert(List<NavTask__c> tasksToUpsert) {
         Map<Decimal, NavTask__c> navTaskMap = new Map<Decimal, NavTask__c>();
 
