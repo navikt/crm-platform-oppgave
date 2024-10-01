@@ -25,7 +25,6 @@ public without sharing class CRM_OppgaveSyncController {
 
                 //Using the oppgave query response wrapper to convert and insert NAV Task
                 CRM_OppgaveQueryResponse queryResp = new CRM_OppgaveQueryResponse();
-                queryResp.antallTreffTotalt = 1;
                 queryResp.oppgaver = new List<CRM_KafkaOppgave>{ kfOppg };
                 List<NavTask__c> navTaskList = queryResp.convertToNavTasks();
 
@@ -53,7 +52,7 @@ public without sharing class CRM_OppgaveSyncController {
     @AuraEnabled
     public static void doOppgaveSync(String jsonQuery) {
         CRM_OppgaveQuery query = (CRM_OppgaveQuery) JSON.deserialize(jsonQuery, CRM_OppgaveQuery.class);
-        query.opprettetFom = query.opprettetFom == null ? System.now().addYears(-1) : null; //Get oppgaver for the given actor created maximum og one year back in time
+        query.opprettetFom = query.opprettetFom == null ? System.now().addYears(-1) : null; //Get oppgaver for the given actor created maximum of one year back in time
         query.returnlimit = 100;
         CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
         oppgaveService.setContext(CRM_NavTaskOppgaveService.Context.SYSTEM_CONTEXT);
@@ -85,7 +84,6 @@ public without sharing class CRM_OppgaveSyncController {
 
                 //Using the oppgave query response wrapper to convert and insert NAV Task
                 CRM_OppgaveQueryResponse queryResp = new CRM_OppgaveQueryResponse();
-                queryResp.antallTreffTotalt = 1;
                 queryResp.oppgaver = new List<CRM_KafkaOppgave>{ kfOppg };
                 List<NavTask__c> navTaskList = queryResp.convertToNavTasks();
 
@@ -193,7 +191,7 @@ public without sharing class CRM_OppgaveSyncController {
         }
     }
 
-    /**
+     /**
      * Performing a database upsert to update exisiting tasks (using SF ID) and create new ones
      * @author Stian Ruud Schikora | 03-28-2022
      * @param tasksToUpsert
@@ -205,15 +203,15 @@ public without sharing class CRM_OppgaveSyncController {
             navTaskMap.put(navTask.INT_External_Reference__c, navTask);
         }
 
-        for (NavTask__c dbNavTask : [
+        for (NavTask__c existingTask : [
             SELECT Id, INT_External_Reference__c
             FROM NavTask__c
             WHERE INT_External_Reference__c IN :navTaskMap.keySet()
             FOR UPDATE
         ]) {
-            NavTask__c mapTask = navTaskMap.get(dbNavTask.INT_External_Reference__c);
-            mapTask.Id = dbNavTask.Id;
-            navTaskMap.put(mapTask.INT_External_Reference__c, mapTask);
+            NavTask__c navTask = navTaskMap.get(existingTask.INT_External_Reference__c);
+            navTask.Id = existingTask.Id;
+            navTaskMap.put(navTask.INT_External_Reference__c, navTask);
         }
         
         List<Database.UpsertResult> upsList = Database.upsert(tasksToUpsert, false);
