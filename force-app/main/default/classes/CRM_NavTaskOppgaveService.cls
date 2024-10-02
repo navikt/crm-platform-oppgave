@@ -162,7 +162,7 @@ public without sharing class CRM_NavTaskOppgaveService {
                     value = parser.getDatetimeValue().format('yyyy-MM-dd');
                 } else if (key == 'opprettetFom') {
                     value = parser.getDatetimeValue().format('yyyy-MM-dd\'T\'HH:mm:ss');
-                } else if (key == 'returnlimit') {
+                } else if (key.equals('returnlimit')) {
                     //limit is reserved in SF so need special parsing handling
                     key = 'limit';
                     value = String.valueOf(parser.getIntegerValue());
@@ -207,7 +207,7 @@ public without sharing class CRM_NavTaskOppgaveService {
             value.add(parser.getDatetimeValue().format('yyyy-MM-dd'));
         } else if (key == 'opprettetFom') {
             value.add(parser.getDatetimeValue().format('yyyy-MM-dd\'T\'HH:mm:ss'));
-        } else if (key == 'returnlimit') {
+        } else if (key.equals('returnlimit')) {
             //limit is reserved in SF so need special parsing handling
             key = 'limit';
             value.add(String.valueOf(parser.getIntegerValue()));
