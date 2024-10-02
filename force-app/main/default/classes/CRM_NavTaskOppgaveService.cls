@@ -158,9 +158,9 @@ public without sharing class CRM_NavTaskOppgaveService {
                 String key = parser.getText();
                 String value;
                 parser.nextToken();
-                if (key == 'fristFom' || key == 'fristTom') {
+                if (key.equals('fristFom') || key.equals('fristTom')) {
                     value = parser.getDatetimeValue().format('yyyy-MM-dd');
-                } else if (key == 'opprettetFom') {
+                } else if (key.equals('opprettetFom')) {
                     value = parser.getDatetimeValue().format('yyyy-MM-dd\'T\'HH:mm:ss');
                 } else if (key.equals('returnlimit')) {
                     //limit is reserved in SF so need special parsing handling
@@ -203,9 +203,9 @@ public without sharing class CRM_NavTaskOppgaveService {
     }
 
     private void addFilterdQueryParams(JSONParser parser, String key, List<String> value) {
-        if (key == 'fristFom' || key == 'fristTom') {
+        if (key.equals('fristFom') || key.equals('fristTom')) {
             value.add(parser.getDatetimeValue().format('yyyy-MM-dd'));
-        } else if (key == 'opprettetFom') {
+        } else if (key.equals('opprettetFom')) {
             value.add(parser.getDatetimeValue().format('yyyy-MM-dd\'T\'HH:mm:ss'));
         } else if (key.equals('returnlimit')) {
             //limit is reserved in SF so need special parsing handling
