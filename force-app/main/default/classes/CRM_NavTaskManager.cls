@@ -345,7 +345,6 @@ public without sharing class CRM_NavTaskManager {
         public String errorMessage;
         @invocableVariable
         public NavTask__c task;
-        @invocableVariable
         public String tildeltEnhetsNr;
 
         public NavTaskResponse() {
