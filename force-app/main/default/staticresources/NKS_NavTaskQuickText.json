@@ -1,0 +1,98 @@
+[
+    {
+        "name": "Situasjon",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker ønsker kontakt om sin situasjon. Det er behov for at NAV-kontoret kontakter bruker for nærmere avklaring.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Forvaltning, ønsker mer utbetalt",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker har forvaltning og har behov for ekstra overføring på SUM til nødvendige utgifter.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Møte med NAV-kontoret",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker ønsker å bestille en timeavtale om sin situasjon.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Bosituasjon, ønsker kontakt",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker ønsker kontakt om bosituasjon.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Dokumentasjon, spørsmål",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker har spørsmål om etterspurt dokumentasjon som behøver nærmere avklaring.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Utbetaling",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker ønsker kontakt om utbetalinger. Det er behov for at NAV-kontoret kontakter bruker for nærmere avklaring.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Utgått saksbehandlingstid",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker etterlyser svar på søknad av DATO. Saksbehandlingstiden er utgått.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Vilkår, avklaring",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker ønsker kontakt om vilkår som behøver nærmere avklaring.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Søkt nødhjelp, vurdert behov for oppgave",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker har sendt søknad med DATO og har behov for rask avklaring.\n\nBruker er ikke informert om svarfrist da det blir vurdert å haste."
+    },
+    {
+        "name": "Trekke søknad om sosialhjelp",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker ønsker å trekke søknad sendt DATO. Jeg har bedt bruker om å skrive en bekreftelse om at søknaden skal trekkes og deretter laste opp dokumentet ved å benytte ettersendelsesfunksjonen på nav.no i tillegg til at denne beskjeden blir gitt.\n\nInformert om at NAV-kontoret kontakter bruker ved behov."
+    },
+    {
+        "name": "Vedtak, generelt spørsmål",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker har spørsmål til vedtak av DATO som må avklares med saksbehandler.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Vedtak, spørsmål til siste",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker har spørsmål til siste vedtak som må avklares med saksbehandler.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Advokat tar kontakt",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nAdvokat NAVN ønsker\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Fullmektig tar kontakt",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nNAVN, som hevder å ha fullmakt i brukerens sak, ønsker kontakt om.\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Samhandler tar kontakt",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nSamhandler NAVN ønsker\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Verge tar kontakt",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nVerge NAVN ønsker\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Utleier tar kontakt",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nUtleier NAVN ønsker\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Utleier, purring krav",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nUtleier NAVN viser til innsendt krav (DATO)\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Bostøtte, utbetaling",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker ønsker kontakt om utbetaling av bostøtte.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Bostøtte, dokumentasjon",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker ønsker kontakt om dokumentasjon i forbindelse med bostøtte.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Bostøtte, vedtak",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker ønsker kontakt om vedtak om bostøtte for MÅNED.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Startlån, veiledning i forkant av søknad",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker ønsker veiledning i forkant av søknad om startlån.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Økonomi- og gjeldsrådgivning, timeavtale",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker har behov for rådgivning i forbindelse med situasjon. Ta kontakt for nærmere avklaring.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    },
+    {
+        "name": "Oppdatert kontonummer",
+        "hurtigtekst": "Aktuelt telefonnummer: \nGjelder: \n\nBruker har oppdatert kontonummer på nav.no, ønsker å få utbetaling til nytt kontonummer.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}."
+    }
+]

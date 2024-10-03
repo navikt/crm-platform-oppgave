@@ -93,6 +93,7 @@ public without sharing class CRM_DueDateUtility {
         return retDate;
     }
 
+    @AuraEnabled
     public static Date addBusinessDays(Integer numberofBusinessdays) {
         Boolean valid = false;
         Integer businessdaysbetween = 0;
