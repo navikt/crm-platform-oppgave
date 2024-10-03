@@ -18,11 +18,10 @@ public without sharing class CRM_NavTaskManager {
             }
             responseList.add(response);
 
-            if (response.success && response?.task.INT_External_Reference__c != null && response.tildeltEnhetsnr != null) {
+            if (response.success && response.tildeltEnhetsnr != null) {
                 unitNumbers.add(response.tildeltEnhetsnr);
             }  
         }
-
         Map<String, Id> unitIdByUnitNumber = new Map<String, Id>();
         if (!unitNumbers.isEmpty()) {
             for (NavUnit__c unit : [
@@ -35,14 +34,14 @@ public without sharing class CRM_NavTaskManager {
         }
 
         for (NavTaskResponse response : responseList) {
-            if (response.success && response?.task.INT_External_Reference__c != null && response.tildeltEnhetsnr != null) {
+            if (response.success && response.tildeltEnhetsnr != null) {
                 String unitNumber = response.tildeltEnhetsnr;
                 if (unitNumber != null) {
                     response.task.CRM_NavUnit__c = unitIdByUnitNumber.get(unitNumber);
                 }
             }
         }
-
+        
         return responseList;
     }
 
