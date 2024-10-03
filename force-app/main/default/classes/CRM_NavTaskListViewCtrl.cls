@@ -92,6 +92,10 @@ public without sharing class CRM_NavTaskListViewCtrl {
      * @param records
      **/
     private static void handleRecordDiff(List<NavTask__c> sfRecords, List<NavTask__c> serviceRecords) {
+        if (serviceRecords == null || serviceRecords.isEmpty() || sfRecords == null || sfRecords.isEmpty()) {
+            return;
+        }
+        
         Set<Decimal> serviceExternalRefs = new Set<Decimal>();
         for (NavTask__c serviceRecord : serviceRecords) {
             serviceExternalRefs.add(serviceRecord.INT_External_Reference__c);
