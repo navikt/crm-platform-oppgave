@@ -197,7 +197,7 @@ public without sharing class CRM_OppgaveSyncController {
      * @param tasksToUpsert
      **/
     public static void doNavTaskUpsert(List<NavTask__c> tasksToUpsert) {
-        if (tasksToUpsert.isEmpty() || tasksToUpsert == null) {
+        if (tasksToUpsert == null || tasksToUpsert.isEmpty()) {
             return;
         }
         
