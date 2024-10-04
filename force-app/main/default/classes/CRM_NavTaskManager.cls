@@ -4,18 +4,44 @@ public without sharing class CRM_NavTaskManager {
     @InvocableMethod(label='Process NAV task' category='Task Handling')
     public static List<NavTaskResponse> handleNavTaskRequests(List<NavTaskRequest> taskRequests) {
         List<NavTaskResponse> responseList = new List<NavTaskResponse>();
+        Set<String> unitNumbers = new Set<String>();
 
         for (NavTaskRequest taskRequest : taskRequests) {
+            NavTaskResponse response;
             switch on (taskRequest.requestType) {
                 when 'POST' {
-                    responseList.add(postTask(taskRequest));
+                    response = postTask(taskRequest);
                 }
                 when 'EDIT' {
-                    responseList.add(patchEditTask(taskRequest));
+                    response = patchEditTask(taskRequest);
                 }
+            }
+            responseList.add(response);
+
+            if (response.success && response.tildeltEnhetsnr != null) {
+                unitNumbers.add(response.tildeltEnhetsnr);
+            }  
+        }
+        Map<String, Id> unitIdByUnitNumber = new Map<String, Id>();
+        if (!unitNumbers.isEmpty()) {
+            for (NavUnit__c unit : [
+                SELECT Id, INT_UnitNumber__c
+                FROM NavUnit__c
+                WHERE INT_UnitNumber__c IN :unitNumbers
+            ]) {
+                unitIdByUnitNumber.put(unit.INT_UnitNumber__c, unit.Id);
             }
         }
 
+        for (NavTaskResponse response : responseList) {
+            if (response.success && response.tildeltEnhetsnr != null) {
+                String unitNumber = response.tildeltEnhetsnr;
+                if (unitNumber != null) {
+                    response.task.CRM_NavUnit__c = unitIdByUnitNumber.get(unitNumber);
+                }
+            }
+        }
+        
         return responseList;
     }
 
@@ -110,14 +136,7 @@ public without sharing class CRM_NavTaskManager {
             if (statusCode == 200 || statusCode == 201) {
                 OppgaveResponse apiResp = (OppgaveResponse) JSON.deserialize(response.getBody(), OppgaveResponse.class);
                 task.INT_External_Reference__c = apiResp.id;
-                task.CRM_NavUnit__c = [
-                    SELECT Id
-                    FROM NavUnit__c
-                    WHERE INT_UnitNumber__c = :apiResp.tildeltEnhetsnr
-                    LIMIT 1
-                ]
-                ?.Id; //Setting the appropriate NAV unit received from the API
-                resp.setResponse(true, null, task);
+                resp.setResponse(true, null, task, apiResp.tildeltEnhetsnr);
             } else {
                 logger.httpError(
                     'Error posting oppgave',
@@ -126,11 +145,11 @@ public without sharing class CRM_NavTaskManager {
                     CRM_ApplicationDomain.Domain.NKS,
                     oppgaveService.getTransactionId()
                 );
-                resp.setResponse(false, oppgaveService.getTransactionId(), task);
+                resp.setResponse(false, oppgaveService.getTransactionId(), task, null);
             }
         } catch (Exception ex) {
             logger.exception(ex, task, CRM_ApplicationDomain.Domain.NKS);
-            resp.setResponse(false, logger.peek().UUID__c, task);
+            resp.setResponse(false, logger.peek().UUID__c, task, null);
         } finally {
             logger.publish();
         }
@@ -192,7 +211,7 @@ public without sharing class CRM_NavTaskManager {
             if (statusCode == 200 || statusCode == 201) {
                 OppgaveResponse apiResp = (OppgaveResponse) JSON.deserialize(response.getBody(), OppgaveResponse.class);
                 task.NKS_Task_Version__c = apiResp.versjon;
-                resp.setResponse(true, null, task);
+                resp.setResponse(true, null, task, null);
             } else {
                 logger.httpError(
                     'Error editing oppgave',
@@ -201,11 +220,11 @@ public without sharing class CRM_NavTaskManager {
                     CRM_ApplicationDomain.Domain.NKS,
                     oppgaveService.getTransactionId()
                 );
-                resp.setResponse(false, oppgaveService.getTransactionId(), task);
+                resp.setResponse(false, oppgaveService.getTransactionId(), task, null);
             }
         } catch (Exception ex) {
             logger.exception(ex, task, CRM_ApplicationDomain.Domain.NKS);
-            resp.setResponse(false, logger.peek().UUID__c, task);
+            resp.setResponse(false, logger.peek().UUID__c, task, null);
         } finally {
             logger.publish();
         }
@@ -326,23 +345,27 @@ public without sharing class CRM_NavTaskManager {
         public String errorMessage;
         @invocableVariable
         public NavTask__c task;
+        public String tildeltEnhetsNr;
 
         public NavTaskResponse() {
             this.success = false;
             this.errorMessage = null;
             this.task = null;
+            this.tildeltEnhetsNr = null;
         }
 
-        public void setResponse(Boolean success, String errorMessage, NavTask__c task) {
+        public void setResponse(Boolean success, String errorMessage, NavTask__c task, String tildeltEnhetsNr) {
             this.success = success;
             this.errorMessage = errorMessage;
             this.task = task;
+            this.tildeltEnhetsNr = tildeltEnhetsNr;
         }
 
-        public NavTaskResponse(Boolean success, String errorMessage, NavTask__c task) {
+        public NavTaskResponse(Boolean success, String errorMessage, NavTask__c task, String tildeltEnhetsNr) {
             this.success = success;
             this.errorMessage = errorMessage;
             this.task = task;
+            this.tildeltEnhetsNr = tildeltEnhetsNr;
         }
     }
 
