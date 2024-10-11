@@ -42,6 +42,25 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
     delegateToSelf = false;
     @api hideDelegateToSelf = false;
 
+    displayInfo = {
+        additionalFields: ['INT_UnitNumber__c'],
+    };
+
+    matchingInfo = {
+        primaryField: { fieldPath: 'Name', mode: 'contains' },
+        additionalFields: [{ fieldPath: 'INT_UnitNumber__c', mode: 'startsWith'  }],
+    };
+
+    filter = {
+        criteria: [
+            {
+                fieldPath: 'INT_UnitNumber__c',
+                operator: 'ne',
+                value: '0703',
+            },
+        ],
+    };
+
     set disableConditionalRendering(value) {
         if (value && (value === true || value.toLowerCase() === 'true')) {
             this.alwaysShow = true;
@@ -277,11 +296,12 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
     }
 
     onManualSearchChange(event) {
-        let ids = event.detail.value;
+        console.log(event);
+        let recordId = event.detail.recordId;
         this.delegateToSelf = false;
-        if (ids && ids.length === 1) {
+        if (recordId != null) {
             this.selectedLabel = 'other';
-            this.selectedManualSearchId = ids[0];
+            this.selectedManualSearchId = recordId;
         } else {
             this.selectedManualSearchId = null;
         }
