@@ -56,7 +56,7 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
             {
                 fieldPath: 'INT_UnitNumber__c',
                 operator: 'ne',
-                value: '0703',
+                value: '4252',
             },
         ],
     };
