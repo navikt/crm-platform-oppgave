@@ -296,7 +296,6 @@ export default class NksNavTaskWorkAllocation extends LightningElement {
     }
 
     onManualSearchChange(event) {
-        console.log(event);
         let recordId = event.detail.recordId;
         this.delegateToSelf = false;
         if (recordId != null) {
