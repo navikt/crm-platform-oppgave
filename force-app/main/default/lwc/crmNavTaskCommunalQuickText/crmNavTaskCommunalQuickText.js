@@ -9,8 +9,8 @@ const communalTheme = 'KOM';
 
 export default class CrmNavTaskQuickText extends LightningElement {
     @api selectedValue;
+    @api selectedValueLabel;
 
-    selectedValueLabel;
     isCommunalTheme = false;
 
     options = [];
@@ -62,11 +62,13 @@ export default class CrmNavTaskQuickText extends LightningElement {
     handleChange(event) {
         const selectedOption = this.options.find((opt) => opt.value === event.detail.value);
         this.displayedValue = selectedOption.label;
+        this.selectedValueLabel = this.displayedValue;
         this.selectedValue = selectedOption.value;
         if (selectedOption?.hasVirkedager) {
             this.calculateAndReplaceBusinessDate(2);
         } else {
-            this.dispatchAttributeChange();
+            this.dispatchAttributeChange('selectedValue');
+            this.dispatchAttributeChange('selectedValueLabel');
         }
     }
 
@@ -80,15 +82,17 @@ export default class CrmNavTaskQuickText extends LightningElement {
                     day: '2-digit'
                 });
                 this.selectedValue = this.selectedValue.replace('{TO_VIRKEDAGER_FRA_DAGENS_DATO}', formattedDate);
-                this.dispatchAttributeChange();
+                this.dispatchAttributeChange('selectedValue');
+                this.dispatchAttributeChange('selectedValueLabel');
             })
             .catch((error) => {
                 console.error('Error calculating business date:', error);
             });
     }
 
-    dispatchAttributeChange() {
-        const attributeChangeEvent = new FlowAttributeChangeEvent('selectedValue', this.selectedValue);
+    dispatchAttributeChange(attribute) {
+        const value = attribute == 'selectedValue' ? this.selectedValue : this.selectedValueLabel;
+        const attributeChangeEvent = new FlowAttributeChangeEvent(attribute, value);
         this.dispatchEvent(attributeChangeEvent);
     }
 }
