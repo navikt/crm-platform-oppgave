@@ -51,24 +51,25 @@ export default class CrmNavTaskListView extends NavigationMixin(LightningElement
             })
             .finally(() => {
                 this.isLoading = false;
-                setTimeout(() => { // 10 sec delay to avoid spamming requests
+                setTimeout(() => {
+                    // 10 sec delay to avoid spamming requests
                     this.isRefreshDisabled = false;
                 }, 10000);
             });
-        }
+    }
 
-    @wire(getNavTaskRecords, { 
+    @wire(getNavTaskRecords, {
         fieldsToQuery: '$displayFields',
         filterString: '$filterString',
         ownedByRunningUser: '$ownedByRunningUser',
         numRecords: '$numRecords'
     })
     wiredTasks(result) {
-        this.wiredNavTaskResult = result; 
+        this.wiredNavTaskResult = result;
         if (result.data) {
             this.records = result.data;
         } else if (result.error) {
-            console.error('Error fetching tasks:', error);
+            console.error('Error fetching tasks:', result.error);
         }
     }
 
