@@ -9,6 +9,8 @@
     <targetConfigs>
         <targetConfig targets="lightning__FlowScreen">
             <property name="selectedValue" label="Selected Value" type="String" role="outputOnly" />
+            <property name="selectedValueLabel" label="Selected Value Label" type="String"
+                role="outputOnly" />
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>
