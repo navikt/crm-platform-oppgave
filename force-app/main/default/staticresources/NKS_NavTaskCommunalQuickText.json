@@ -1,122 +1,152 @@
 [
     {
-        "name": "Situasjon",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker ønsker kontakt om sin situasjon. Det er behov for at NAV-kontoret kontakter bruker for nærmere avklaring.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "name": "Advokat tar kontakt",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nAdvokat NAVN ønsker\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
         "hasVirkedager": true
     },
     {
-        "name": "Forvaltning, ønsker mer utbetalt",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker har forvaltning og har behov for ekstra overføring på SUM til nødvendige utgifter.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "name": "Aktivitetskort for barn og unge",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder: Aktivitetskort for barn og unge.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
         "hasVirkedager": true
     },
     {
-        "name": "Møte med NAV-kontoret",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker ønsker å bestille en timeavtale om sin situasjon.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
-        "hasVirkedager": true
+        "name": "Bekreftelse på mottatt / ikke mottatt kommunale ytelser",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder: Bruker ønsker en bekreftelse på at vedkommende HAR/IKKE_HAR mottatt kommunale ytelser i PERIODE.\nJeg har informert bruker om at Nav-kontoret sender bekreftelsen digitalt (Altinn/digital postkasse) eller som ordinær post, og at bruker blir kontaktet av Nav-kontoret hvis bekreftelsen må hentes fysisk på Nav-kontoret.",
+        "hasVirkedager": false
+    },
+    {
+        "name": "Bosituasjon, uten bolig",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder: Er uten bolig fra DATO.\n\nBruker er ikke informert om svarfrist da det blir vurdert å haste.",
+        "hasVirkedager": false
     },
     {
         "name": "Bosituasjon, ønsker kontakt",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker ønsker kontakt om bosituasjon.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
-        "hasVirkedager": true
-    },
-    {
-        "name": "Dokumentasjon, spørsmål",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker har spørsmål om etterspurt dokumentasjon som behøver nærmere avklaring.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
-        "hasVirkedager": true
-    },
-    {
-        "name": "Utbetaling",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker ønsker kontakt om utbetalinger. Det er behov for at NAV-kontoret kontakter bruker for nærmere avklaring.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
-        "hasVirkedager": true
-    },
-    {
-        "name": "Utgått saksbehandlingstid",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker etterlyser svar på søknad av DATO. Saksbehandlingstiden er utgått.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
-        "hasVirkedager": true
-    },
-    {
-        "name": "Vilkår, avklaring",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker ønsker kontakt om vilkår som behøver nærmere avklaring.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
-        "hasVirkedager": true
-    },
-    {
-        "name": "Søkt nødhjelp, vurdert behov for oppgave",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker har sendt søknad med DATO og har behov for rask avklaring.\n\nBruker er ikke informert om svarfrist da det blir vurdert å haste.",
-        "hasVirkedager": false
-    },
-    {
-        "name": "Trekke søknad om sosialhjelp",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker ønsker å trekke søknad sendt DATO. Jeg har bedt bruker om å skrive en bekreftelse om at søknaden skal trekkes og deretter laste opp dokumentet ved å benytte ettersendelsesfunksjonen på nav.no i tillegg til at denne beskjeden blir gitt.\n\nInformert om at NAV-kontoret kontakter bruker ved behov.",
-        "hasVirkedager": false
-    },
-    {
-        "name": "Vedtak, generelt spørsmål",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker har spørsmål til vedtak av DATO som må avklares med saksbehandler.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
-        "hasVirkedager": true
-    },
-    {
-        "name": "Vedtak, spørsmål til siste",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker har spørsmål til siste vedtak som må avklares med saksbehandler.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
-        "hasVirkedager": true
-    },
-    {
-        "name": "Advokat tar kontakt",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nAdvokat NAVN ønsker\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
-        "hasVirkedager": true
-    },
-    {
-        "name": "Fullmektig tar kontakt",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nNAVN, som hevder å ha fullmakt i brukerens sak, ønsker kontakt om.\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
-        "hasVirkedager": true
-    },
-    {
-        "name": "Samhandler tar kontakt",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nSamhandler NAVN ønsker\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
-        "hasVirkedager": true
-    },
-    {
-        "name": "Verge tar kontakt",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nVerge NAVN ønsker\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
-        "hasVirkedager": true
-    },
-    {
-        "name": "Utleier tar kontakt",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nUtleier NAVN ønsker\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
-        "hasVirkedager": true
-    },
-    {
-        "name": "Utleier, purring krav",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nUtleier NAVN viser til innsendt krav (DATO)\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
-        "hasVirkedager": true
-    },
-    {
-        "name": "Bostøtte, utbetaling",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker ønsker kontakt om utbetaling av bostøtte.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker ønsker kontakt om bosituasjon.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
         "hasVirkedager": true
     },
     {
         "name": "Bostøtte, dokumentasjon",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker ønsker kontakt om dokumentasjon i forbindelse med bostøtte.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker ønsker kontakt om dokumentasjon i forbindelse med bostøtte.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hasVirkedager": true
+    },
+    {
+        "name": "Bostøtte, utbetaling",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker ønsker kontakt om utbetaling av bostøtte.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
         "hasVirkedager": true
     },
     {
         "name": "Bostøtte, vedtak",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker ønsker kontakt om vedtak om bostøtte for MÅNED.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker ønsker kontakt om vedtak om bostøtte for MÅNED.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
         "hasVirkedager": true
     },
     {
-        "name": "Startlån, veiledning i forkant av søknad",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker ønsker veiledning i forkant av søknad om startlån.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "name": "Dokumentasjon, spørsmål",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker har spørsmål om etterspurt dokumentasjon som behøver nærmere avklaring.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
         "hasVirkedager": true
     },
     {
-        "name": "Økonomi- og gjeldsrådgivning, timeavtale",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker har behov for rådgivning i forbindelse med situasjon. Ta kontakt for nærmere avklaring.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "name": "Forvaltning, ønsker mer utbetalt",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker har forvaltning og har behov for ekstra overføring på SUM til nødvendige utgifter.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hasVirkedager": true
+    },
+    {
+        "name": "Fullmektig tar kontakt",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nNAVN, som hevder å ha fullmakt i brukerens sak, ønsker kontakt om.\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hasVirkedager": true
+    },
+    {
+        "name": "Generell hurtigtekst",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hasVirkedager": true
+    },
+    {
+        "name": "Møte med NAV-kontoret",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker ønsker å bestille en timeavtale om sin situasjon.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
         "hasVirkedager": true
     },
     {
         "name": "Oppdatert kontonummer",
-        "hurtigtekst": "Til: \nAktuelt telefonnummer: \nGjelder: \n\nBruker har oppdatert kontonummer på nav.no, ønsker å få utbetaling til nytt kontonummer.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker har oppdatert kontonummer på nav.no, ønsker å få utbetaling til nytt kontonummer.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hasVirkedager": true
+    },
+    {
+        "name": "Samhandler tar kontakt",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nSamhandler NAVN ønsker\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hasVirkedager": true
+    },
+    {
+        "name": "Situasjon",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker ønsker kontakt om sin situasjon. Det er behov for at Nav-kontoret kontakter bruker for nærmere avklaring.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hasVirkedager": true
+    },
+    {
+        "name": "Startlån, veiledning i forkant av søknad",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker ønsker veiledning i forkant av søknad om startlån.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hasVirkedager": true
+    },
+    {
+        "name": "Strøm, stengevarsel",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder: Varsel om stenging av strøm DATO.\n\nBruker er ikke informert om svarfrist da det blir vurdert å haste.",
+        "hasVirkedager": false
+    },
+    {
+        "name": "Strøm, strømmen er stengt",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder: Stenging av strøm DATO.\n\nBruker er ikke informert om svarfrist da det blir vurdert å haste.",
+        "hasVirkedager": false
+    },
+    {
+        "name": "Søkt nødhjelp, vurdert behov for oppgave",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker har sendt søknad DATO og har behov for rask avklaring.\n\nBruker er ikke informert om svarfrist da det blir vurdert å haste.",
+        "hasVirkedager": false
+    },
+    {
+        "name": "Trekke søknad om sosialhjelp",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker ønsker å trekke søknad sendt DATO. Jeg har bedt bruker om å skrive en bekreftelse om at søknaden skal trekkes og deretter laste opp dokumentet ved å benytte ettersendelsesfunksjonen på nav.no i tillegg til at denne beskjeden blir gitt.\n\nInformert om at NAV-kontoret kontakter bruker ved behov.",
+        "hasVirkedager": false
+    },
+    {
+        "name": "Utbetaling",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker ønsker kontakt om utbetalinger. Det er behov for at NAV-kontoret kontakter bruker for nærmere avklaring.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hasVirkedager": true
+    },
+    {
+        "name": "Utgått saksbehandlingstid",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker etterlyser svar på søknad av DATO. Saksbehandlingstiden er utgått.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hasVirkedager": true
+    },
+    {
+        "name": "Utleier tar kontakt",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nUtleier NAVN ønsker\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hasVirkedager": true
+    },
+    {
+        "name": "Utleier, purring krav",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nUtleier NAVN viser til innsendt krav (DATO)\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hasVirkedager": true
+    },
+    {
+        "name": "Vedtak, generelt spørsmål",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker har spørsmål til vedtak av DATO som må avklares med saksbehandler.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hasVirkedager": true
+    },
+    {
+        "name": "Vedtak, spørsmål til siste",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker har spørsmål til siste vedtak som må avklares med saksbehandler.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hasVirkedager": true
+    },
+    {
+        "name": "Verge tar kontakt",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nVerge NAVN ønsker\n\nInnringer er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hasVirkedager": true
+    },
+    {
+        "name": "Vilkår, avklaring",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker ønsker kontakt om vilkår som behøver nærmere avklaring.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
+        "hasVirkedager": true
+    },
+    {
+        "name": "Økonomi- og gjeldsrådgivning, timeavtale",
+        "hurtigtekst": "Til:\nAktuelt telefonnummer:\nGjelder:\n\nBruker har behov for rådgivning i forbindelse med situasjon. Ta kontakt for nærmere avklaring.\n\nBruker er informert om svarfrist innen utgangen av {TO_VIRKEDAGER_FRA_DAGENS_DATO}.",
         "hasVirkedager": true
     }
 ]
