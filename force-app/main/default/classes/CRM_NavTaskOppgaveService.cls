@@ -346,11 +346,7 @@ public without sharing class CRM_NavTaskOppgaveService {
      * @param task
      **/
     private void addXCorrelation(ApiController apiCtrl) {
-        String requestId = logger.apiTransaction(
-            apiCtrl.getrequestEndpoint(),
-            apiCtrl.getRequest(),
-            CRM_ApplicationDomain.Domain.NKS
-        );
+        String requestId = new Uuid().getValue();
         apiCtrl.addHeader('X-Correlation-ID', requestId); //Adds the unique transaction ID to the request
         this.transactionId = requestId;
         logger.publish();
