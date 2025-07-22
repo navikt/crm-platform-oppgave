@@ -41,11 +41,6 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
-        <field>NavTask__c.CRM_IsOwnerNAVUnitQueue__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
         <editable>true</editable>
         <field>NavTask__c.CRM_NavUnit__c</field>
         <readable>true</readable>
@@ -123,11 +118,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>NavTask__c.NKS_Henvendelse_BehandlingsId__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>NavTask__c.NKS_Internal_Reference__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
