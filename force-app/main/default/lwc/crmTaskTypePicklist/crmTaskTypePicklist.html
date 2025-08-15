@@ -16,7 +16,11 @@
         >
         </lightning-radio-group>
        <template lwc:if={noValidTaskTypes}>
-            <p class="slds-p-bottom_x-small">Ingen gyldige oppgavetyper for valgt tema</p>
+            <div class="slds-var-p-top_small" role="alert" aria-live="assertive">
+                <span style="color:#8C4B02">
+                    Ingen gyldige oppgavetyper for valgt tema
+                </span>
+            </div>
         </template>
     </template>
      <template lwc:if={isSupported}>
