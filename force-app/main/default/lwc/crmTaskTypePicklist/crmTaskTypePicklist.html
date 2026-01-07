@@ -1,8 +1,10 @@
 <template>
-    <template if:false={loaded}>
-        <lightning-spinner alternative-text="Loading" size="small"> </lightning-spinner>
+    <template lwc:if={loaded}>
     </template>
-    <template if:true={showcomponent}>
+    <template lwc:else>
+        <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+    </template>
+    <template lwc:if={showcomponent}>
         <lightning-radio-group
             name="TaskType"
             label="Oppgavetype"
@@ -10,14 +12,24 @@
             required
             value={tasktype}
             onchange={handleTaskTypeChange}
+            class="slds-p-bottom_x-small slds-p-top_x-small"
         >
         </lightning-radio-group>
+       <template lwc:if={noValidTaskTypes}>
+            <div class="slds-var-p-top_small" role="alert" aria-live="assertive">
+                <span style="color:#8C4B02">
+                    Ingen gyldige oppgavetyper for valgt tema
+                </span>
+            </div>
+        </template>
     </template>
-    <template if:false={isSupported}>
+     <template lwc:if={isSupported}>
+    </template>
+    <template lwc:else>
         <div class="slds-var-p-top_small" role="alert" aria-live="assertive">
-            <font color="#8C4B02">
+            <span style="color:#8C4B02">
                 Velg lav eller høy prioritet. Temaet du har valgt støtter ikke prioritet normal.
-            </font>
+            </span>
         </div>
     </template>
 </template>
