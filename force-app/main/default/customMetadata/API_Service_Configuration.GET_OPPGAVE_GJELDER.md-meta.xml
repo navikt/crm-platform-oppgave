@@ -3305,6 +3305,6 @@
     </values>
     <values>
         <field>Service_Path__c</field>
-        <value xsi:type="xsd:string">/oppgave/api/v1/kodeverk</value>
+        <value xsi:type="xsd:string">/api/v1/kodeverk</value>
     </values>
 </CustomMetadata>

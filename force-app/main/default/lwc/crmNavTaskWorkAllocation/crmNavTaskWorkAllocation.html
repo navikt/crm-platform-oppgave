@@ -2,21 +2,17 @@
     <template if:true={showContent}>
         <lightning-radio-group
             name="navUnitRadioGroup"
-            label="Nav-enhet"
+            label="NAV-enhet"
             options={navUnits}
             disabled={isUnavailable}
             type="radio"
             value={selectedLabel}
             onchange={onChange}
             required={required}
+            class="slds-p-bottom_x-small"
         >
         </lightning-radio-group>
-        <lightning-record-edit-form object-api-name="NavTask__c">
-            <lightning-input-field
-                field-name="CRM_NavUnit__c"
-                variant="label-hidden"
-                onchange={onManualSearchChange}
-            ></lightning-input-field>
-        </lightning-record-edit-form>
+        <lightning-record-picker object-api-name="NavUnit__c" variant="label-hidden" label="Annen NAV-enhet"
+        placeholder="Søk NAV-enheter" display-info={displayInfo} matching-info={matchingInfo} filter={filter} onchange={onManualSearchChange}></lightning-record-picker>
     </template>
 </template>
