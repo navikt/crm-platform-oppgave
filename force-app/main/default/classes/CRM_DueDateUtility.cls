@@ -69,10 +69,6 @@ public without sharing class CRM_DueDateUtility {
             NAV_Task_Due_Date__mdt duedateRecord;
             if (dueDateMap.containsKey(theme + '_' + taskType)) {
                 duedateRecord = dueDateMap.get(theme + '_' + taskType);
-            } else {
-                LoggerUtility logger = new LoggerUtility('Oppgave');
-                logger.warning('Error retrieving duedate rule themecode = ' + theme + 'TaskType = ' + taskType, null);
-                logger.publish();
             }
 
             //Number of business days defaults to 2 if nothing else is defined
