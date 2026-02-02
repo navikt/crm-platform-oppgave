@@ -161,7 +161,6 @@ public without sharing class CRM_NavTaskManager {
      * @return Boolean
      **/
     private static Boolean hasPersonAccess(NavTask__c task) {
-        Id userId = UserInfo.getUserId();
         Id personId = [SELECT Id, CRM_Person__c FROM Account WHERE Id = :task.CRM_Account__c]?.CRM_Person__c;
 
         return getPersonAccess(personId);
