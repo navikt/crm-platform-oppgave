@@ -4,7 +4,7 @@
         <name>Format_date_time</name>
         <label>Format date time</label>
         <locationX>176</locationX>
-        <locationY>278</locationY>
+        <locationY>242</locationY>
         <actionName>CRM_FlowUtils</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -23,7 +23,7 @@
         <name>Insert_NAV_Task</name>
         <label>Insert NAV Task</label>
         <locationX>176</locationX>
-        <locationY>1430</locationY>
+        <locationY>1274</locationY>
         <actionName>CRM_NavTaskDbHandler</actionName>
         <actionType>apex</actionType>
         <faultConnector>
@@ -46,7 +46,7 @@
         <name>Post_NAV_Task</name>
         <label>Post NAV Task</label>
         <locationX>176</locationX>
-        <locationY>1310</locationY>
+        <locationY>1166</locationY>
         <actionName>CRM_NavTaskManager</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -69,6 +69,12 @@
             <name>createdByUnitNumber</name>
             <value>
                 <elementReference>Created_By_Unit_Number</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logCategory</name>
+            <value>
+                <elementReference>LogCategory</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -127,7 +133,7 @@
         <name>Set_Task_Due_Date</name>
         <label>Set Task Due Date</label>
         <locationX>176</locationX>
-        <locationY>1190</locationY>
+        <locationY>1058</locationY>
         <actionName>CRM_DueDateUtility</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -150,7 +156,7 @@
         <name>Apply_header_to_comment</name>
         <label>Apply header to comment</label>
         <locationX>176</locationX>
-        <locationY>398</locationY>
+        <locationY>350</locationY>
         <assignmentItems>
             <assignToReference>NAV_Task.NKS_Comments__c</assignToReference>
             <operator>Assign</operator>
@@ -166,7 +172,7 @@
         <name>Set_Subtheme_Null</name>
         <label>Set Subtheme Null</label>
         <locationX>264</locationX>
-        <locationY>638</locationY>
+        <locationY>566</locationY>
         <assignmentItems>
             <assignToReference>NAV_Task.NKS_Subtheme__c</assignToReference>
             <operator>Assign</operator>
@@ -179,7 +185,7 @@
         <name>Set_Subtype_Null</name>
         <label>Set Subtype Null</label>
         <locationX>264</locationX>
-        <locationY>974</locationY>
+        <locationY>866</locationY>
         <assignmentItems>
             <assignToReference>NAV_Task.CRM_Subtype__c</assignToReference>
             <operator>Assign</operator>
@@ -192,7 +198,7 @@
         <name>EmptyString</name>
         <dataType>String</dataType>
         <value>
-            <stringValue/>
+            <stringValue></stringValue>
         </value>
     </constants>
     <decisions>
@@ -200,7 +206,7 @@
         <name>Validate_Subtheme</name>
         <label>Validate Subtheme</label>
         <locationX>176</locationX>
-        <locationY>518</locationY>
+        <locationY>458</locationY>
         <defaultConnector>
             <targetReference>Set_Subtheme_Null</targetReference>
         </defaultConnector>
@@ -226,7 +232,7 @@
         <name>Validate_Subtype</name>
         <label>Validate Subtype</label>
         <locationX>176</locationX>
-        <locationY>854</locationY>
+        <locationY>758</locationY>
         <defaultConnector>
             <targetReference>Set_Subtype_Null</targetReference>
         </defaultConnector>
@@ -307,7 +313,7 @@ null,
         <name>Get_Account</name>
         <label>Get Account</label>
         <locationX>176</locationX>
-        <locationY>158</locationY>
+        <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Format_date_time</targetReference>
@@ -337,7 +343,7 @@ null,
         <name>Insert_Log_Warning</name>
         <label>Insert Log Warning</label>
         <locationX>528</locationX>
-        <locationY>1550</locationY>
+        <locationY>1382</locationY>
         <flowName>Flow_Create_Application_Log</flowName>
         <inputAssignments>
             <name>Application_Domain</name>
@@ -389,6 +395,17 @@ null,
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Optional log category override for webhook filtering</description>
+        <name>LogCategory</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue></stringValue>
+        </value>
     </variables>
     <variables>
         <description>NAV Task containing data to be sent to oppgave API</description>
