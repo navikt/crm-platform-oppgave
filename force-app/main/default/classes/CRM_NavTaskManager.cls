@@ -115,6 +115,9 @@ public without sharing class CRM_NavTaskManager {
     public static NavTaskResponse postTask(NavTaskRequest taskRequest) {
         NavTaskResponse resp = new NavTaskResponse();
         NavTask__c task = taskRequest.task;
+        LoggerUtility postLogger = String.isNotBlank(taskRequest.logCategory)
+            ? new LoggerUtility(taskRequest.logCategory)
+            : logger;
 
         try {
             CRM_NavTaskOppgaveService oppgaveService = new CRM_NavTaskOppgaveService();
@@ -135,7 +138,7 @@ public without sharing class CRM_NavTaskManager {
                 task.INT_External_Reference__c = apiResp.id;
                 resp.setResponse(true, null, task, apiResp.tildeltEnhetsnr);
             } else {
-                logger.httpError(
+                postLogger.httpError(
                     'Error posting oppgave',
                     response,
                     task,
@@ -145,10 +148,10 @@ public without sharing class CRM_NavTaskManager {
                 resp.setResponse(false, oppgaveService.getTransactionId(), task, null);
             }
         } catch (Exception ex) {
-            logger.exception(ex, task, CRM_ApplicationDomain.Domain.NKS);
-            resp.setResponse(false, logger.peek().UUID__c, task, null);
+            postLogger.exception(ex, task, CRM_ApplicationDomain.Domain.NKS);
+            resp.setResponse(false, postLogger.peek().UUID__c, task, null);
         } finally {
-            logger.publish();
+            postLogger.publish();
         }
 
         return resp;
@@ -322,6 +325,10 @@ public without sharing class CRM_NavTaskManager {
             label='Default POST is done in user context as long as user has person record access, this value allows to force system-system post'
         )
         public Boolean POST_AS_SYSTEM = false;
+        @invocableVariable(
+            label='Optional log category override for webhook filtering'
+        )
+        public String logCategory;
 
         public NavTaskRequest() {
             this.requestType = null;
