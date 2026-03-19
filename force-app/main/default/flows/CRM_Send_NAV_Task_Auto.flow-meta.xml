@@ -260,7 +260,7 @@
         <dataType>String</dataType>
         <expression>IF(NOT(ISBLANK({!NAV_Task.CRM_NavUnit__c})),
 {!NAV_Task.CRM_NavUnit__r.INT_UnitNumber__c},
-null)</expression>
+{!Created_By_Unit_Number})</expression>
     </formulas>
     <formulas>
         <name>CommentHeaderFormula</name>
