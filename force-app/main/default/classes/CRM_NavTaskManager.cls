@@ -1,6 +1,31 @@
 public without sharing class CRM_NavTaskManager {
     private static LoggerUtility logger = new LoggerUtility('Oppgave');
 
+    @AuraEnabled
+    List<CRM_OppgaveOppfolging> getTaskOppfolging(Id task_id) {
+        return null;
+    }
+
+    @AuraEnabled
+    NKS_OppgaveResponseWrapper getTaskById(Id task_id)  {
+        return null;
+    }
+
+    @AuraEnabled
+    List<NKS_OppgaveResponseWrapper> getAllAssignedOpenTasks(String navident) {
+        return null;
+    }
+
+    @AuraEnabled
+    List<NKS_OppgaveResponseWrapper> getOpenTasks(Id personId, Integer offset) {
+        return null;
+    }
+    
+    @AuraEnabled
+    List<NKS_OppgaveResponseWrapper> getAllTasks(Id personId, Integer offset) {
+        return null;
+    }
+
     @InvocableMethod(label='Process NAV task' category='Task Handling')
     public static List<NavTaskResponse> handleNavTaskRequests(List<NavTaskRequest> taskRequests) {
         List<NavTaskResponse> responseList = new List<NavTaskResponse>();
