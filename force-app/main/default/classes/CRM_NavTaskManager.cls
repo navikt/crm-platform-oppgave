@@ -2,27 +2,27 @@ public without sharing class CRM_NavTaskManager {
     private static LoggerUtility logger = new LoggerUtility('Oppgave');
 
     @AuraEnabled
-    List<CRM_OppgaveOppfolging> getTaskOppfolging(Id task_id) {
+    List<CRM_OppgaveOppfolging> getOppgaveOppfolging(String oppgaveId) {
         return null;
     }
 
     @AuraEnabled
-    NKS_OppgaveResponseWrapper getTaskById(Id task_id)  {
+    NKS_OppgaveResponseWrapper getOppgaveById(String oppgaveId)  {
         return null;
     }
 
     @AuraEnabled
-    List<NKS_OppgaveResponseWrapper> getAllAssignedOpenTasks(String navident) {
+    List<NKS_OppgaveResponseWrapper> getAllAssignedOpenOppgaver(String navident) {
         return null;
     }
 
     @AuraEnabled
-    List<NKS_OppgaveResponseWrapper> getOpenTasks(Id personId, Integer offset) {
+    List<NKS_OppgaveResponseWrapper> getOpenOppgaver(Id personId, Integer offset) {
         return null;
     }
-    
+
     @AuraEnabled
-    List<NKS_OppgaveResponseWrapper> getAllTasks(Id personId, Integer offset) {
+    List<NKS_OppgaveResponseWrapper> getAllOppgaver(Id personId, Integer offset) {
         return null;
     }
 
