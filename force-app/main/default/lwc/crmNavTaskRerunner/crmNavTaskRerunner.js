@@ -18,6 +18,9 @@ export default class CrmNavTaskRerunner extends LightningElement {
 
     @track taskTypeFilters = [];
     @track themeFilters = [];
+    @track taskIds = [];
+    idInput = '';
+    idError = null;
 
     connectedCallback() {
         this.getThemesFromApex();
@@ -217,5 +220,40 @@ export default class CrmNavTaskRerunner extends LightningElement {
 
     get hasThemeFilters() {
         return this.themeFilters.length > 0;
+    }
+
+    handleIdInput(event) {
+        this.idInput = event.target.value;
+        let idError = null;
+
+        //console.log(idInput);
+
+        // if (!this.idInput.trim()) {
+        //     this.taskIds = [];
+        //     return;
+        // }
+
+        // const rawIds = this.idInput
+        //     .split(/[,\s\n]+/)
+        //     .map((id) => id.trim())
+        //     .filter((id) => id.length > 0);
+
+        // const uniqueIds = [...new Set(rawIds)];
+        // console.log(uniqueIds);
+    }
+
+    rerunWithId() {
+        console.log('heyo');
+        //se om id er gyldig
+        this.initiateIdRerun(this.idInput);
+    }
+
+    initiateIdRerun(taskIds) {
+        console.log('OI MATE', taskIds);
+        //kjør
+    }
+
+    get hasTaskIds() {
+        return this.taskIds.length > 0;
     }
 }
