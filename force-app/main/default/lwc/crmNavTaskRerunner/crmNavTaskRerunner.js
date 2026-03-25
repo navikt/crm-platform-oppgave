@@ -18,7 +18,7 @@ export default class CrmNavTaskRerunner extends LightningElement {
 
     @track taskTypeFilters = [];
     @track themeFilters = [];
-    idInput;
+    idInput = '';
     isFilterTabActive = true;
 
     connectedCallback() {
@@ -92,7 +92,7 @@ export default class CrmNavTaskRerunner extends LightningElement {
 
     metFilterRequirements() {
         if (!this.isFilterTabActive) {
-            if (!this.idInput) {
+            if (this.idInput.trim() === '') {
                 this.filterError = 'Enter at least one record Id';
                 return false;
             }
@@ -237,7 +237,12 @@ export default class CrmNavTaskRerunner extends LightningElement {
     }
 
     get idFilterSoql() {
-        return 'AND Id IN (' + this.idInput + ')';
+        const ids = this.idInput
+            .split(',')
+            .flatMap((part) => part.split(' '))
+            .map((id) => id.trim().replaceAll("'", ''))
+            .filter((id) => id.length > 0);
+        return "AND Id IN ('" + ids.join("','") + "')";
     }
 
     get hasTaskTypeFilters() {
