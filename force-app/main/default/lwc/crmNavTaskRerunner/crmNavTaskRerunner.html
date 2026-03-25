@@ -1,8 +1,7 @@
 <template>
-    <lightning-card title="NAV Task Rerunner" icon-name="standard:invocable_action">
+    <lightning-card title="Nav Task rerun" icon-name="standard:invocable_action">
         <lightning-spinner if:true={isLoading} size="medium"> </lightning-spinner>
         <div if:true={runningJob} class="slds-var-p-around_small">
-            <!--THERE IS ALREADY A RUNNING JOB-->
             <div class="slds-box slds-box_xx-small">
                 <lightning-card icon-name="utility:info" title="Running job details">
                     <lightning-button-icon
@@ -50,44 +49,67 @@
                 </lightning-card>
             </div>
         </div>
-        <lightning-layout vertical-align="center" class="slds-var-p-around_small" multiple-rows="true">
-            <lightning-layout-item size="8">
-                <lightning-combobox
-                    name="taskTypeFilterInput"
-                    label="Task type filters: "
-                    placeholder="Add task type filter"
-                    options={taskTypes}
-                    onchange={handleFilterAdd}
-                ></lightning-combobox>
-            </lightning-layout-item>
-            <lightning-layout-item if:true={hasTaskTypeFilters} class="slds-var-p-top_xx-small" size="12">
-                <lightning-pill-container
-                    items={taskTypeFilters}
-                    onitemremove={handleTaskTypeFilterRemove}
-                ></lightning-pill-container>
-            </lightning-layout-item>
-            <lightning-layout-item size="8">
-                <lightning-combobox
-                    name="themeFilterInput"
-                    label="Theme filters: "
-                    placeholder="Add theme filter"
-                    options={themes}
-                    onchange={handleFilterAdd}
-                ></lightning-combobox>
-            </lightning-layout-item>
-            <lightning-layout-item if:true={hasThemeFilters} class="slds-var-p-top_xx-small" size="12">
-                <lightning-pill-container
-                    items={themeFilters}
-                    onitemremove={handleThemeFilterRemove}
-                ></lightning-pill-container>
-            </lightning-layout-item>
-
-            <lightning-layout-item size="12"> Timeframe: </lightning-layout-item>
-            <lightning-layout-item> LAST_N_DAYS: </lightning-layout-item>
-            <lightning-layout-item padding="horizontal-small" size="2">
-                <lightning-input type="number" value="5" variant="label-hidden" min="1.0"></lightning-input>
-            </lightning-layout-item>
-        </lightning-layout>
+        <lightning-tabset>
+            <lightning-tab label="Query rerun with filters" onactive={handleFilterTabActive}>
+                <lightning-layout vertical-align="center" class="slds-var-p-around_small" multiple-rows="true">
+                    <lightning-layout-item size="8">
+                        <lightning-combobox
+                            name="taskTypeFilterInput"
+                            label="Task type filters: "
+                            placeholder="Add task type filter"
+                            options={taskTypes}
+                            onchange={handleFilterAdd}
+                        ></lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item if:true={hasTaskTypeFilters} class="slds-var-p-top_xx-small" size="12">
+                        <lightning-pill-container
+                            items={taskTypeFilters}
+                            onitemremove={handleTaskTypeFilterRemove}
+                        ></lightning-pill-container>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="8">
+                        <lightning-combobox
+                            name="themeFilterInput"
+                            label="Theme filters: "
+                            placeholder="Add theme filter"
+                            options={themes}
+                            onchange={handleFilterAdd}
+                        ></lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item if:true={hasThemeFilters} class="slds-var-p-top_xx-small" size="12">
+                        <lightning-pill-container
+                            items={themeFilters}
+                            onitemremove={handleThemeFilterRemove}
+                        ></lightning-pill-container>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" class="slds-var-p-top_small">
+                        <lightning-layout vertical-align="center">
+                            <lightning-layout-item> LAST_N_DAYS: </lightning-layout-item>
+                            <lightning-layout-item padding="horizontal-small" size="2">
+                                <lightning-input
+                                    type="number"
+                                    value="5"
+                                    variant="label-hidden"
+                                    min="1.0"
+                                ></lightning-input>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-tab>
+            <lightning-tab label="Query rerun with record ids" onactive={handleIdTabActive}>
+                <lightning-layout vertical-align="center" class="slds-var-p-around_small" multiple-rows="true">
+                    <lightning-layout-item size="12">
+                        <lightning-input
+                            type="text"
+                            label="NavTask Ids (space or comma separated)"
+                            value={idInput}
+                            onchange={handleIdInput}
+                        ></lightning-input>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-tab>
+        </lightning-tabset>
         <div class="slds-var-p-around_small">
             <lightning-textarea
                 label="Query filter"
@@ -100,7 +122,7 @@
             <p if:true={filterError} class="slds-text-color_error">{filterError}</p>
         </div>
         <div slot="footer">
-            <lightning-layout horizontal-align="end">
+            <lightning-layout horizontal-align="center">
                 <lightning-button-group>
                     <lightning-button variant={buttonVariant} label="Validate filter" onclick={testFilter}>
                     </lightning-button>

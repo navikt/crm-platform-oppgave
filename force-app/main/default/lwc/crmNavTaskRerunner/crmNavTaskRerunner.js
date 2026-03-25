@@ -18,6 +18,8 @@ export default class CrmNavTaskRerunner extends LightningElement {
 
     @track taskTypeFilters = [];
     @track themeFilters = [];
+    idInput = '';
+    isFilterTabActive = true;
 
     connectedCallback() {
         this.getThemesFromApex();
@@ -89,12 +91,18 @@ export default class CrmNavTaskRerunner extends LightningElement {
     }
 
     metFilterRequirements() {
+        if (!this.isFilterTabActive) {
+            if (this.idInput.trim() === '') {
+                this.filterError = 'Enter at least one record Id';
+                return false;
+            }
+            return true;
+        }
         if (this.taskTypeFilters.length > 0) {
             return true;
-        } else {
-            this.filterError = 'Choose at least one task type filter';
-            return false;
         }
+        this.filterError = 'Choose at least one task type filter';
+        return false;
     }
 
     initiateRerun() {
@@ -159,6 +167,20 @@ export default class CrmNavTaskRerunner extends LightningElement {
         this.invalidateFilter();
     }
 
+    handleIdInput(event) {
+        this.idInput = event.target.value;
+    }
+
+    handleIdTabActive() {
+        this.isFilterTabActive = false;
+        this.invalidateFilter();
+    }
+
+    handleFilterTabActive() {
+        this.isFilterTabActive = true;
+        this.invalidateFilter();
+    }
+
     get buttonVariant() {
         return this.isValid ? 'success' : 'neutral';
     }
@@ -173,10 +195,13 @@ export default class CrmNavTaskRerunner extends LightningElement {
 
     get queryFilter() {
         let filter = 'INT_External_Reference__c = null';
-        filter += ' ' + this.taskTypeFilterSoql;
-        filter += ' ' + this.themeFilterSoql;
-        filter += ' ' + this.timeframeSoql;
-
+        if (!this.isFilterTabActive) {
+            filter += ' ' + this.idFilterSoql;
+        } else {
+            filter += ' ' + this.taskTypeFilterSoql;
+            filter += ' ' + this.themeFilterSoql;
+            filter += ' ' + this.timeframeSoql;
+        }
         return filter;
     }
 
@@ -209,6 +234,15 @@ export default class CrmNavTaskRerunner extends LightningElement {
 
     get timeframeSoql() {
         return 'AND CreatedDate = LAST_N_DAYS:' + this.template.querySelector('lightning-input')?.value;
+    }
+
+    get idFilterSoql() {
+        const ids = this.idInput
+            .split(',')
+            .flatMap((part) => part.split(' '))
+            .map((id) => id.trim().replaceAll("'", ''))
+            .filter((id) => id.length > 0);
+        return "AND Id IN ('" + ids.join("','") + "')";
     }
 
     get hasTaskTypeFilters() {
