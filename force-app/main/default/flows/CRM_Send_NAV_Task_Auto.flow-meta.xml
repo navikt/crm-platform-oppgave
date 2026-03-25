@@ -260,7 +260,7 @@
         <dataType>String</dataType>
         <expression>IF(NOT(ISBLANK({!NAV_Task.CRM_NavUnit__c})),
 {!NAV_Task.CRM_NavUnit__r.INT_UnitNumber__c},
-{!Created_By_Unit_Number})</expression>
+IF({!NavUnit_Active}, {!Created_By_Unit_Number}, NULL))</expression>
     </formulas>
     <formulas>
         <name>CommentHeaderFormula</name>
@@ -415,6 +415,18 @@ null,
         <isInput>true</isInput>
         <isOutput>true</isOutput>
         <objectType>NavTask__c</objectType>
+    </variables>
+    <variables>
+        <description>If Nav Unit does not exist in Salesforce, the post to Oppgave with an assigned resource set and Unit set to null will fail (not allowed by Oppgave). 
+So we add a fallback unit to NavTask as the Unit which created the task (Created_By_Unit_Number). However, if that NavUnit is no longer active, we need to set NavUnit to null on the NavTask after all.</description>
+        <name>NavUnit_Active</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
     </variables>
     <variables>
         <description>Defines if the API post was successful. If not a NAV task is created without an external reference</description>
