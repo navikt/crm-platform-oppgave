@@ -62,8 +62,8 @@ public with sharing class OppgaveManager {
         query.statuskategori = OppgaveStatuskategori.AAPEN;
         HttpResponse response = service.queryOppgave(query);
         if(response.getStatusCode() == 200) {
-            List<Oppgave> oppgaver = (List<Oppgave>) JSON.deserialize(response.getBody(), List<Oppgave>.class);
-            return oppgaver;
+            OppgaveQueryResponseWrapper oppgaver = (OppgaveQueryResponseWrapper) JSON.deserialize(response.getBody(), OppgaveQueryResponseWrapper.class);
+            return oppgaver.oppgaver;
         } else {
             logger.httpError(
                 'Error getting assigned open oppgaver',
@@ -81,7 +81,13 @@ public with sharing class OppgaveManager {
     public static List<Oppgave> getOpenOppgaver(Id personId, Integer offset) {
         CRM_NavTaskOppgaveService service = new CRM_NavTaskOppgaveService();
         CRM_OppgaveQueryList query = new CRM_OppgaveQueryList();
-        query.aktoerId = new List<String>{ personId };
+        Person__c person = [Select Id, Name from Person__c where Id = :personId Limit 1];
+
+        if(person == null) {
+            return null;
+        }
+
+        query.aktoerId = new List<String>{ person.Name };
         query.statuskategori = OppgaveStatuskategori.AAPEN;
         query.returnLimit = 100;
         if(offset != null && offset > 0) {
@@ -89,8 +95,8 @@ public with sharing class OppgaveManager {
         }
         HttpResponse response = service.queryOppgave(query);
         if(response.getStatusCode() == 200) {
-            List<Oppgave> oppgaver = (List<Oppgave>) JSON.deserialize(response.getBody(), List<Oppgave>.class);
-            return oppgaver;
+            OppgaveQueryResponseWrapper oppgaver = (OppgaveQueryResponseWrapper) JSON.deserialize(response.getBody(), OppgaveQueryResponseWrapper.class);
+            return oppgaver.oppgaver;
         } else {
             logger.httpError(
                 'Error getting open oppgaver for person',
@@ -115,8 +121,8 @@ public with sharing class OppgaveManager {
         }
         HttpResponse response = service.queryOppgave(query);
         if(response.getStatusCode() == 200) {
-            List<Oppgave> oppgaver = (List<Oppgave>) JSON.deserialize(response.getBody(), List<Oppgave>.class);
-            return oppgaver;
+            OppgaveQueryResponseWrapper oppgaver = (OppgaveQueryResponseWrapper) JSON.deserialize(response.getBody(), OppgaveQueryResponseWrapper.class);
+            return oppgaver.oppgaver;
         } else {
             logger.httpError(
                 'Error getting all oppgaver for person',
@@ -128,5 +134,10 @@ public with sharing class OppgaveManager {
             logger.publish();
         }
         return null;
+    }
+
+    private class OppgaveQueryResponseWrapper {
+        private Integer antallTreffTotalt;	
+        private List<Oppgave> oppgaver;
     }
 }
