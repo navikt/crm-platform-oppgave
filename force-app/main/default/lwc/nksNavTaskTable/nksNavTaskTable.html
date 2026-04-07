@@ -1,0 +1,14 @@
+<template>
+    <lightning-card title="Oppgaver">
+        <lightning-datatable
+            key-field="id"
+            data={data}
+            columns={columns}
+            hide-checkbox-column
+        >
+        </lightning-datatable>
+        <div if:true={error} class="slds-text-color_error slds-p-horizontal_small slds-p-bottom_small">
+            {errorMessage}
+        </div>
+    </lightning-card>
+</template>
