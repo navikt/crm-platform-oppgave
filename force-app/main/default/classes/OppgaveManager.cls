@@ -1,25 +1,16 @@
 public with sharing class OppgaveManager {
     static LoggerUtility logger = new LoggerUtility('Oppgave');
 
-    @AuraEnabled
+    // TODO: Will be implemented as part of getOppgaveById when oppgave v2 api is ready by appending ?include=kommentarer in req.
+    /*@AuraEnabled
     public static List<CRM_OppgaveOppfolging> getOppgaveOppfolging(String oppgaveId) {
-        CRM_NavTaskOppgaveService service = new CRM_NavTaskOppgaveService();
+        OppgaveService service = new OppgaveService();
         HttpResponse response = service.getOppgaveOppfolgingById(oppgaveId);
         if (response.getStatusCode() == 200) {
             List<CRM_OppgaveOppfolging> oppfolgingList = (List<CRM_OppgaveOppfolging>) JSON.deserialize(
                 response.getBody(),
                 List<CRM_OppgaveOppfolging>.class
             );
-
-            // Skal vi gjøre dette før vi returnerer? Kopierte det fra sync løsningen.
-            // String comment = '';
-
-            // for (CRM_OppgaveOppfolging oppfolgingOppgave : oppfolgingList) {
-            //     Datetime createdTime = Datetime.valueofGMT(oppfolgingOppgave.opprettetTidspunkt.replace('T', ' '));
-            //     String formattedDateTime = createdTime.format('dd.MM.yyyy HH:mm', 'Norway/Oslo');
-            //     comment += '--- ' + formattedDateTime + ' ' + '(' + oppfolgingOppgave.opprettetAv + ') ---\n' + oppfolgingOppgave.kommentar + '\n\n';
-            // }
-
             return oppfolgingList;
         } else {
             logger.httpError(
@@ -31,13 +22,13 @@ public with sharing class OppgaveManager {
             );
         }
         return null;
-    }
+    }*/
 
     @AuraEnabled
     public static Oppgave getOppgaveById(String oppgaveId) {
-        CRM_NavTaskOppgaveService service = new CRM_NavTaskOppgaveService();
+        OppgaveService service = new OppgaveService();
         HttpResponse response = service.getOppgaveById(oppgaveId);
-        if (response.getStatuscode() == 200) {
+        if (response.getStatusCode() == 200) {
             Oppgave oppgave = (Oppgave) JSON.deserialize(response.getBody(), Oppgave.class);
             return oppgave;
         } else {
@@ -55,7 +46,7 @@ public with sharing class OppgaveManager {
 
     @AuraEnabled
     public static List<Oppgave> getAllAssignedOpenOppgaver(String navIdent) {
-        CRM_NavTaskOppgaveService service = new CRM_NavTaskOppgaveService();
+        OppgaveService service = new OppgaveService();
         CRM_OppgaveQueryList query = new CRM_OppgaveQueryList();
         query.tilordnetRessurs = navIdent;
         query.statuskategori = OppgaveStatuskategori.AAPEN;
@@ -81,7 +72,7 @@ public with sharing class OppgaveManager {
 
     @AuraEnabled
     public static List<Oppgave> getOpenOppgaver(Id personId, Integer offset) {
-        CRM_NavTaskOppgaveService service = new CRM_NavTaskOppgaveService();
+        OppgaveService service = new OppgaveService();
         CRM_OppgaveQueryList query = new CRM_OppgaveQueryList();
         Person__c person = [SELECT Id, Name FROM Person__c WHERE Id = :personId LIMIT 1];
 
@@ -117,7 +108,7 @@ public with sharing class OppgaveManager {
 
     @AuraEnabled
     public static List<Oppgave> getAllOppgaver(Id personId, Integer offset) {
-        CRM_NavTaskOppgaveService service = new CRM_NavTaskOppgaveService();
+        OppgaveService service = new OppgaveService();
         CRM_OppgaveQueryList query = new CRM_OppgaveQueryList();
         query.aktoerId = new List<String>{ personId };
         query.returnLimit = 100;

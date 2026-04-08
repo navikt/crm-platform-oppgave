@@ -1,4 +1,4 @@
-public class Oppgave implements Comparable {
+public class Oppgave {
     public Integer id;
     public String tildeltEnhetsnr; //Enheten oppgaven er tildelt. Dersom enhet ikke er angitt, så vil oppgaven automatisk fordeles iht. standard arbeidsfordelingsregler (se norg2)
     public String opprettetAvEnhetsnr;
@@ -6,7 +6,9 @@ public class Oppgave implements Comparable {
     public String journalpostkilde;
     public String behandlesAvApplikasjon;
     public String tilordnetRessurs;
+    public String endretAvEnhetsnr; // Unit Number fra User
     public String beskrivelse;
+    public String saksreferanse;
     public String tema;
     public String behandlingstema;
     public String oppgavetype; // REQUIRED
@@ -15,30 +17,23 @@ public class Oppgave implements Comparable {
     public String fristFerdigstillelse; //Datestring
     public String prioritet; // [HOY, NORM, LAV],
     public String opprettetTidspunkt; //Datetime String
-    public String status; //ENUM: [OPPRETTET, AAPNET, UNDER_BEHANDLING, FERDIGSTILT, FEILREGISTRERT]
+    public OppgaveStatuskategori status; //ENUM: [OPPRETTET, AAPNET, UNDER_BEHANDLING, FERDIGSTILT, FEILREGISTRERT]
     public Integer versjon;
     public List<Ident> identer; //To-be model
     public LegacyIdent ident;
+    public String personIdent;
     public OppgaveMetadata metadata;
     public String aktoerId;
     public String orgnr;
+    public Kommentar kommentar;
 
     public class OppgaveMetadata {
         public String EKSTERN_HENVENDELSE_ID;
     }
 
-
-    public Integer compareTo(Object compareToObj) {
-        CRM_KafkaOppgave compareOppg = (CRM_KafkaOppgave) compareToObj;
-
-        Integer returnValue = 0;
-        if (versjon > compareOppg.versjon) {
-            returnValue = 1;
-        } else if (versjon > compareOppg.versjon) {
-            returnValue = -1;
-        }
-
-        return returnValue;
+    public class Kommentar {
+        public String tekst;
+        public Boolean automatiskGenerert;
     }
 
     public class Ident {
@@ -49,28 +44,5 @@ public class Oppgave implements Comparable {
     public class LegacyIdent {
         public String identType;
         public String verdi;
-    }
-
-    public String getActorId() {
-        String actorId;
-        if (
-            ident != null &&
-            String.isNotBlank(this.ident.identType) &&
-            this.ident.identType.equalsIgnoreCase('AKTOERID')
-        ) {
-            actorId = this.ident.verdi;
-        } else if (String.isNotBlank(this.aktoerId)) {
-            actorId = this.aktoerId;
-        } else {
-            if (this.identer != null) {
-                for (Ident idt : this.identer) {
-                    if (String.isNotBlank(idt.gruppe) && idt.gruppe.equalsIgnoreCase('AKTOERID')) {
-                        actorId = idt.ident;
-                    }
-                }
-            }
-        }
-
-        return actorId;
     }
 }
