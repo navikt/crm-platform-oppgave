@@ -71,21 +71,16 @@ public with sharing class OppgaveManager {
     }
 
     @AuraEnabled
-    public static List<Oppgave> getOpenOppgaver(Id personId, Integer offset) {
+    public static List<Oppgave> getOpenOppgaver(String personIdent, Integer offset) {
         OppgaveService service = new OppgaveService();
         CRM_OppgaveQueryList query = new CRM_OppgaveQueryList();
-        Person__c person = [SELECT Id, Name FROM Person__c WHERE Id = :personId LIMIT 1];
-
-        if (person == null) {
-            return null;
-        }
-
-        query.aktoerId = new List<String>{ person.Name };
+        query.aktoerId = new List<String>{ personIdent };
         query.statuskategori = OppgaveStatuskategori.AAPEN;
         query.returnLimit = 100;
         if (offset != null && offset > 0) {
             query.offset = offset;
         }
+
         HttpResponse response = service.getOppgaveList(query);
         if (response.getStatusCode() == 200) {
             OppgaveListResponse oppgaver = (OppgaveListResponse) JSON.deserialize(
@@ -107,14 +102,15 @@ public with sharing class OppgaveManager {
     }
 
     @AuraEnabled
-    public static List<Oppgave> getAllOppgaver(Id personId, Integer offset) {
+    public static List<Oppgave> getAllOppgaver(String personIdent, Integer offset) {
         OppgaveService service = new OppgaveService();
         CRM_OppgaveQueryList query = new CRM_OppgaveQueryList();
-        query.aktoerId = new List<String>{ personId };
+        query.aktoerId = new List<String>{ personIdent };
         query.returnLimit = 100;
         if (offset != null && offset > 0) {
             query.offset = offset;
         }
+
         HttpResponse response = service.getOppgaveList(query);
         if (response.getStatusCode() == 200) {
             OppgaveListResponse oppgaver = (OppgaveListResponse) JSON.deserialize(
