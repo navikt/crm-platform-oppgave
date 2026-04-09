@@ -225,8 +225,6 @@ public with sharing class OppgaveManager {
     // Invocable wrapper for flows - might not need all these variables
     public class OppgaveRequest {
         @invocableVariable
-        public Integer id;
-        @invocableVariable
         public String tildeltEnhetsnr;
         @invocableVariable
         public String opprettetAvEnhetsnr;
@@ -281,7 +279,7 @@ public with sharing class OppgaveManager {
 
         public Oppgave toOppgave() {
             Oppgave o = new Oppgave();
-            o.id = this.id;
+            o.id = this.eksternHenvendelseId;
             o.tildeltEnhetsnr = this.tildeltEnhetsnr;
             o.opprettetAvEnhetsnr = this.opprettetAvEnhetsnr;
             o.journalpostId = this.journalpostId;
