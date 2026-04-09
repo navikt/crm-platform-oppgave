@@ -1,3 +1,4 @@
+// Swagger: https://oppgave.intern.dev.nav.no/#/Oppgave
 public class Oppgave {
     public Integer id;
     public String tildeltEnhetsnr; //Enheten oppgaven er tildelt. Dersom enhet ikke er angitt, så vil oppgaven automatisk fordeles iht. standard arbeidsfordelingsregler (se norg2)
@@ -19,10 +20,10 @@ public class Oppgave {
     public String opprettetTidspunkt; //Datetime String
     public OppgaveStatuskategori status; //ENUM: [OPPRETTET, AAPNET, UNDER_BEHANDLING, FERDIGSTILT, FEILREGISTRERT]
     public Integer versjon;
-    public List<Ident> identer; //To-be model
+    public List<Ident> identer;
     public LegacyIdent ident;
     public String personIdent;
-    public OppgaveMetadata metadata;
+    public OppgaveMetadata metadata; // Hidden in Swagger, but still in use
     public String aktoerId;
     public String orgnr;
     public Kommentar kommentar;
@@ -36,11 +37,13 @@ public class Oppgave {
         public Boolean automatiskGenerert;
     }
 
+    // Hidden in Swagger, but still in use
     public class Ident {
         public String ident;
         public String gruppe;
     }
 
+    // Hidden in Swagger, but still in use
     public class LegacyIdent {
         public String identType;
         public String verdi;

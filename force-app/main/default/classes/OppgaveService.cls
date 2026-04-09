@@ -25,32 +25,6 @@ public without sharing class OppgaveService {
         this.context = context;
     }
 
-    public HttpResponse getOppgaveById(String Id) {
-        ApiController apiCtrl = new ApiController();
-        Map<String, String> httpHeaders = new Map<String, String>{
-            'Content-Type' => 'application/json',
-            'accept' => 'application/json'
-        };
-        //If no person access, callout is performed in system mode
-        switch on this.context {
-            when SYSTEM_CONTEXT {
-                apiCtrl.setSystemContext();
-            }
-            when else {
-                //No context change
-            }
-        }
-        Map<String, String> queryParams = new Map<String, String>{ 'id' => Id };
-
-        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVE_BY_ID', queryParams);
-        apiCtrl.addServiceAuthHeader('Oppgave');
-        apiCtrl.setHeaders(httpHeaders);
-
-        addXCorrelation(apiCtrl);
-        apiCtrl.doCallout();
-        return apiCtrl.getResponse();
-    }
-
     // TODO: Will be implemented as part of getOppgaveById when oppgave v2 api is ready by appending ?include=kommentarer in req.
     /*
     public HttpResponse getOppgaveOppfolgingById(String Id) {
@@ -79,16 +53,33 @@ public without sharing class OppgaveService {
         return apiCtrl.getResponse();
     }*/
 
-    public HttpResponse queryOppgave(CRM_OppgaveQuery query) {
-        ApiController apiCtrl = setupController('GET_OPPGAVE');
-        apiCtrl.setUrlParams(convertToQueryParams(query));
+    public HttpResponse getOppgaveById(String Id) {
+        ApiController apiCtrl = new ApiController();
+        Map<String, String> httpHeaders = new Map<String, String>{
+            'Content-Type' => 'application/json',
+            'accept' => 'application/json'
+        };
+        //If no person access, callout is performed in system mode
+        switch on this.context {
+            when SYSTEM_CONTEXT {
+                apiCtrl.setSystemContext();
+            }
+            when else {
+                //No context change
+            }
+        }
+        Map<String, String> queryParams = new Map<String, String>{ 'id' => Id };
+
+        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVE_BY_ID', queryParams);
+        apiCtrl.addServiceAuthHeader('Oppgave');
+        apiCtrl.setHeaders(httpHeaders);
 
         addXCorrelation(apiCtrl);
         apiCtrl.doCallout();
         return apiCtrl.getResponse();
     }
 
-    public HttpResponse queryOppgave(CRM_OppgaveQueryList query) {
+    public HttpResponse getOppgaveList(CRM_OppgaveQueryList query) {
         ApiController apiCtrl = setupController('GET_OPPGAVE');
         Map<String, List<String>> convertedParams = convertToQueryParams(query);
         for (String param : convertedParams.keySet()) {
