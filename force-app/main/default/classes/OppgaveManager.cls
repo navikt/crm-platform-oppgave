@@ -244,7 +244,7 @@ public with sharing class OppgaveManager {
         public String tilordnetRessurs;
         @invocableVariable
         public String endretAvEnhetsnr;
-        @invocableVariable
+        @invocableVariable(label='Skal kun brukes ved opprettelse av oppgave')
         public String beskrivelse;
         @invocableVariable
         public String saksreferanse;
