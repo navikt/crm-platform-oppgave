@@ -81,7 +81,7 @@ public with sharing class OppgaveService_Test {
         queryList.aktoerId = new List<String>{ '12345' };
         queryList.status = new List<String>{ 'AAPEN', 'FEILREGISTRERT' };
 
-        ApiMock.setTestMock('GET_OPPGAVE', 500, 'OK');
+        ApiMock.setTestMock('GET_OPPGAVE', 500, 'Error');
         Test.startTest();
         HttpResponse res = service.getOppgaveList(queryList);
         Test.stopTest();
@@ -115,7 +115,7 @@ public with sharing class OppgaveService_Test {
     static void postTask_Error() {
         Oppgave request = new Oppgave();
         OppgaveService service = new OppgaveService();
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 500, 'OK');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 500, 'Error');
         Test.startTest();
         HttpResponse res = service.postTask(request);
         Test.stopTest();
@@ -152,7 +152,7 @@ public with sharing class OppgaveService_Test {
         Oppgave request = new Oppgave();
         OppgaveService service = new OppgaveService();
         request.id = 12345;
-        ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 500, 'OK');
+        ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 500, 'Error');
         Test.startTest();
         HttpResponse res = service.editTask(request);
         Test.stopTest();
@@ -163,7 +163,7 @@ public with sharing class OppgaveService_Test {
     static void editTask_NoId_Error() {
         Oppgave request = new Oppgave();
         OppgaveService service = new OppgaveService();
-        ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 500, 'OK');
+        ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 500, 'Error');
         Test.startTest();
         try {
             HttpResponse res = service.editTask(request);
@@ -198,7 +198,7 @@ public with sharing class OppgaveService_Test {
     @IsTest
     static void getTaskTypes_Error() {
         OppgaveService service = new OppgaveService();
-        ApiMock.setTestMock('GET_OPPGAVETYPE', 500, 'OK');
+        ApiMock.setTestMock('GET_OPPGAVETYPE', 500, 'Error');
         Test.startTest();
         HttpResponse res = service.getTaskTypes('FAR');
         Test.stopTest();
@@ -229,7 +229,7 @@ public with sharing class OppgaveService_Test {
     @IsTest
     static void getGjelderValues_Error() {
         OppgaveService service = new OppgaveService();
-        ApiMock.setTestMock('GET_OPPGAVE_GJELDER', 500, 'OK');
+        ApiMock.setTestMock('GET_OPPGAVE_GJELDER', 500, 'Error');
         Test.startTest();
         HttpResponse res = service.getGjelderValues();
         Test.stopTest();
