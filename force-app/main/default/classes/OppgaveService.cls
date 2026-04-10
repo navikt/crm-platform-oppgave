@@ -10,8 +10,8 @@ public without sharing class OppgaveService extends ApiController {
     private String transactionId;
 
     public OppgaveService() {
-        LoggerUtility logger = new LoggerUtility('Krp');
-        setLogCategory('Krp')
+        LoggerUtility logger = new LoggerUtility('Oppgave');
+        setLogCategory('Oppgave')
             .setLogger(logger)
             .setLogCalloutRequest()
             .publishLogAfterCallout()
