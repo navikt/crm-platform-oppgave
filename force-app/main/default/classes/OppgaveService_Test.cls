@@ -2,7 +2,7 @@
 public with sharing class OppgaveService_Test {
     @IsTest
     static void getOppgaveById_UserContext_Success() {
-        OppgaveService service = new OppgaveService(OppgaveService.Context.USER_CONTEXT);
+        OppgaveService service = new OppgaveService();
         ApiMock.setTestMock('GET_OPPGAVE_BY_ID', 200, 'OK');
 
         Test.startTest();
@@ -15,7 +15,8 @@ public with sharing class OppgaveService_Test {
 
     @IsTest
     static void getOppgaveById_SystemContext_Success() {
-        OppgaveService service = new OppgaveService(OppgaveService.Context.SYSTEM_CONTEXT);
+        OppgaveService service = new OppgaveService();
+        service.setSystemContext();
         ApiMock.setTestMock('GET_OPPGAVE_BY_ID', 200, 'OK');
         Test.startTest();
         HttpResponse res = service.getOppgaveById('999');
@@ -30,7 +31,8 @@ public with sharing class OppgaveService_Test {
 
     @IsTest
     static void getOppgaveById_Error() {
-        OppgaveService service = new OppgaveService(OppgaveService.Context.SYSTEM_CONTEXT);
+        OppgaveService service = new OppgaveService();
+        service.setSystemContext();
         ApiMock.setTestMock('GET_OPPGAVE_BY_ID', 500, 'ERROR');
         Test.startTest();
         HttpResponse res = service.getOppgaveById('999');
@@ -59,7 +61,8 @@ public with sharing class OppgaveService_Test {
 
     @IsTest
     static void getOppgaveList_SystemContext_Success() {
-        OppgaveService service = new OppgaveService(OppgaveService.Context.SYSTEM_CONTEXT);
+        OppgaveService service = new OppgaveService();
+        service.setSystemContext();
         CRM_OppgaveQueryList queryList = new CRM_OppgaveQueryList();
         queryList.aktoerId = new List<String>{ '12345' };
         queryList.status = new List<String>{ 'AAPEN', 'FEILREGISTRERT' };
@@ -98,7 +101,8 @@ public with sharing class OppgaveService_Test {
 
     @IsTest
     static void postTask_SystemContext_Success() {
-        OppgaveService service = new OppgaveService(OppgaveService.Context.SYSTEM_CONTEXT);
+        OppgaveService service = new OppgaveService();
+        service.setSystemContext();
         Oppgave request = new Oppgave();
         ApiMock.setTestMock('POST_CREATE_OPPGAVE', 200, 'OK');
         Test.startTest();
@@ -132,7 +136,8 @@ public with sharing class OppgaveService_Test {
 
     @IsTest
     static void editTask_SystemContext_Success() {
-        OppgaveService service = new OppgaveService(OppgaveService.Context.SYSTEM_CONTEXT);
+        OppgaveService service = new OppgaveService();
+        service.setSystemContext();
         Oppgave request = new Oppgave();
         request.id = 12345;
         ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 200, 'OK');
@@ -181,7 +186,8 @@ public with sharing class OppgaveService_Test {
 
     @IsTest
     static void getTaskTypes_SystemContext_Success() {
-        OppgaveService service = new OppgaveService(OppgaveService.Context.SYSTEM_CONTEXT);
+        OppgaveService service = new OppgaveService();
+        service.setSystemContext();
         ApiMock.setTestMock('GET_OPPGAVETYPE', 200, 'OK');
         Test.startTest();
         HttpResponse res = service.getTaskTypes('FAR');
@@ -211,7 +217,8 @@ public with sharing class OppgaveService_Test {
 
     @IsTest
     static void getGjelderValues_SystemContext_Success() {
-        OppgaveService service = new OppgaveService(OppgaveService.Context.SYSTEM_CONTEXT);
+        OppgaveService service = new OppgaveService();
+        service.setSystemContext();
         ApiMock.setTestMock('GET_OPPGAVE_GJELDER', 200, 'OK');
         Test.startTest();
         HttpResponse res = service.getGjelderValues();
