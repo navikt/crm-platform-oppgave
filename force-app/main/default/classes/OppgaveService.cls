@@ -85,6 +85,9 @@ public without sharing class OppgaveService extends ApiController {
         if (request.id == 0 || request.id == null) {
             throw new MissingParameterException('Request ID is required for edit requests');
         }
+        if (request.versjon == 0 || request.versjon == null) {
+            throw new MissingParameterException('Versjon is required for edit requests');
+        }
 
         initRequest('Oppgave_API', 'PATCH_EDIT_OPPGAVE', new Map<String, String>{ 'id' => String.valueOf(request.id) });
         setBody(JSON.serialize(request, true));
