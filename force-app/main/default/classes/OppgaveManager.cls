@@ -167,7 +167,7 @@ public with sharing class OppgaveManager {
                 !hasPersonAccess(taskRequest) ||
                 !UserInfo.getUserType().equalsIgnoreCase('Standard')
             ) {
-                oppgaveService.setContext(OppgaveService.Context.SYSTEM_CONTEXT);
+                oppgaveService.setSystemContext();
             }
 
             HttpResponse response = oppgaveService.postTask(taskRequest.toOppgave());
@@ -208,7 +208,7 @@ public with sharing class OppgaveManager {
                 !hasPersonAccess(taskRequest) ||
                 !UserInfo.getUserType().equalsIgnoreCase('Standard')
             ) {
-                oppgaveService.setContext(OppgaveService.Context.SYSTEM_CONTEXT);
+                oppgaveService.setSystemContext();
             }
 
             HttpResponse response = oppgaveService.editTask(taskRequest.toOppgave());
@@ -246,6 +246,8 @@ public with sharing class OppgaveManager {
 
     // Invocable wrapper for flows - might not need all these variables
     public class OppgaveRequest {
+        @invocableVariable
+        public Integer id;
         @invocableVariable
         public String tildeltEnhetsnr;
         @invocableVariable
@@ -301,7 +303,7 @@ public with sharing class OppgaveManager {
 
         public Oppgave toOppgave() {
             Oppgave o = new Oppgave();
-            o.id = this.eksternHenvendelseId;
+            o.id = this.id;
             o.tildeltEnhetsnr = this.tildeltEnhetsnr;
             o.opprettetAvEnhetsnr = this.opprettetAvEnhetsnr;
             o.journalpostId = this.journalpostId;

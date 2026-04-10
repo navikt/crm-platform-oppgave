@@ -6,23 +6,15 @@
  * @last modified by  : mamikals
  **/
 public without sharing class OppgaveService {
-    public enum Context {
-        SYSTEM_CONTEXT,
-        USER_CONTEXT
-    }
     private LoggerUtility logger = new LoggerUtility('Oppgave');
-    private Context apiContext;
+    private Boolean isSystemContext = false;
     private String transactionId;
 
     public OppgaveService() {
     }
 
-    public OppgaveService(Context context) {
-        this.apiContext = context;
-    }
-
-    public void setContext(Context context) {
-        this.apiContext = context;
+    public void setSystemContext() {
+        this.isSystemContext = true;
     }
 
     // TODO: Will be implemented as part of getOppgaveById when oppgave v2 api is ready by appending ?include=kommentarer in req.
@@ -54,25 +46,8 @@ public without sharing class OppgaveService {
     }*/
 
     public HttpResponse getOppgaveById(String Id) {
-        ApiController apiCtrl = new ApiController();
-        Map<String, String> httpHeaders = new Map<String, String>{
-            'Content-Type' => 'application/json',
-            'accept' => 'application/json'
-        };
-        //If no person access, callout is performed in system mode
-        switch on this.apiContext {
-            when SYSTEM_CONTEXT {
-                apiCtrl.setSystemContext();
-            }
-            when else {
-                //No context change
-            }
-        }
-        Map<String, String> queryParams = new Map<String, String>{ 'id' => Id };
-
-        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVE_BY_ID', queryParams);
-        apiCtrl.addServiceAuthHeader('Oppgave');
-        apiCtrl.setHeaders(httpHeaders);
+        ApiController apiCtrl = buildController();
+        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVE_BY_ID', new Map<String, String>{ 'id' => Id });
 
         addXCorrelation(apiCtrl);
         apiCtrl.doCallout();
@@ -80,7 +55,8 @@ public without sharing class OppgaveService {
     }
 
     public HttpResponse getOppgaveList(CRM_OppgaveQueryList query) {
-        ApiController apiCtrl = setupController('GET_OPPGAVE');
+        ApiController apiCtrl = buildController();
+        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVE');
         Map<String, List<String>> convertedParams = convertToQueryParams(query);
         for (String param : convertedParams.keySet()) {
             if (!convertedParams.get(param).isEmpty()) {
@@ -95,26 +71,69 @@ public without sharing class OppgaveService {
         return apiCtrl.getResponse();
     }
 
-    private ApiController setupController(String request) {
-        ApiController apiCtrl = new ApiController();
-        Map<String, String> httpHeaders = new Map<String, String>{
-            'Content-Type' => 'application/json',
-            'accept' => 'application/json'
-        };
-        //If no person access, callout is performed in system mode
-        switch on this.apiContext {
-            when SYSTEM_CONTEXT {
-                apiCtrl.setSystemContext();
-            }
-            when else {
-                //No context change
-            }
+    public HttpResponse postTask(Oppgave request) {
+        ApiController apiCtrl = buildController();
+        apiCtrl.initRequest('Oppgave_API', 'POST_CREATE_OPPGAVE');
+        apiCtrl.setBody(JSON.serialize(request, true));
+
+        addXCorrelation(apiCtrl);
+        apiCtrl.doCallout();
+        return apiCtrl.getResponse();
+    }
+
+    public HttpResponse editTask(Oppgave request) {
+        if (request.id == 0 || request.id == null) {
+            throw new MissingParameterException('Request ID is required for edit requests');
         }
 
-        apiCtrl.initRequest('Oppgave_API', request);
+        ApiController apiCtrl = buildController();
+        apiCtrl.initRequest(
+            'Oppgave_API',
+            'PATCH_EDIT_OPPGAVE',
+            new Map<String, String>{ 'id' => String.valueOf(request.id) }
+        );
+        apiCtrl.setBody(JSON.serialize(request, true));
+
+        addXCorrelation(apiCtrl);
+        apiCtrl.doCallout();
+        return apiCtrl.getResponse();
+    }
+
+    public HttpResponse getTaskTypes(String themeCode) {
+        ApiController apiCtrl = buildController();
+        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVETYPE', new Map<String, String>{ 'tema' => themeCode });
+
+        addXCorrelation(apiCtrl);
+        apiCtrl.doCallout();
+        return apiCtrl.getResponse();
+    }
+
+    public HttpResponse getGjelderValues() {
+        ApiController apiCtrl = buildController();
+        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVE_GJELDER');
+
+        addXCorrelation(apiCtrl);
+        apiCtrl.doCallout();
+        return apiCtrl.getResponse();
+    }
+
+    private ApiController buildController() {
+        ApiController apiCtrl = new ApiController();
+        if (this.isSystemContext) {
+            apiCtrl.setSystemContext();
+        }
         apiCtrl.addServiceAuthHeader('Oppgave');
-        apiCtrl.setHeaders(httpHeaders);
+        apiCtrl.setHeaders(
+            new Map<String, String>{ 'Content-Type' => 'application/json', 'accept' => 'application/json' }
+        );
         return apiCtrl;
+    }
+
+    private void addXCorrelation(ApiController apiCtrl) {
+        String requestId = new Uuid().getValue();
+        apiCtrl.addHeader('X-Correlation-ID', requestId); //Adds the unique transaction ID to the request
+        this.transactionId = requestId;
+        logger.publish();
     }
 
     private Map<String, List<String>> convertToQueryParams(CRM_OppgaveQueryList query) {
@@ -154,112 +173,6 @@ public without sharing class OppgaveService {
         } else {
             value.add(parser.getText());
         }
-    }
-
-    public HttpResponse postTask(Oppgave request) {
-        //Static context requires own instance of the API controller
-        ApiController apiCtrl = new ApiController();
-        Map<String, String> httpHeaders = new Map<String, String>{
-            'Content-Type' => 'application/json',
-            'accept' => 'application/json'
-        };
-        //If no person access, callout is performed in system mode
-        switch on this.apiContext {
-            when SYSTEM_CONTEXT {
-                apiCtrl.setSystemContext();
-            }
-            when else {
-                //No context change
-            }
-        }
-        apiCtrl.initRequest('Oppgave_API', 'POST_CREATE_OPPGAVE');
-        apiCtrl.addServiceAuthHeader('Oppgave');
-        apiCtrl.setHeaders(httpHeaders);
-        apiCtrl.setBody(JSON.serialize(request, true));
-
-        addXCorrelation(apiCtrl);
-        apiCtrl.doCallout();
-        return apiCtrl.getResponse();
-    }
-
-    public HttpResponse editTask(Oppgave request) {
-        if (request.id == 0 || request.id == null) {
-            throw new MissingParameterException('Request ID is required for edit requests');
-        }
-
-        //Static context requires own instance of the API controller
-        ApiController apiCtrl = new ApiController();
-        Map<String, String> httpHeaders = new Map<String, String>{
-            'Content-Type' => 'application/json',
-            'accept' => 'application/json'
-        };
-        //If no person access, callout is performed in system mode
-        switch on this.apiContext {
-            when SYSTEM_CONTEXT {
-                apiCtrl.setSystemContext();
-            }
-            when else {
-                //No context change
-            }
-        }
-        Map<String, String> paramMap = new Map<String, String>{ 'id' => String.valueOf(request.id) };
-        apiCtrl.initRequest('Oppgave_API', 'PATCH_EDIT_OPPGAVE', paramMap);
-        apiCtrl.addServiceAuthHeader('Oppgave');
-        apiCtrl.setHeaders(httpHeaders);
-        apiCtrl.setBody(JSON.serialize(request, true));
-
-        addXCorrelation(apiCtrl);
-        apiCtrl.doCallout();
-        return apiCtrl.getResponse();
-    }
-
-    public HttpResponse getTaskTypes(String themeCode) {
-        Map<String, String> httpHeaders = new Map<String, String>{
-            'Content-Type' => 'application/json',
-            'accept' => 'application/json'
-        };
-
-        ApiController apiCtrl = new ApiController();
-        Map<String, String> paramMap = new Map<String, String>{ 'tema' => themeCode };
-        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVETYPE', paramMap);
-        apiCtrl.addServiceAuthHeader('Oppgave');
-        apiCtrl.setHeaders(httpHeaders);
-
-        addXCorrelation(apiCtrl);
-        apiCtrl.doCallout();
-        return apiCtrl.getResponse();
-    }
-
-    public HttpResponse getGjelderValues() {
-        Map<String, String> httpHeaders = new Map<String, String>{
-            'Content-Type' => 'application/json',
-            'accept' => 'application/json'
-        };
-
-        ApiController apiCtrl = new ApiController();
-        //If no person access, callout is performed in system mode
-        switch on this.apiContext {
-            when SYSTEM_CONTEXT {
-                apiCtrl.setSystemContext();
-            }
-            when else {
-                //No context change
-            }
-        }
-        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVE_GJELDER');
-        apiCtrl.addServiceAuthHeader('Oppgave');
-        apiCtrl.setHeaders(httpHeaders);
-
-        addXCorrelation(apiCtrl);
-        apiCtrl.doCallout();
-        return apiCtrl.getResponse();
-    }
-
-    private void addXCorrelation(ApiController apiCtrl) {
-        String requestId = new Uuid().getValue();
-        apiCtrl.addHeader('X-Correlation-ID', requestId); //Adds the unique transaction ID to the request
-        this.transactionId = requestId;
-        logger.publish();
     }
 
     public String getTransactionId() {
