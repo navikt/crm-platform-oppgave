@@ -5,16 +5,19 @@
  * @last modified on  : 10-02-2023
  * @last modified by  : mamikals
  **/
-public without sharing class OppgaveService {
-    private LoggerUtility logger = new LoggerUtility('Oppgave');
+public without sharing class OppgaveService extends ApiController {
     private Boolean isSystemContext = false;
     private String transactionId;
 
     public OppgaveService() {
-    }
-
-    public void setSystemContext() {
-        this.isSystemContext = true;
+        LoggerUtility logger = new LoggerUtility('Krp');
+        setLogCategory('Krp')
+            .setLogger(logger)
+            .setLogCalloutRequest()
+            .publishLogAfterCallout()
+            .setLogDomain(CRM_ApplicationDomain.Domain.NKS);
+        addServiceAuthHeader('Oppgave');
+        setHeaders(new Map<String, String>{ 'Content-Type' => 'application/json', 'accept' => 'application/json' });
     }
 
     // TODO: Will be implemented as part of getOppgaveById when oppgave v2 api is ready by appending ?include=kommentarer in req.
@@ -46,39 +49,36 @@ public without sharing class OppgaveService {
     }*/
 
     public HttpResponse getOppgaveById(String Id) {
-        ApiController apiCtrl = buildController();
-        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVE_BY_ID', new Map<String, String>{ 'id' => Id });
+        initRequest('Oppgave_API', 'GET_OPPGAVE_BY_ID', new Map<String, String>{ 'id' => Id });
+        addXCorrelation();
 
-        addXCorrelation(apiCtrl);
-        apiCtrl.doCallout();
-        return apiCtrl.getResponse();
+        doCallout();
+        return getResponse();
     }
 
     public HttpResponse getOppgaveList(CRM_OppgaveQueryList query) {
-        ApiController apiCtrl = buildController();
-        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVE');
+        initRequest('Oppgave_API', 'GET_OPPGAVE');
         Map<String, List<String>> convertedParams = convertToQueryParams(query);
         for (String param : convertedParams.keySet()) {
             if (!convertedParams.get(param).isEmpty()) {
                 for (String paramValue : convertedParams.get(param)) {
-                    apiCtrl.addUrlParam(param, paramValue);
+                    addUrlParam(param, paramValue);
                 }
             }
         }
 
-        addXCorrelation(apiCtrl);
-        apiCtrl.doCallout();
-        return apiCtrl.getResponse();
+        addXCorrelation();
+        doCallout();
+        return getResponse();
     }
 
     public HttpResponse postTask(Oppgave request) {
-        ApiController apiCtrl = buildController();
-        apiCtrl.initRequest('Oppgave_API', 'POST_CREATE_OPPGAVE');
-        apiCtrl.setBody(JSON.serialize(request, true));
+        initRequest('Oppgave_API', 'POST_CREATE_OPPGAVE');
+        setBody(JSON.serialize(request, true));
 
-        addXCorrelation(apiCtrl);
-        apiCtrl.doCallout();
-        return apiCtrl.getResponse();
+        addXCorrelation();
+        doCallout();
+        return getResponse();
     }
 
     public HttpResponse editTask(Oppgave request) {
@@ -86,54 +86,34 @@ public without sharing class OppgaveService {
             throw new MissingParameterException('Request ID is required for edit requests');
         }
 
-        ApiController apiCtrl = buildController();
-        apiCtrl.initRequest(
-            'Oppgave_API',
-            'PATCH_EDIT_OPPGAVE',
-            new Map<String, String>{ 'id' => String.valueOf(request.id) }
-        );
-        apiCtrl.setBody(JSON.serialize(request, true));
+        initRequest('Oppgave_API', 'PATCH_EDIT_OPPGAVE', new Map<String, String>{ 'id' => String.valueOf(request.id) });
+        setBody(JSON.serialize(request, true));
 
-        addXCorrelation(apiCtrl);
-        apiCtrl.doCallout();
-        return apiCtrl.getResponse();
+        addXCorrelation();
+        doCallout();
+        return getResponse();
     }
 
     public HttpResponse getTaskTypes(String themeCode) {
-        ApiController apiCtrl = buildController();
-        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVETYPE', new Map<String, String>{ 'tema' => themeCode });
+        initRequest('Oppgave_API', 'GET_OPPGAVETYPE', new Map<String, String>{ 'tema' => themeCode });
 
-        addXCorrelation(apiCtrl);
-        apiCtrl.doCallout();
-        return apiCtrl.getResponse();
+        addXCorrelation();
+        doCallout();
+        return getResponse();
     }
 
     public HttpResponse getGjelderValues() {
-        ApiController apiCtrl = buildController();
-        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVE_GJELDER');
+        initRequest('Oppgave_API', 'GET_OPPGAVE_GJELDER');
 
-        addXCorrelation(apiCtrl);
-        apiCtrl.doCallout();
-        return apiCtrl.getResponse();
+        addXCorrelation();
+        doCallout();
+        return getResponse();
     }
 
-    private ApiController buildController() {
-        ApiController apiCtrl = new ApiController();
-        if (this.isSystemContext) {
-            apiCtrl.setSystemContext();
-        }
-        apiCtrl.addServiceAuthHeader('Oppgave');
-        apiCtrl.setHeaders(
-            new Map<String, String>{ 'Content-Type' => 'application/json', 'accept' => 'application/json' }
-        );
-        return apiCtrl;
-    }
-
-    private void addXCorrelation(ApiController apiCtrl) {
+    private void addXCorrelation() {
         String requestId = new Uuid().getValue();
-        apiCtrl.addHeader('X-Correlation-ID', requestId); //Adds the unique transaction ID to the request
-        this.transactionId = requestId;
-        logger.publish();
+        addHeader('X-Correlation-ID', requestId); //Adds the unique transaction ID to the request
+        transactionId = requestId;
     }
 
     private Map<String, List<String>> convertToQueryParams(CRM_OppgaveQueryList query) {
