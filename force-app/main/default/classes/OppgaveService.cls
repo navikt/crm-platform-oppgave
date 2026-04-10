@@ -11,18 +11,18 @@ public without sharing class OppgaveService {
         USER_CONTEXT
     }
     private LoggerUtility logger = new LoggerUtility('Oppgave');
-    private Context context;
+    private Context apiContext;
     private String transactionId;
 
     public OppgaveService() {
     }
 
     public OppgaveService(Context context) {
-        this.context = context;
+        this.apiContext = context;
     }
 
     public void setContext(Context context) {
-        this.context = context;
+        this.apiContext = context;
     }
 
     // TODO: Will be implemented as part of getOppgaveById when oppgave v2 api is ready by appending ?include=kommentarer in req.
@@ -34,7 +34,7 @@ public without sharing class OppgaveService {
             'accept' => 'application/json'
         };
         //If no person access, callout is performed in system mode
-        switch on this.context {
+        switch on this.apiContext {
             when SYSTEM_CONTEXT {
                 apiCtrl.setSystemContext();
             }
@@ -60,7 +60,7 @@ public without sharing class OppgaveService {
             'accept' => 'application/json'
         };
         //If no person access, callout is performed in system mode
-        switch on this.context {
+        switch on this.apiContext {
             when SYSTEM_CONTEXT {
                 apiCtrl.setSystemContext();
             }
@@ -102,7 +102,7 @@ public without sharing class OppgaveService {
             'accept' => 'application/json'
         };
         //If no person access, callout is performed in system mode
-        switch on this.context {
+        switch on this.apiContext {
             when SYSTEM_CONTEXT {
                 apiCtrl.setSystemContext();
             }
@@ -115,35 +115,6 @@ public without sharing class OppgaveService {
         apiCtrl.addServiceAuthHeader('Oppgave');
         apiCtrl.setHeaders(httpHeaders);
         return apiCtrl;
-    }
-
-    private Map<String, String> convertToQueryParams(CRM_OppgaveQuery query) {
-        Map<String, String> returnMap = new Map<String, String>();
-        String jsonParams = JSON.serialize(query, true); //Suppressing null values
-        JSONParser parser = JSON.createParser(jsonParams);
-
-        while (parser.nextToken() != null) {
-            if (parser.getCurrentToken() == JSONToken.FIELD_NAME) {
-                String key = parser.getText();
-                String value;
-                parser.nextToken();
-                if (key.equals('fristFom') || key.equals('fristTom')) {
-                    value = parser.getDatetimeValue().format('yyyy-MM-dd');
-                } else if (key.equals('opprettetFom')) {
-                    value = parser.getDatetimeValue().format('yyyy-MM-dd\'T\'HH:mm:ss');
-                } else if (key.equals('returnlimit')) {
-                    //limit is reserved in SF so need special parsing handling
-                    key = 'limit';
-                    value = String.valueOf(parser.getIntegerValue());
-                } else {
-                    value = parser.getText();
-                }
-
-                returnMap.put(key, value);
-            }
-        }
-
-        return returnMap;
     }
 
     private Map<String, List<String>> convertToQueryParams(CRM_OppgaveQueryList query) {
@@ -193,7 +164,7 @@ public without sharing class OppgaveService {
             'accept' => 'application/json'
         };
         //If no person access, callout is performed in system mode
-        switch on this.context {
+        switch on this.apiContext {
             when SYSTEM_CONTEXT {
                 apiCtrl.setSystemContext();
             }
@@ -223,7 +194,7 @@ public without sharing class OppgaveService {
             'accept' => 'application/json'
         };
         //If no person access, callout is performed in system mode
-        switch on this.context {
+        switch on this.apiContext {
             when SYSTEM_CONTEXT {
                 apiCtrl.setSystemContext();
             }
@@ -267,7 +238,7 @@ public without sharing class OppgaveService {
 
         ApiController apiCtrl = new ApiController();
         //If no person access, callout is performed in system mode
-        switch on this.context {
+        switch on this.apiContext {
             when SYSTEM_CONTEXT {
                 apiCtrl.setSystemContext();
             }
@@ -295,6 +266,7 @@ public without sharing class OppgaveService {
         return this.transactionId;
     }
 
+    @TestVisible
     private class MissingParameterException extends Exception {
     }
 }
