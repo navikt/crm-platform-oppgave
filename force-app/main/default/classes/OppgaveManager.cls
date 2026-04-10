@@ -131,6 +131,28 @@ public with sharing class OppgaveManager {
         return null;
     }
 
+    public static List<Oppgave> getOppgaver(CRM_OppgaveQueryList query) {
+        OppgaveService service = new OppgaveService();
+        HttpResponse response = service.getOppgaveList(query);
+        if (response.getStatusCode() == 200) {
+            OppgaveListResponse oppgaver = (OppgaveListResponse) JSON.deserialize(
+                response.getBody(),
+                OppgaveListResponse.class
+            );
+            return oppgaver.oppgaver;
+        } else {
+            logger.httpError(
+                'Error getting oppgaver',
+                response,
+                null,
+                CRM_ApplicationDomain.Domain.NKS,
+                service.getTransactionId()
+            );
+            logger.publish();
+        }
+        return null;
+    }
+
     public static Oppgave postTask(OppgaveRequest taskRequest) {
         Oppgave resp = new Oppgave();
 
