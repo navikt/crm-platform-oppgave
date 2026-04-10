@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <label>POST_CREATE_OPPGAVE</label>
     <protected>false</protected>
     <values>
@@ -18,6 +20,14 @@
         <field>Mock_Response__c</field>
         <value xsi:type="xsd:string">{
 &quot;200&quot;: {
+&quot;headers&quot;: null,
+&quot;body&quot;: {
+&quot;id&quot;:null,
+&quot;tildeltEnhetsnr&quot;: &quot;4100&quot;,
+&quot;versjon&quot;: 1
+}
+},
+&quot;201&quot;: {
 &quot;headers&quot;: null,
 &quot;body&quot;: {
 &quot;id&quot;:null,
