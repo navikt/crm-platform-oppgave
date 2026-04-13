@@ -1,0 +1,23 @@
+.task-table tr {
+    border-bottom: 1px solid #B8B8B8;
+}
+
+.task-table th{
+    font-weight: 700;
+}
+
+.task-table td {
+    font-weight: 400;
+}
+
+.task-table tr > th,
+.task-table tr > td {
+    padding: 12px 24px;
+    color: #000;
+    font-feature-settings: 'liga' off, 'clig' off;
+    /* font-family: "SF Pro"; */
+    font-size: 13px;
+    font-style: normal;
+    line-height: 24px;
+}
+

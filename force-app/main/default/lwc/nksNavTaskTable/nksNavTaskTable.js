@@ -11,44 +11,11 @@ const QUERY_FIELDS = [
 	'CRM_NavUnit__r.Name'
 ];
 
-const COLUMNS = [
-	{ label: 'Oppgavetype', fieldName: 'oppgavetype', type: 'text' },
-	{ label: 'Tema', fieldName: 'tema', type: 'text' },
-	{ label: 'Gjelder', fieldName: 'gjelder', type: 'text' },
-	{ label: 'Status', fieldName: 'status', type: 'text' },
-	{
-		label: 'Registrert',
-		fieldName: 'registrert',
-		type: 'date',
-		typeAttributes: {
-			year: 'numeric',
-			month: '2-digit',
-			day: '2-digit',
-			hour: '2-digit',
-			minute: '2-digit'
-		}
-	},
-	{
-		label: 'Frist',
-		fieldName: 'frist',
-		type: 'date',
-		typeAttributes: {
-			year: 'numeric',
-			month: '2-digit',
-			day: '2-digit',
-			hour: '2-digit',
-			minute: '2-digit'
-		}
-	},
-	{ label: 'Nav enhet', fieldName: 'navEnhet', type: 'text' }
-];
-
 export default class NksNavTaskTable extends LightningElement {
 	@api numRecords = 25;
 	@api ownedByRunningUser = false;
 
 	data = [];
-	columns = COLUMNS;
 	error;
 
 	@wire(getNavTaskRecords, {
@@ -65,8 +32,8 @@ export default class NksNavTaskTable extends LightningElement {
 				tema: row.NKS_Theme__r?.Name || '',
 				gjelder: row.CRM_GjelderFormula__c || '',
 				status: row.NKS_Status__c || '',
-				registrert: this.toDateTimeValue(row.NKS_Date_Registered__c),
-				frist: this.toDateTimeValue(row.CRM_DueDate__c),
+				registrert: this.formatDate(row.NKS_Date_Registered__c),
+				frist: this.formatDate(row.CRM_DueDate__c),
 				navEnhet: row.CRM_NavUnit__r?.Name || ''
 			}));
 			this.error = undefined;
@@ -77,14 +44,26 @@ export default class NksNavTaskTable extends LightningElement {
 		this.error = error;
 	}
 
-	toDateTimeValue(value) {
+	formatDate(value) {
 		if (!value) {
-            console.log('lol');
-            
-			return null;
+			return '';
 		}
 
-		return String(value).includes('T') ? value : `${value}T00:00:00.000Z`;
+		const date = new Date(String(value).includes('T') ? value : `${value}T00:00:00.000Z`);
+
+		if (Number.isNaN(date.getTime())) {
+			return '';
+		}
+
+		return new Intl.DateTimeFormat('nb-NO', {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit'
+		}).format(date);
+	}
+
+	get hasNoRows() {
+		return !this.error && this.data.length === 0;
 	}
 
 	get errorMessage() {
