@@ -25,7 +25,7 @@ public class OppgaveRequest {
     @invocableVariable
     public String endretAvEnhetsnr;
     @AuraEnabled
-    @invocableVariable(label='Skal kun brukes ved opprettelse av oppgave')
+    @invocableVariable(label='Beskrivelse - Only used for creating tasks, ignored for edits')
     public String beskrivelse;
     @AuraEnabled
     @invocableVariable
@@ -49,7 +49,9 @@ public class OppgaveRequest {
     @invocableVariable(label='Prioritet [HOY, NORM, LAV]')
     public String prioritet;
     @AuraEnabled
-    @invocableVariable(label='Status [OPPRETTET, AAPNET, UNDER_BEHANDLING, FERDIGSTILT, FEILREGISTRERT]')
+    @invocableVariable(
+        label='Status (only on EDIT requests) [OPPRETTET, AAPNET, UNDER_BEHANDLING, FERDIGSTILT, FEILREGISTRERT]'
+    )
     public String status;
     @AuraEnabled
     @invocableVariable
@@ -75,6 +77,9 @@ public class OppgaveRequest {
 
     // Request metadata
     @AuraEnabled
+    @invocableVariable(label='Method type [POST, PATCH]')
+    public String methodType;
+    @AuraEnabled
     @invocableVariable(label='Force system context for the callout')
     public Boolean POST_AS_SYSTEM = false;
     @AuraEnabled
@@ -98,7 +103,9 @@ public class OppgaveRequest {
         o.oppgavetype = this.oppgavetype;
         o.behandlingstype = this.behandlingstype;
         o.aktivDato = Datetime.now().format('yyyy-MM-dd');
-        o.fristFerdigstillelse = this.fristFerdigstillelse;
+        o.fristFerdigstillelse = String.isNotBlank(this.fristFerdigstillelse)
+            ? this.fristFerdigstillelse
+            : String.valueOf(CRM_DueDateUtility.setDueDate(this));
         o.prioritet = this.prioritet;
         o.status = String.isNotBlank(this.status) ? OppgaveStatuskategori.valueOf(this.status) : null;
         o.versjon = this.versjon;
