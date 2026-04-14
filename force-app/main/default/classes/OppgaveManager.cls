@@ -175,6 +175,7 @@ public with sharing class OppgaveManager {
             : logger;
 
         Boolean retry = true;
+        OppgaveResponse result;
         try {
             OppgaveService oppgaveService = new OppgaveService();
             if (
@@ -189,7 +190,7 @@ public with sharing class OppgaveManager {
             Integer statusCode = response.getStatusCode();
             if (statusCode == 200 || statusCode == 201) {
                 retry = false;
-                resp = (Oppgave) JSON.deserialize(response.getBody(), Oppgave.class);
+                result = OppgaveResponse.success((Oppgave) JSON.deserialize(response.getBody(), Oppgave.class));
             } else if (statusCode == 400 || statusCode == 401 || statusCode == 403) {
                 // No retry
                 retry = false;
@@ -201,7 +202,7 @@ public with sharing class OppgaveManager {
                     CRM_ApplicationDomain.Domain.NKS,
                     oppgaveService.getTransactionId()
                 );
-                resp = null;
+                result = OppgaveResponse.failure(response.getBody());
             } else {
                 // Retry
                 retry = true;
@@ -214,7 +215,7 @@ public with sharing class OppgaveManager {
                     oppgaveService.getTransactionId()
                 );
                 postLogger.peek().Log_Level__c = 'Warning';
-                resp = null;
+                result = OppgaveResponse.failure(response.getBody());
             }
         } catch (Exception ex) {
             postLogger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
@@ -227,11 +228,11 @@ public with sharing class OppgaveManager {
                 } catch (Exception except) {
                     // TODO: Ka gjør vi her?
                     postLogger.exception(except, null, CRM_ApplicationDomain.Domain.NKS);
-                    resp = null;
                 }
             }
             postLogger.publish();
         }
+        return result;
     }
 
     private static OppgaveResponse patchEditTask(OppgaveRequest request) {
@@ -240,6 +241,7 @@ public with sharing class OppgaveManager {
             : logger;
 
         Boolean retry = true;
+        OppgaveResponse result;
         try {
             OppgaveService oppgaveService = new OppgaveService();
             if (
@@ -254,7 +256,8 @@ public with sharing class OppgaveManager {
             Integer statusCode = response.getStatusCode();
 
             if (statusCode == 200 || statusCode == 201) {
-                resp = (Oppgave) JSON.deserialize(response.getBody(), Oppgave.class);
+                retry = false;
+                result = OppgaveResponse.success((Oppgave) JSON.deserialize(response.getBody(), Oppgave.class));
             } else if (statusCode == 400 || statusCode == 401 || statusCode == 403 || statusCode == 409) {
                 // No retry
                 retry = false;
@@ -266,7 +269,7 @@ public with sharing class OppgaveManager {
                     CRM_ApplicationDomain.Domain.NKS,
                     oppgaveService.getTransactionId()
                 );
-                resp = null;
+                result = OppgaveResponse.failure(response.getBody());
             } else {
                 // Retry
                 retry = true;
@@ -279,7 +282,7 @@ public with sharing class OppgaveManager {
                     oppgaveService.getTransactionId()
                 );
                 patchLogger.peek().Log_Level__c = 'Warning';
-                resp = null;
+                result = OppgaveResponse.failure(response.getBody());
             }
         } catch (Exception ex) {
             patchLogger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
@@ -291,11 +294,11 @@ public with sharing class OppgaveManager {
                     createScheduledRequest('Patch', request);
                 } catch (Exception except) {
                     patchLogger.exception(except, null, CRM_ApplicationDomain.Domain.NKS);
-                    resp = null;
                 }
             }
             patchLogger.publish();
         }
+        return result;
     }
 
     private static Boolean hasPersonAccess(OppgaveRequest taskRequest) {
