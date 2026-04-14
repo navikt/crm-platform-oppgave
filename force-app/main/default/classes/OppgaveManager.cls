@@ -153,27 +153,41 @@ public with sharing class OppgaveManager {
         return null;
     }
 
-    public static Oppgave postTask(OppgaveRequest taskRequest) {
-        Oppgave resp = new Oppgave();
+    @invocableMethod(label='Execute Oppgave' category='Oppgave')
+    public static List<OppgaveResponse> executeOppgave(List<OppgaveRequest> taskRequest) {
+        OppgaveRequest request = taskRequest[0];
+        switch on request.methodType {
+            when 'POST' {
+                return new List<OppgaveResponse>{ postTask(request) };
+            }
+            when 'PATCH' {
+                return new List<OppgaveResponse>{ patchEditTask(request) };
+            }
+            when else {
+                throw new IllegalArgumentException('Unknown methodType: ' + request.methodType);
+            }
+        }
+    }
 
-        LoggerUtility postLogger = String.isNotBlank(taskRequest.logCategory)
-            ? new LoggerUtility(taskRequest.logCategory)
+    private static OppgaveResponse postTask(OppgaveRequest request) {
+        LoggerUtility postLogger = String.isNotBlank(request.logCategory)
+            ? new LoggerUtility(request.logCategory)
             : logger;
 
         try {
             OppgaveService oppgaveService = new OppgaveService();
             if (
-                taskRequest.POST_AS_SYSTEM == true ||
-                !hasPersonAccess(taskRequest) ||
+                request.POST_AS_SYSTEM == true ||
+                !hasPersonAccess(request) ||
                 !UserInfo.getUserType().equalsIgnoreCase('Standard')
             ) {
                 oppgaveService.setSystemContext();
             }
 
-            HttpResponse response = oppgaveService.postTask(taskRequest.toOppgave());
+            HttpResponse response = oppgaveService.postTask(request.toOppgave());
             Integer statusCode = response.getStatusCode();
             if (statusCode == 200 || statusCode == 201) {
-                resp = (Oppgave) JSON.deserialize(response.getBody(), Oppgave.class);
+                return OppgaveResponse.success((Oppgave) JSON.deserialize(response.getBody(), Oppgave.class));
             } else {
                 postLogger.httpError(
                     'Error posting oppgave',
@@ -182,40 +196,36 @@ public with sharing class OppgaveManager {
                     CRM_ApplicationDomain.Domain.NKS,
                     oppgaveService.getTransactionId()
                 );
-                resp = null;
+                return OppgaveResponse.failure(response.getBody());
             }
         } catch (Exception ex) {
             postLogger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
-            resp = null;
+            return OppgaveResponse.failure(ex.getMessage());
         } finally {
             postLogger.publish();
         }
-
-        return resp;
     }
 
-    public static Oppgave patchEditTask(OppgaveRequest taskRequest) {
-        Oppgave resp = new Oppgave();
-
-        LoggerUtility patchLogger = String.isNotBlank(taskRequest.logCategory)
-            ? new LoggerUtility(taskRequest.logCategory)
+    private static OppgaveResponse patchEditTask(OppgaveRequest request) {
+        LoggerUtility patchLogger = String.isNotBlank(request.logCategory)
+            ? new LoggerUtility(request.logCategory)
             : logger;
 
         try {
             OppgaveService oppgaveService = new OppgaveService();
             if (
-                taskRequest.POST_AS_SYSTEM == true ||
-                !hasPersonAccess(taskRequest) ||
+                request.POST_AS_SYSTEM == true ||
+                !hasPersonAccess(request) ||
                 !UserInfo.getUserType().equalsIgnoreCase('Standard')
             ) {
                 oppgaveService.setSystemContext();
             }
 
-            HttpResponse response = oppgaveService.editTask(taskRequest.toOppgave());
+            HttpResponse response = oppgaveService.editTask(request.toOppgave());
             Integer statusCode = response.getStatusCode();
 
             if (statusCode == 200 || statusCode == 201) {
-                resp = (Oppgave) JSON.deserialize(response.getBody(), Oppgave.class);
+                return OppgaveResponse.success((Oppgave) JSON.deserialize(response.getBody(), Oppgave.class));
             } else {
                 patchLogger.httpError(
                     'Error editing oppgave',
@@ -224,16 +234,14 @@ public with sharing class OppgaveManager {
                     CRM_ApplicationDomain.Domain.NKS,
                     oppgaveService.getTransactionId()
                 );
-                resp = null;
+                return OppgaveResponse.failure(response.getBody());
             }
         } catch (Exception ex) {
             patchLogger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
-            resp = null;
+            return OppgaveResponse.failure(ex.getMessage());
         } finally {
             patchLogger.publish();
         }
-
-        return resp;
     }
 
     private static Boolean hasPersonAccess(OppgaveRequest taskRequest) {
