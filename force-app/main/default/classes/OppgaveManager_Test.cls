@@ -249,6 +249,25 @@ public with sharing class OppgaveManager_Test {
     }
 
     @IsTest
+    static void postTask_400_Error() {
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 400, 'Bad Request');
+        OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.personIdent = '12345678901';
+        taskRequest.POST_AS_SYSTEM = true;
+
+        List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c WHERE Category__c = 'Oppgave'];
+        Test.startTest();
+        Oppgave taskResponse = OppgaveManager.postTask(taskRequest);
+        Test.stopTest();
+        List<Application_Log__c> logsAfter = [SELECT Id, UUID__c FROM Application_Log__c WHERE Category__c = 'Oppgave'];
+
+        Assert.isNull(taskResponse);
+        Assert.areEqual(0, logsBefore.size(), 'Should not have logs before posting oppgave');
+        Assert.areEqual(1, logsAfter.size(), 'Should have one log after trying to post oppgave');
+        Assert.isNotNull(logsAfter[0].UUID__c, 'Should have transaction ID in log');
+    }
+
+    @IsTest
     static void postTask_LogCategory_Error() {
         String testLogCategory = 'TestLog';
 
@@ -269,8 +288,51 @@ public with sharing class OppgaveManager_Test {
         ];
 
         Assert.areEqual(0, logsBefore.size(), 'No logs from category before');
-        Assert.areEqual(1, logsAfter.size(), 'One loge from category after');
+        Assert.areEqual(1, logsAfter.size(), 'One log from category after');
         Assert.isNotNull(logsAfter[0].UUID__c, 'Should have transaction ID in log');
+    }
+
+    @IsTest
+    static void postTask_ScheduledRequest_Error() {
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 500, 'Error');
+        OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.personIdent = '12345678901';
+
+        List<Scheduled_Request__c> schRequestsBefore = [SELECT Id FROM Scheduled_Request__c];
+        Test.startTest();
+        Oppgave taskResponse = OppgaveManager.postTask(taskRequest);
+        Test.stopTest();
+        List<Scheduled_Request__c> schRequestsAfter = [
+            SELECT Id, Method__c, Status__c, Payload__c
+            FROM Scheduled_Request__c
+        ];
+
+        Assert.areEqual(0, schRequestsBefore.size(), 'No scheduled requests before');
+        Assert.areEqual(1, schRequestsAfter.size(), 'One scheduled request after');
+        Scheduled_Request__c schRequest = schRequestsAfter[0];
+        Assert.areEqual('Post', schRequest.Method__c);
+        Assert.areEqual('Scheduled', schRequest.Status__c);
+        OppgaveRequest payload = (OppgaveRequest) JSON.deserialize(schRequest.Payload__c, OppgaveRequest.class);
+        Assert.isNotNull(payload);
+    }
+
+    @IsTest
+    static void postTask_No_ScheduledRequest_Error() {
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 400, 'Bad Request');
+        OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.personIdent = '12345678901';
+
+        List<Scheduled_Request__c> schRequestsBefore = [SELECT Id FROM Scheduled_Request__c];
+        Test.startTest();
+        Oppgave taskResponse = OppgaveManager.postTask(taskRequest);
+        Test.stopTest();
+        List<Scheduled_Request__c> schRequestsAfter = [
+            SELECT Id, Method__c, Status__c, Payload__c
+            FROM Scheduled_Request__c
+        ];
+
+        Assert.areEqual(0, schRequestsBefore.size(), 'No scheduled requests before');
+        Assert.areEqual(0, schRequestsAfter.size(), 'No scheduled requests after');
     }
 
     @IsTest
@@ -304,6 +366,26 @@ public with sharing class OppgaveManager_Test {
     @IsTest
     static void patchEditTask_Error() {
         ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 500, 'Error');
+        OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.personIdent = '12345678901';
+        taskRequest.id = 12345;
+        taskRequest.versjon = 2;
+
+        List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c WHERE Category__c = 'Oppgave'];
+        Test.startTest();
+        Oppgave taskResponse = OppgaveManager.patchEditTask(taskRequest);
+        Test.stopTest();
+        List<Application_Log__c> logsAfter = [SELECT Id, UUID__c FROM Application_Log__c WHERE Category__c = 'Oppgave'];
+
+        Assert.isNull(taskResponse);
+        Assert.areEqual(0, logsBefore.size(), 'Should not have logs before editing oppgave');
+        Assert.areEqual(1, logsAfter.size(), 'Should have one log after trying to edit oppgave');
+        Assert.isNotNull(logsAfter[0].UUID__c, 'Should have transaction ID in log');
+    }
+
+    @IsTest
+    static void patchEditTask_400_Error() {
+        ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 400, 'Bad Request');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.id = 12345;
@@ -381,7 +463,415 @@ public with sharing class OppgaveManager_Test {
         ];
 
         Assert.areEqual(0, logsBefore.size(), 'No logs from category before');
-        Assert.areEqual(1, logsAfter.size(), 'One loge from category after');
+        Assert.areEqual(1, logsAfter.size(), 'One log from category after');
         Assert.isNotNull(logsAfter[0].UUID__c, 'Should have transaction ID in log');
     }
+
+    @IsTest
+    static void patchEditTask_ScheduledRequest_Error() {
+        ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 500, 'Error');
+        OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.personIdent = '12345678901';
+        taskRequest.id = 12345;
+        taskRequest.versjon = 2;
+
+        List<Scheduled_Request__c> schRequestsBefore = [SELECT Id FROM Scheduled_Request__c];
+        Test.startTest();
+        Oppgave taskResponse = OppgaveManager.patchEditTask(taskRequest);
+        Test.stopTest();
+        List<Scheduled_Request__c> schRequestsAfter = [
+            SELECT Id, Method__c, Status__c, Payload__c
+            FROM Scheduled_Request__c
+        ];
+
+        Assert.areEqual(0, schRequestsBefore.size(), 'No scheduled requests before');
+        Assert.areEqual(1, schRequestsAfter.size(), 'One scheduled request after');
+        Scheduled_Request__c schRequest = schRequestsAfter[0];
+        Assert.areEqual('Patch', schRequest.Method__c);
+        Assert.areEqual('Scheduled', schRequest.Status__c);
+        OppgaveRequest payload = (OppgaveRequest) JSON.deserialize(schRequest.Payload__c, OppgaveRequest.class);
+        Assert.isNotNull(payload);
+    }
+
+    @IsTest
+    static void patchEditTask_No_ScheduledRequest_Error() {
+        ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 400, 'Bad Request');
+        OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.personIdent = '12345678901';
+        taskRequest.id = 12345;
+        taskRequest.versjon = 2;
+
+        List<Scheduled_Request__c> schRequestsBefore = [SELECT Id FROM Scheduled_Request__c];
+        Test.startTest();
+        Oppgave taskResponse = OppgaveManager.patchEditTask(taskRequest);
+        Test.stopTest();
+        List<Scheduled_Request__c> schRequestsAfter = [
+            SELECT Id, Method__c, Status__c, Payload__c
+            FROM Scheduled_Request__c
+        ];
+
+        Assert.areEqual(0, schRequestsBefore.size(), 'No scheduled requests before');
+        Assert.areEqual(0, schRequestsAfter.size(), 'No scheduled requests after');
+    }
+
+    @IsTest
+    static void retryScheduledRequest_Post_200_Success() {
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 201, 'Created');
+        OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.personIdent = '12345678901';
+        String payload = JSON.serialize(taskRequest);
+
+        Scheduled_Request__c schRequest = new Scheduled_Request__c(
+            Method__c = 'Post',
+            Status__c = 'Scheduled',
+            Payload__c = payload
+        );
+        insert schRequest;
+
+        List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c];
+
+        Test.startTest();
+        OppgaveManager.retryScheduledRequest(schRequest);
+        Test.stopTest();
+        List<Application_Log__c> logsAfter = [
+            SELECT Id, Log_Level__c, Category__c
+            FROM Application_Log__c
+        ];
+
+        List<Scheduled_Request__c> schRequestAfter = [SELECT Id FROM Scheduled_Request__c WHERE Id = :schRequest.Id];
+
+        Assert.areEqual(0, logsBefore.size(), 'No logs from category before');
+        Assert.areEqual(1, logsAfter.size(), 'One log from category after');
+        Application_Log__c log = logsAfter[0];
+        Assert.areEqual('Info', log.Log_Level__c, 'Should log info level log');
+        Assert.areEqual('Oppgave Retry', log.Category__c, 'Should log in Oppgave Retry category');
+        Assert.isTrue(schRequestAfter.isEmpty(), 'Request should have been deleted');
+    }
+
+    @IsTest
+    static void retryScheduledRequest_Post_400_Error() {
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 400, 'Bad Request');
+        OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.personIdent = 'Geir';
+        String payload = JSON.serialize(taskRequest);
+
+        Scheduled_Request__c schRequest = new Scheduled_Request__c(
+            Method__c = 'Post',
+            Status__c = 'Scheduled',
+            Payload__c = payload
+        );
+        insert schRequest;
+
+        List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c];
+
+        Test.startTest();
+        OppgaveManager.retryScheduledRequest(schRequest);
+        Test.stopTest();
+        List<Application_Log__c> logsAfter = [
+            SELECT Id, Log_Level__c, Category__c
+            FROM Application_Log__c
+        ];
+
+        List<Scheduled_Request__c> schRequestAfter = [
+            SELECT Id, Status__c
+            FROM Scheduled_Request__c
+            WHERE Id = :schRequest.Id
+        ];
+
+        Assert.areEqual(0, logsBefore.size(), 'No logs from category before');
+        Assert.areEqual(1, logsAfter.size(), 'One log from category after');
+        Application_Log__c log = logsAfter[0];
+        Assert.areEqual('Error', log.Log_Level__c, 'Should log error level log');
+        Assert.areEqual('Oppgave Retry', log.Category__c, 'Should log in Oppgave Retry category');
+        Assert.isFalse(schRequestAfter.isEmpty(), 'Request should still be there');
+        Assert.areEqual('Failed', schRequestAfter[0].Status__c, 'Request status should be Failed');
+    }
+
+    @IsTest
+    static void retryScheduledRequest_Post_500_Error() {
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 500, 'Internal Server Error');
+        OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.personIdent = '12345678901';
+        String payload = JSON.serialize(taskRequest);
+
+        Scheduled_Request__c schRequest = new Scheduled_Request__c(
+            Method__c = 'Post',
+            Status__c = 'Scheduled',
+            Payload__c = payload
+        );
+        insert schRequest;
+
+        List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c];
+
+        Test.startTest();
+        OppgaveManager.retryScheduledRequest(schRequest);
+        Test.stopTest();
+        List<Application_Log__c> logsAfter = [
+            SELECT Id, Log_Level__c, Category__c
+            FROM Application_Log__c
+        ];
+
+        List<Scheduled_Request__c> schRequestAfter = [
+            SELECT Id, Status__c
+            FROM Scheduled_Request__c
+            WHERE Id = :schRequest.Id
+        ];
+
+        Assert.areEqual(0, logsBefore.size(), 'No logs from category before');
+        Assert.areEqual(1, logsAfter.size(), 'One log from category after');
+        Application_Log__c log = logsAfter[0];
+        Assert.areEqual('Error', log.Log_Level__c, 'Should log error level log');
+        Assert.areEqual('Oppgave Retry', log.Category__c, 'Should log in Oppgave Retry category');
+        Assert.isFalse(schRequestAfter.isEmpty(), 'Request should still be there');
+        Assert.areEqual('Scheduled', schRequestAfter[0].Status__c, 'Request status should be Scheduled');
+    }
+
+    @IsTest
+    static void retryScheduledRequest_Post_500_OldRequest_Error() {
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 500, 'Internal Server Error');
+        OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.personIdent = '12345678901';
+        String payload = JSON.serialize(taskRequest);
+
+        Scheduled_Request__c schRequest = new Scheduled_Request__c(
+            Method__c = 'Post',
+            Status__c = 'Scheduled',
+            Payload__c = payload
+        );
+        insert schRequest;
+        Test.setCreatedDate(schRequest.Id, DateTime.now().addDays(-2));
+
+        // We fetch the record agin to get the updated CreatedDate after Test.setCreatedDate
+        Scheduled_Request__c realSchRequest = [
+            SELECT Id, Method__c, Status__c, Payload__c, CreatedDate
+            FROM Scheduled_Request__c
+            WHERE Id = :schRequest.Id
+        ];
+
+        List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c];
+
+        Test.startTest();
+        OppgaveManager.retryScheduledRequest(realSchRequest);
+        Test.stopTest();
+        List<Application_Log__c> logsAfter = [
+            SELECT Id, Log_Level__c, Category__c
+            FROM Application_Log__c
+        ];
+
+        List<Scheduled_Request__c> schRequestAfter = [
+            SELECT Id, Status__c
+            FROM Scheduled_Request__c
+            WHERE Id = :realSchRequest.Id
+        ];
+
+        Assert.areEqual(0, logsBefore.size(), 'No logs from category before');
+        Assert.areEqual(1, logsAfter.size(), 'One log from category after');
+        Application_Log__c log = logsAfter[0];
+        Assert.areEqual('Critical', log.Log_Level__c, 'Should log critical level log');
+        Assert.areEqual('Oppgave Retry', log.Category__c, 'Should log in Oppgave Retry category');
+        Assert.isFalse(schRequestAfter.isEmpty(), 'Request should still be there');
+        Assert.areEqual('Failed', schRequestAfter[0].Status__c, 'Request status should be Failed');
+    }
+
+    @IsTest
+    static void retryScheduledRequest_Patch_200_Success() {
+        ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 200, 'OK');
+        OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.personIdent = '12345678902';
+        taskRequest.id = 12345;
+        taskRequest.versjon = 2;
+        String payload = JSON.serialize(taskRequest);
+
+        Scheduled_Request__c schRequest = new Scheduled_Request__c(
+            Method__c = 'Patch',
+            Status__c = 'Scheduled',
+            Payload__c = payload
+        );
+        insert schRequest;
+
+        List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c];
+
+        Test.startTest();
+        OppgaveManager.retryScheduledRequest(schRequest);
+        Test.stopTest();
+        List<Application_Log__c> logsAfter = [
+            SELECT Id, Log_Level__c, Category__c
+            FROM Application_Log__c
+        ];
+
+        List<Scheduled_Request__c> schRequestAfter = [SELECT Id FROM Scheduled_Request__c WHERE Id = :schRequest.Id];
+
+        Assert.areEqual(0, logsBefore.size(), 'No logs from category before');
+        Assert.areEqual(1, logsAfter.size(), 'One log from category after');
+        Application_Log__c log = logsAfter[0];
+        Assert.areEqual('Info', log.Log_Level__c, 'Should log info level log');
+        Assert.areEqual('Oppgave Retry', log.Category__c, 'Should log in Oppgave Retry category');
+        Assert.isTrue(schRequestAfter.isEmpty(), 'Request should have been deleted');
+    }
+
+    @IsTest
+    static void retryScheduledRequest_Patch_400_Error() {
+        ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 400, 'Bad Request');
+        OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.personIdent = '12345678901';
+        taskRequest.id = 12345;
+        taskRequest.versjon = 2;
+        String payload = JSON.serialize(taskRequest);
+
+        Scheduled_Request__c schRequest = new Scheduled_Request__c(
+            Method__c = 'Patch',
+            Status__c = 'Scheduled',
+            Payload__c = payload
+        );
+        insert schRequest;
+
+        List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c];
+
+        Test.startTest();
+        OppgaveManager.retryScheduledRequest(schRequest);
+        Test.stopTest();
+        List<Application_Log__c> logsAfter = [
+            SELECT Id, Log_Level__c, Category__c
+            FROM Application_Log__c
+        ];
+
+        List<Scheduled_Request__c> schRequestAfter = [
+            SELECT Id, Status__c
+            FROM Scheduled_Request__c
+            WHERE Id = :schRequest.Id
+        ];
+
+        Assert.areEqual(0, logsBefore.size(), 'No logs from category before');
+        Assert.areEqual(1, logsAfter.size(), 'One log from category after');
+        Application_Log__c log = logsAfter[0];
+        Assert.areEqual('Error', log.Log_Level__c, 'Should log error level log');
+        Assert.areEqual('Oppgave Retry', log.Category__c, 'Should log in Oppgave Retry category');
+        Assert.isFalse(schRequestAfter.isEmpty(), 'Request should still be there');
+        Assert.areEqual('Failed', schRequestAfter[0].Status__c, 'Request status should be Failed');
+    }
+
+    @IsTest
+    static void retryScheduledRequest_Patch_500_Error() {
+        ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 500, 'Internal Server Error');
+        OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.personIdent = '12345678901';
+        taskRequest.id = 12345;
+        taskRequest.versjon = 2;
+        String payload = JSON.serialize(taskRequest);
+
+        Scheduled_Request__c schRequest = new Scheduled_Request__c(
+            Method__c = 'Patch',
+            Status__c = 'Scheduled',
+            Payload__c = payload
+        );
+        insert schRequest;
+
+        List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c];
+
+        Test.startTest();
+        OppgaveManager.retryScheduledRequest(schRequest);
+        Test.stopTest();
+        List<Application_Log__c> logsAfter = [
+            SELECT Id, Log_Level__c, Category__c
+            FROM Application_Log__c
+        ];
+
+        List<Scheduled_Request__c> schRequestAfter = [
+            SELECT Id, Status__c
+            FROM Scheduled_Request__c
+            WHERE Id = :schRequest.Id
+        ];
+
+        Assert.areEqual(0, logsBefore.size(), 'No logs from category before');
+        Assert.areEqual(1, logsAfter.size(), 'One log from category after');
+        Application_Log__c log = logsAfter[0];
+        Assert.areEqual('Error', log.Log_Level__c, 'Should log error level log');
+        Assert.areEqual('Oppgave Retry', log.Category__c, 'Should log in Oppgave Retry category');
+        Assert.isFalse(schRequestAfter.isEmpty(), 'Request should still be there');
+        Assert.areEqual('Scheduled', schRequestAfter[0].Status__c, 'Request status should be Scheduled');
+    }
+
+    @IsTest
+    static void retryScheduledRequest_Patch_500_OldRequest_Error() {
+        ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 500, 'Internal Server Error');
+        OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.personIdent = '12345678901';
+        taskRequest.id = 12345;
+        taskRequest.versjon = 2;
+        String payload = JSON.serialize(taskRequest);
+
+        Scheduled_Request__c schRequest = new Scheduled_Request__c(
+            Method__c = 'Patch',
+            Status__c = 'Scheduled',
+            Payload__c = payload
+        );
+        insert schRequest;
+        Test.setCreatedDate(schRequest.Id, DateTime.now().addDays(-2));
+
+        // We fetch the record agin to get the updated CreatedDate after Test.setCreatedDate
+        Scheduled_Request__c realSchRequest = [
+            SELECT Id, Method__c, Status__c, Payload__c, CreatedDate
+            FROM Scheduled_Request__c
+            WHERE Id = :schRequest.Id
+        ];
+
+        List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c];
+
+        Test.startTest();
+        OppgaveManager.retryScheduledRequest(realSchRequest);
+        Test.stopTest();
+        List<Application_Log__c> logsAfter = [
+            SELECT Id, Log_Level__c, Category__c
+            FROM Application_Log__c
+        ];
+
+        List<Scheduled_Request__c> schRequestAfter = [
+            SELECT Id, Status__c, createdDate
+            FROM Scheduled_Request__c
+            WHERE Id = :realSchRequest.Id
+        ];
+
+        Assert.areEqual(0, logsBefore.size(), 'No logs from category before');
+        Assert.areEqual(1, logsAfter.size(), 'One log from category after');
+        Application_Log__c log = logsAfter[0];
+        Assert.areEqual('Critical', log.Log_Level__c, 'Should log critical level log');
+        Assert.areEqual('Oppgave Retry', log.Category__c, 'Should log in Oppgave Retry category');
+        Assert.isFalse(schRequestAfter.isEmpty(), 'Request should still be there');
+        Assert.areEqual('Failed', schRequestAfter[0].Status__c, 'Request status should be Failed');
+    }
+
+    @IsTest
+    static void retryScheduledRequest_UnknownMethod_Error() {
+        List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c WHERE Category__c = 'Oppgave Retry'];
+        Scheduled_Request__c schRequest = new Scheduled_Request__c(
+            Method__c = 'Unknown',
+            Status__c = 'Scheduled',
+            Payload__c = '{}'
+        );
+        insert schRequest;
+        Test.startTest();
+        OppgaveManager.retryScheduledRequest(schRequest);
+        Test.stopTest();
+
+        List<Scheduled_Request__c> schRequestAfter = [
+            SELECT Id, Status__c
+            FROM Scheduled_Request__c
+            WHERE Id = :schRequest.Id
+        ];
+
+        List<Application_Log__c> logsAfter = [
+            SELECT Id, Log_Level__c, Category__c
+            FROM Application_Log__c
+            WHERE Category__c = 'Oppgave Retry'
+        ];
+        Assert.areEqual(0, logsBefore.size(), 'No logs from category before');
+        Assert.areEqual(1, logsAfter.size(), 'One log from category after');
+        Application_Log__c log = logsAfter[0];
+        Assert.areEqual('Error', log.Log_Level__c, 'Should log error level log');
+        Assert.areEqual('Oppgave Retry', log.Category__c, 'Should log in Oppgave Retry category');
+        Assert.isFalse(schRequestAfter.isEmpty(), 'Request should still be there');
+        Assert.areEqual('Failed', schRequestAfter[0].Status__c, 'Request status should be Failed');
+    }
+
+    // Retry for requests older than 1 day
 }
