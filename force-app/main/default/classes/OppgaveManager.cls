@@ -223,8 +223,8 @@ public with sharing class OppgaveManager {
         } finally {
             if (retry) {
                 try {
-                    String request = JSON.serialize(taskRequest);
-                    createScheduledRequest('Post', request);
+                    String scheduledRequest = JSON.serialize(request);
+                    createScheduledRequest('Post', scheduledRequest);
                 } catch (Exception except) {
                     // TODO: Ka gjør vi her?
                     postLogger.exception(except, null, CRM_ApplicationDomain.Domain.NKS);
@@ -290,8 +290,8 @@ public with sharing class OppgaveManager {
         } finally {
             if (retry) {
                 try {
-                    String request = JSON.serialize(taskRequest);
-                    createScheduledRequest('Patch', request);
+                    String scheduledRequest = JSON.serialize(request);
+                    createScheduledRequest('Patch', scheduledRequest);
                 } catch (Exception except) {
                     patchLogger.exception(except, null, CRM_ApplicationDomain.Domain.NKS);
                 }
