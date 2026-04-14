@@ -82,6 +82,22 @@ public without sharing class CRM_DueDateUtility {
         return dateList;
     }
 
+    public static Date setDueDate(OppgaveRequest taskRequest) {
+        String theme = commonCodeMap.containsKey(taskRequest.tema) ? commonCodeMap.get(taskRequest.tema) : null;
+        String taskType = commonCodeMap.containsKey(taskRequest.oppgavetype)
+            ? commonCodeMap.get(taskRequest.oppgavetype)
+            : null;
+        NAV_Task_Due_Date__mdt duedateRecord;
+        if (dueDateMap.containsKey(theme + '_' + taskType)) {
+            duedateRecord = dueDateMap.get(theme + '_' + taskType);
+        }
+
+        //Number of business days defaults to 2 if nothing else is defined
+        Integer numberofBusinessdays = duedateRecord != null ? Integer.valueOf(duedateRecord.CRM_Business_Days__c) : 2;
+
+        return addBusinessDays(numberofBusinessdays);
+    }
+
     private static Date getNextOccurance(Holiday h) {
         Date retDate = h.ActivityDate.addYears(Date.today().year() - h.ActivityDate.year());
         if (retDate < Date.today()) {
