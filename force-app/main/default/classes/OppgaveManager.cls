@@ -179,7 +179,7 @@ public with sharing class OppgaveManager {
             } else if (statusCode == 400 || statusCode == 401 || statusCode == 403) {
                 // No retry
                 retry = false;
-                // Throw error to show frontend cause and message
+                //TODO: Throw error to show frontend cause and message
                 postLogger.httpError(
                     'Error posting oppgave',
                     response,
@@ -211,6 +211,7 @@ public with sharing class OppgaveManager {
                     String request = JSON.serialize(taskRequest);
                     createScheduledRequest('Post', request);
                 } catch (Exception except) {
+                    // TODO: Ka gjør vi her?
                     postLogger.exception(except, null, CRM_ApplicationDomain.Domain.NKS);
                     resp = null;
                 }
