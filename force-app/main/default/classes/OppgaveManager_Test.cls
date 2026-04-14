@@ -174,11 +174,12 @@ public with sharing class OppgaveManager_Test {
         ApiMock.setTestMock('POST_CREATE_OPPGAVE', 201, 'Created');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
+        taskRequest.methodType = 'POST';
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.postTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
-        Assert.isNotNull(taskResponse);
-        Assert.isNotNull(taskResponse.tildeltEnhetsnr);
+        Assert.isTrue(taskResponse.isSuccess);
+        Assert.isNotNull(taskResponse.oppgave.tildeltEnhetsnr);
     }
 
     @IsTest
@@ -187,22 +188,24 @@ public with sharing class OppgaveManager_Test {
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.POST_AS_SYSTEM = true;
+        taskRequest.methodType = 'POST';
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.postTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
-        Assert.isNotNull(taskResponse);
-        Assert.isNotNull(taskResponse.tildeltEnhetsnr);
+        Assert.isTrue(taskResponse.isSuccess);
+        Assert.isNotNull(taskResponse.oppgave.tildeltEnhetsnr);
     }
 
     @IsTest
     static void postTask_NoIdent_Success() {
         ApiMock.setTestMock('POST_CREATE_OPPGAVE', 201, 'Created');
         OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.methodType = 'POST';
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.postTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
-        Assert.isNotNull(taskResponse);
-        Assert.isNotNull(taskResponse.tildeltEnhetsnr);
+        Assert.isTrue(taskResponse.isSuccess);
+        Assert.isNotNull(taskResponse.oppgave.tildeltEnhetsnr);
     }
 
     @IsTest
@@ -210,11 +213,12 @@ public with sharing class OppgaveManager_Test {
         ApiMock.setTestMock('POST_CREATE_OPPGAVE', 201, 'Created');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.eksternHenvendelseId = '12345';
+        taskRequest.methodType = 'POST';
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.postTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
-        Assert.isNotNull(taskResponse);
-        Assert.isNotNull(taskResponse.tildeltEnhetsnr);
+        Assert.isTrue(taskResponse.isSuccess);
+        Assert.isNotNull(taskResponse.oppgave.tildeltEnhetsnr);
     }
 
     @IsTest
@@ -222,11 +226,12 @@ public with sharing class OppgaveManager_Test {
         ApiMock.setTestMock('POST_CREATE_OPPGAVE', 201, 'Created');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.kommentarTekst = 'This is a test';
+        taskRequest.methodType = 'POST';
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.postTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
-        Assert.isNotNull(taskResponse);
-        Assert.isNotNull(taskResponse.tildeltEnhetsnr);
+        Assert.isTrue(taskResponse.isSuccess);
+        Assert.isNotNull(taskResponse.oppgave.tildeltEnhetsnr);
     }
 
     @IsTest
@@ -235,14 +240,15 @@ public with sharing class OppgaveManager_Test {
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.POST_AS_SYSTEM = true;
+        taskRequest.methodType = 'POST';
 
         List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c WHERE Category__c = 'Oppgave'];
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.postTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
         List<Application_Log__c> logsAfter = [SELECT Id, UUID__c FROM Application_Log__c WHERE Category__c = 'Oppgave'];
 
-        Assert.isNull(taskResponse);
+        Assert.isFalse(taskResponse.isSuccess);
         Assert.areEqual(0, logsBefore.size(), 'Should not have logs before posting oppgave');
         Assert.areEqual(1, logsAfter.size(), 'Should have one log after trying to post oppgaver');
         Assert.isNotNull(logsAfter[0].UUID__c, 'Should have transaction ID in log');
@@ -254,14 +260,15 @@ public with sharing class OppgaveManager_Test {
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.POST_AS_SYSTEM = true;
+        taskRequest.methodType = 'POST';
 
         List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c WHERE Category__c = 'Oppgave'];
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.postTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
         List<Application_Log__c> logsAfter = [SELECT Id, UUID__c FROM Application_Log__c WHERE Category__c = 'Oppgave'];
 
-        Assert.isNull(taskResponse);
+        Assert.isFalse(taskResponse.isSuccess);
         Assert.areEqual(0, logsBefore.size(), 'Should not have logs before posting oppgave');
         Assert.areEqual(1, logsAfter.size(), 'Should have one log after trying to post oppgave');
         Assert.isNotNull(logsAfter[0].UUID__c, 'Should have transaction ID in log');
@@ -276,10 +283,11 @@ public with sharing class OppgaveManager_Test {
         taskRequest.personIdent = '12345678901';
         taskRequest.POST_AS_SYSTEM = true;
         taskRequest.logCategory = testLogCategory;
+        taskRequest.methodType = 'POST';
 
         List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c WHERE Category__c = :testLogCategory];
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.postTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
         List<Application_Log__c> logsAfter = [
             SELECT Id, UUID__c
@@ -297,10 +305,11 @@ public with sharing class OppgaveManager_Test {
         ApiMock.setTestMock('POST_CREATE_OPPGAVE', 500, 'Error');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
+        taskRequest.methodType = 'POST';
 
         List<Scheduled_Request__c> schRequestsBefore = [SELECT Id FROM Scheduled_Request__c];
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.postTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
         List<Scheduled_Request__c> schRequestsAfter = [
             SELECT Id, Method__c, Status__c, Payload__c
@@ -321,10 +330,11 @@ public with sharing class OppgaveManager_Test {
         ApiMock.setTestMock('POST_CREATE_OPPGAVE', 400, 'Bad Request');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
+        taskRequest.methodType = 'POST';
 
         List<Scheduled_Request__c> schRequestsBefore = [SELECT Id FROM Scheduled_Request__c];
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.postTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
         List<Scheduled_Request__c> schRequestsAfter = [
             SELECT Id, Method__c, Status__c, Payload__c
@@ -342,11 +352,12 @@ public with sharing class OppgaveManager_Test {
         taskRequest.personIdent = '12345678902';
         taskRequest.id = 12345;
         taskRequest.versjon = 2;
+        taskRequest.methodType = 'PATCH';
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.patchEditTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
-        Assert.isNotNull(taskResponse);
-        Assert.isNotNull(taskResponse.versjon);
+        Assert.isTrue(taskResponse.isSuccess);
+        Assert.isNotNull(taskResponse.oppgave.versjon);
     }
 
     @IsTest
@@ -356,11 +367,12 @@ public with sharing class OppgaveManager_Test {
         taskRequest.POST_AS_SYSTEM = true;
         taskRequest.id = 12345;
         taskRequest.versjon = 2;
+        taskRequest.methodType = 'PATCH';
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.patchEditTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
-        Assert.isNotNull(taskResponse);
-        Assert.isNotNull(taskResponse.versjon);
+        Assert.isTrue(taskResponse.isSuccess);
+        Assert.isNotNull(taskResponse.oppgave.versjon);
     }
 
     @IsTest
@@ -370,14 +382,15 @@ public with sharing class OppgaveManager_Test {
         taskRequest.personIdent = '12345678901';
         taskRequest.id = 12345;
         taskRequest.versjon = 2;
+        taskRequest.methodType = 'PATCH';
 
         List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c WHERE Category__c = 'Oppgave'];
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.patchEditTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
         List<Application_Log__c> logsAfter = [SELECT Id, UUID__c FROM Application_Log__c WHERE Category__c = 'Oppgave'];
 
-        Assert.isNull(taskResponse);
+        Assert.isFalse(taskResponse.isSuccess);
         Assert.areEqual(0, logsBefore.size(), 'Should not have logs before editing oppgave');
         Assert.areEqual(1, logsAfter.size(), 'Should have one log after trying to edit oppgave');
         Assert.isNotNull(logsAfter[0].UUID__c, 'Should have transaction ID in log');
@@ -390,14 +403,15 @@ public with sharing class OppgaveManager_Test {
         taskRequest.personIdent = '12345678901';
         taskRequest.id = 12345;
         taskRequest.versjon = 2;
+        taskRequest.methodType = 'PATCH';
 
         List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c WHERE Category__c = 'Oppgave'];
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.patchEditTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
         List<Application_Log__c> logsAfter = [SELECT Id, UUID__c FROM Application_Log__c WHERE Category__c = 'Oppgave'];
 
-        Assert.isNull(taskResponse);
+        Assert.isFalse(taskResponse.isSuccess);
         Assert.areEqual(0, logsBefore.size(), 'Should not have logs before editing oppgave');
         Assert.areEqual(1, logsAfter.size(), 'Should have one log after trying to edit oppgave');
         Assert.isNotNull(logsAfter[0].UUID__c, 'Should have transaction ID in log');
@@ -409,14 +423,15 @@ public with sharing class OppgaveManager_Test {
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.versjon = 2;
+        taskRequest.methodType = 'PATCH';
 
         List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c WHERE Category__c = 'Oppgave'];
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.patchEditTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
         List<Application_Log__c> logsAfter = [SELECT Id, UUID__c FROM Application_Log__c WHERE Category__c = 'Oppgave'];
 
-        Assert.isNull(taskResponse);
+        Assert.isFalse(taskResponse.isSuccess);
         Assert.areEqual(0, logsBefore.size(), 'Should not have logs before editing oppgave');
         Assert.areEqual(1, logsAfter.size(), 'Should have one log after trying to edit oppgave');
         Assert.isNotNull(logsAfter[0].UUID__c, 'Should have transaction ID in log');
@@ -428,14 +443,15 @@ public with sharing class OppgaveManager_Test {
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.id = 12345;
+        taskRequest.methodType = 'PATCH';
 
         List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c WHERE Category__c = 'Oppgave'];
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.patchEditTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
         List<Application_Log__c> logsAfter = [SELECT Id, UUID__c FROM Application_Log__c WHERE Category__c = 'Oppgave'];
 
-        Assert.isNull(taskResponse);
+        Assert.isFalse(taskResponse.isSuccess);
         Assert.areEqual(0, logsBefore.size(), 'Should not have logs before editing oppgave');
         Assert.areEqual(1, logsAfter.size(), 'Should have one log after trying to edit oppgave');
         Assert.isNotNull(logsAfter[0].UUID__c, 'Should have transaction ID in log');
@@ -451,10 +467,11 @@ public with sharing class OppgaveManager_Test {
         taskRequest.id = 12345;
         taskRequest.versjon = 2;
         taskRequest.logCategory = testLogCategory;
+        taskRequest.methodType = 'PATCH';
 
         List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c WHERE Category__c = :testLogCategory];
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.patchEditTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
         List<Application_Log__c> logsAfter = [
             SELECT Id, UUID__c
@@ -474,10 +491,11 @@ public with sharing class OppgaveManager_Test {
         taskRequest.personIdent = '12345678901';
         taskRequest.id = 12345;
         taskRequest.versjon = 2;
+        taskRequest.methodType = 'PATCH';
 
         List<Scheduled_Request__c> schRequestsBefore = [SELECT Id FROM Scheduled_Request__c];
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.patchEditTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
         List<Scheduled_Request__c> schRequestsAfter = [
             SELECT Id, Method__c, Status__c, Payload__c
@@ -500,10 +518,11 @@ public with sharing class OppgaveManager_Test {
         taskRequest.personIdent = '12345678901';
         taskRequest.id = 12345;
         taskRequest.versjon = 2;
+        taskRequest.methodType = 'PATCH';
 
         List<Scheduled_Request__c> schRequestsBefore = [SELECT Id FROM Scheduled_Request__c];
         Test.startTest();
-        Oppgave taskResponse = OppgaveManager.patchEditTask(taskRequest);
+        OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
         List<Scheduled_Request__c> schRequestsAfter = [
             SELECT Id, Method__c, Status__c, Payload__c
