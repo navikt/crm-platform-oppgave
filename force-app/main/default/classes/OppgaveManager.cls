@@ -241,12 +241,12 @@ public with sharing class OppgaveManager {
             return false;
         }
         List<Person__c> persons = [
-            SELECT Id, HasReadAccess
+            SELECT Id
             FROM Person__c
             WHERE Name = :taskRequest.personIdent
             LIMIT 1
         ];
-        return !persons.isEmpty() && persons[0].HasReadAccess;
+        return !persons.isEmpty();
     }
 
     private class OppgaveListResponse {
