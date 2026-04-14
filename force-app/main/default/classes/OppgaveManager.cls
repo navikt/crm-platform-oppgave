@@ -243,6 +243,9 @@ public with sharing class OppgaveManager {
         Boolean retry = true;
         OppgaveResponse result;
         try {
+            if (request.versjon == null || request.versjon == 0) {
+                throw new IllegalArgumentException('Versjon is required for edit requests');
+            }
             OppgaveService oppgaveService = new OppgaveService();
             if (
                 request.POST_AS_SYSTEM == true ||
