@@ -172,7 +172,7 @@ public with sharing class OppgaveManager_Test {
     @IsTest
     static void postTask_Success() {
         ApiMock.setTestMock('POST_CREATE_OPPGAVE', 201, 'Created');
-        OppgaveManager.OppgaveRequest taskRequest = new OppgaveManager.OppgaveRequest();
+        OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         Test.startTest();
         Oppgave taskResponse = OppgaveManager.postTask(taskRequest);
@@ -184,7 +184,7 @@ public with sharing class OppgaveManager_Test {
     @IsTest
     static void postTask_System_Success() {
         ApiMock.setTestMock('POST_CREATE_OPPGAVE', 201, 'Created');
-        OppgaveManager.OppgaveRequest taskRequest = new OppgaveManager.OppgaveRequest();
+        OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.POST_AS_SYSTEM = true;
         Test.startTest();
@@ -197,7 +197,7 @@ public with sharing class OppgaveManager_Test {
     @IsTest
     static void postTask_NoIdent_Success() {
         ApiMock.setTestMock('POST_CREATE_OPPGAVE', 201, 'Created');
-        OppgaveManager.OppgaveRequest taskRequest = new OppgaveManager.OppgaveRequest();
+        OppgaveRequest taskRequest = new OppgaveRequest();
         Test.startTest();
         Oppgave taskResponse = OppgaveManager.postTask(taskRequest);
         Test.stopTest();
@@ -208,7 +208,7 @@ public with sharing class OppgaveManager_Test {
     @IsTest
     static void postTask_Metadata_Success() {
         ApiMock.setTestMock('POST_CREATE_OPPGAVE', 201, 'Created');
-        OppgaveManager.OppgaveRequest taskRequest = new OppgaveManager.OppgaveRequest();
+        OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.eksternHenvendelseId = '12345';
         Test.startTest();
         Oppgave taskResponse = OppgaveManager.postTask(taskRequest);
@@ -220,7 +220,7 @@ public with sharing class OppgaveManager_Test {
     @IsTest
     static void postTask_KommentarTekst_Success() {
         ApiMock.setTestMock('POST_CREATE_OPPGAVE', 201, 'Created');
-        OppgaveManager.OppgaveRequest taskRequest = new OppgaveManager.OppgaveRequest();
+        OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.kommentarTekst = 'This is a test';
         Test.startTest();
         Oppgave taskResponse = OppgaveManager.postTask(taskRequest);
@@ -232,7 +232,7 @@ public with sharing class OppgaveManager_Test {
     @IsTest
     static void postTask_Error() {
         ApiMock.setTestMock('POST_CREATE_OPPGAVE', 500, 'Error');
-        OppgaveManager.OppgaveRequest taskRequest = new OppgaveManager.OppgaveRequest();
+        OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.POST_AS_SYSTEM = true;
 
@@ -253,7 +253,7 @@ public with sharing class OppgaveManager_Test {
         String testLogCategory = 'TestLog';
 
         ApiMock.setTestMock('POST_CREATE_OPPGAVE', 500, 'Error');
-        OppgaveManager.OppgaveRequest taskRequest = new OppgaveManager.OppgaveRequest();
+        OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.POST_AS_SYSTEM = true;
         taskRequest.logCategory = testLogCategory;
@@ -276,7 +276,7 @@ public with sharing class OppgaveManager_Test {
     @IsTest
     static void patchEditTask_Success() {
         ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 200, 'OK');
-        OppgaveManager.OppgaveRequest taskRequest = new OppgaveManager.OppgaveRequest();
+        OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678902';
         taskRequest.id = 12345;
         taskRequest.versjon = 2;
@@ -290,7 +290,7 @@ public with sharing class OppgaveManager_Test {
     @IsTest
     static void patchEditTask_System_Success() {
         ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 200, 'OK');
-        OppgaveManager.OppgaveRequest taskRequest = new OppgaveManager.OppgaveRequest();
+        OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.POST_AS_SYSTEM = true;
         taskRequest.id = 12345;
         taskRequest.versjon = 2;
@@ -304,7 +304,7 @@ public with sharing class OppgaveManager_Test {
     @IsTest
     static void patchEditTask_Error() {
         ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 500, 'Error');
-        OppgaveManager.OppgaveRequest taskRequest = new OppgaveManager.OppgaveRequest();
+        OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.id = 12345;
         taskRequest.versjon = 2;
@@ -324,7 +324,7 @@ public with sharing class OppgaveManager_Test {
     @IsTest
     static void patchEditTask_NoId_Error() {
         ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 200, 'Ok');
-        OppgaveManager.OppgaveRequest taskRequest = new OppgaveManager.OppgaveRequest();
+        OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.versjon = 2;
 
@@ -343,7 +343,7 @@ public with sharing class OppgaveManager_Test {
     @IsTest
     static void patchEditTask_NoVersjon_Error() {
         ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 200, 'Ok');
-        OppgaveManager.OppgaveRequest taskRequest = new OppgaveManager.OppgaveRequest();
+        OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.id = 12345;
 
@@ -364,7 +364,7 @@ public with sharing class OppgaveManager_Test {
         String testLogCategory = 'TestLog';
 
         ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 500, 'Error');
-        OppgaveManager.OppgaveRequest taskRequest = new OppgaveManager.OppgaveRequest();
+        OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.id = 12345;
         taskRequest.versjon = 2;
