@@ -155,18 +155,21 @@ public with sharing class OppgaveManager {
 
     @invocableMethod(label='Execute Oppgave' category='Oppgave')
     public static List<OppgaveResponse> executeOppgave(List<OppgaveRequest> taskRequest) {
-        OppgaveRequest request = taskRequest[0];
-        switch on request.methodType {
-            when 'POST' {
-                return new List<OppgaveResponse>{ postTask(request) };
-            }
-            when 'PATCH' {
-                return new List<OppgaveResponse>{ patchEditTask(request) };
-            }
-            when else {
-                throw new IllegalArgumentException('Unknown methodType: ' + request.methodType);
+        List<OppgaveResponse> responses = new List<OppgaveResponse>();
+        for (OppgaveRequest request : taskRequest) {
+            switch on request.methodType {
+                when 'POST' {
+                    responses.add(postTask(request));
+                }
+                when 'PATCH' {
+                    responses.add(patchEditTask(request));
+                }
+                when else {
+                    throw new IllegalArgumentException('Unknown methodType: ' + request.methodType);
+                }
             }
         }
+        return responses;
     }
 
     private static OppgaveResponse postTask(OppgaveRequest request) {
