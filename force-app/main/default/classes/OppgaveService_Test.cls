@@ -127,6 +127,7 @@ public with sharing class OppgaveService_Test {
         Oppgave request = new Oppgave();
         OppgaveService service = new OppgaveService();
         request.id = 12345;
+        request.versjon = 2;
         ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 200, 'OK');
         Test.startTest();
         HttpResponse res = service.editTask(request);
@@ -140,6 +141,8 @@ public with sharing class OppgaveService_Test {
         service.setSystemContext();
         Oppgave request = new Oppgave();
         request.id = 12345;
+        request.versjon = 2;
+
         ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 200, 'OK');
         Test.startTest();
         HttpResponse res = service.editTask(request);
@@ -152,6 +155,7 @@ public with sharing class OppgaveService_Test {
         Oppgave request = new Oppgave();
         OppgaveService service = new OppgaveService();
         request.id = 12345;
+        request.versjon = 2;
         ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 500, 'Error');
         Test.startTest();
         HttpResponse res = service.editTask(request);
