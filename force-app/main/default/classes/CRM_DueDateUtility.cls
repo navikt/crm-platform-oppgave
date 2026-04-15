@@ -83,10 +83,8 @@ public without sharing class CRM_DueDateUtility {
     }
 
     public static Date setDueDate(OppgaveRequest taskRequest) {
-        String theme = commonCodeMap.containsKey(taskRequest.tema) ? commonCodeMap.get(taskRequest.tema) : null;
-        String taskType = commonCodeMap.containsKey(taskRequest.oppgavetype)
-            ? commonCodeMap.get(taskRequest.oppgavetype)
-            : null;
+        String theme = taskRequest.tema;
+        String taskType = taskRequest.oppgavetype;
         NAV_Task_Due_Date__mdt duedateRecord;
         if (dueDateMap.containsKey(theme + '_' + taskType)) {
             duedateRecord = dueDateMap.get(theme + '_' + taskType);
