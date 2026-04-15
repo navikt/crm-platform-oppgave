@@ -264,7 +264,7 @@ public with sharing class OppgaveManager {
             } else if (statusCode == 400 || statusCode == 401 || statusCode == 403 || statusCode == 409) {
                 // No retry
                 retry = false;
-                // Throw error to show frontend cause and message
+                //TODO: Throw error to show frontend cause and message
                 patchLogger.httpError(
                     'Error editing oppgave',
                     response,

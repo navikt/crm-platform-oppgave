@@ -891,6 +891,4 @@ public with sharing class OppgaveManager_Test {
         Assert.isFalse(schRequestAfter.isEmpty(), 'Request should still be there');
         Assert.areEqual('Failed', schRequestAfter[0].Status__c, 'Request status should be Failed');
     }
-
-    // Retry for requests older than 1 day
 }
