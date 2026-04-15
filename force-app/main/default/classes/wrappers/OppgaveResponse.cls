@@ -8,6 +8,9 @@ public class OppgaveResponse {
     @invocableVariable(label='Error UUID')
     public String errorUuid;
 
+    @invocableVariable(label='HTTP status code')
+    public Integer statusCode;
+
     @invocableVariable(label='Oppgave')
     public Oppgave oppgave;
 
@@ -18,7 +21,7 @@ public class OppgaveResponse {
         return resp;
     }
 
-    public static OppgaveResponse failure(String responseBody) {
+    public static OppgaveResponse failure(String responseBody, Integer statusCode) {
         OppgaveResponse resp = new OppgaveResponse();
         resp.isSuccess = false;
         try {
@@ -28,8 +31,10 @@ public class OppgaveResponse {
             );
             resp.errorMessage = err.feilmelding;
             resp.errorUuid = err.uuid;
+            resp.statusCode = statusCode;
         } catch (Exception e) {
             resp.errorMessage = responseBody;
+            resp.statusCode = statusCode;
         }
         return resp;
     }

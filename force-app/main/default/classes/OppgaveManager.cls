@@ -205,7 +205,7 @@ public with sharing class OppgaveManager {
                     CRM_ApplicationDomain.Domain.NKS,
                     oppgaveService.getTransactionId()
                 );
-                result = OppgaveResponse.failure(response.getBody());
+                result = OppgaveResponse.failure(response.getBody(), statusCode);
             } else {
                 // Retry
                 retry = true;
@@ -218,11 +218,11 @@ public with sharing class OppgaveManager {
                     oppgaveService.getTransactionId()
                 );
                 postLogger.peek().Log_Level__c = 'Warning';
-                result = OppgaveResponse.failure(response.getBody());
+                result = OppgaveResponse.failure(response.getBody(), statusCode);
             }
         } catch (Exception ex) {
             postLogger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
-            return OppgaveResponse.failure(ex.getMessage());
+            return OppgaveResponse.failure(ex.getMessage(), null);
         } finally {
             if (retry) {
                 try {
@@ -275,7 +275,7 @@ public with sharing class OppgaveManager {
                     CRM_ApplicationDomain.Domain.NKS,
                     oppgaveService.getTransactionId()
                 );
-                result = OppgaveResponse.failure(response.getBody());
+                result = OppgaveResponse.failure(response.getBody(), statusCode);
             } else {
                 // Retry
                 retry = true;
@@ -288,11 +288,11 @@ public with sharing class OppgaveManager {
                     oppgaveService.getTransactionId()
                 );
                 patchLogger.peek().Log_Level__c = 'Warning';
-                result = OppgaveResponse.failure(response.getBody());
+                result = OppgaveResponse.failure(response.getBody(), statusCode);
             }
         } catch (Exception ex) {
             patchLogger.exception(ex, null, CRM_ApplicationDomain.Domain.NKS);
-            return OppgaveResponse.failure(ex.getMessage());
+            return OppgaveResponse.failure(ex.getMessage(), null);
         } finally {
             if (retry) {
                 try {
