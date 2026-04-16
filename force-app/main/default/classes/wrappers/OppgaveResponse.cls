@@ -8,8 +8,8 @@ public class OppgaveResponse {
     @invocableVariable(label='Error UUID')
     public String errorUuid;
 
-    @invocableVariable(label='HTTP status code')
-    public Integer statusCode;
+    @invocableVariable(label='Will be retried?')
+    public Boolean isRetry;
 
     @invocableVariable(label='Oppgave')
     public Oppgave oppgave;
@@ -21,7 +21,7 @@ public class OppgaveResponse {
         return resp;
     }
 
-    public static OppgaveResponse failure(String responseBody, Integer statusCode) {
+    public static OppgaveResponse failure(String responseBody, Boolean isRetry) {
         OppgaveResponse resp = new OppgaveResponse();
         resp.isSuccess = false;
         try {
@@ -31,10 +31,10 @@ public class OppgaveResponse {
             );
             resp.errorMessage = err.feilmelding;
             resp.errorUuid = err.uuid;
-            resp.statusCode = statusCode;
+            resp.isRetry = isRetry;
         } catch (Exception e) {
             resp.errorMessage = responseBody;
-            resp.statusCode = statusCode;
+            resp.isRetry = isRetry;
         }
         return resp;
     }
