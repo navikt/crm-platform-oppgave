@@ -1,4 +1,5 @@
 import { api, LightningElement, wire } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
 import getNavTaskRecords from '@salesforce/apex/CRM_NavTaskListViewCtrl.getRecords';
 
 const QUERY_FIELDS = [
@@ -11,7 +12,7 @@ const QUERY_FIELDS = [
 	'CRM_NavUnit__r.Name'
 ];
 
-export default class NksNavTaskTable extends LightningElement {
+export default class NksNavTaskTable extends NavigationMixin(LightningElement) {
 	@api numRecords = 25;
 	@api ownedByRunningUser = false;
 
@@ -28,6 +29,7 @@ export default class NksNavTaskTable extends LightningElement {
 		if (data) {
 			this.data = data.map((row) => ({
 				id: row.Id,
+				recordUrl: `/lightning/r/NavTask__c/${row.Id}/view`,
 				oppgavetype: row.NKS_TaskType__r?.Name || '',
 				tema: row.NKS_Theme__r?.Name || '',
 				gjelder: row.CRM_GjelderFormula__c || '',
@@ -42,6 +44,24 @@ export default class NksNavTaskTable extends LightningElement {
 
 		this.data = [];
 		this.error = error;
+	}
+
+	handleRecordClick(event) {
+		event.preventDefault();
+
+		const { recordId } = event.currentTarget.dataset;
+
+		if (!recordId) {
+			return;
+		}
+
+		this[NavigationMixin.Navigate]({
+			type: 'standard__recordPage',
+			attributes: {
+				recordId,
+				actionName: 'view'
+			}
+		});
 	}
 
 	formatDate(value) {

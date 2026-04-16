@@ -10,6 +10,15 @@
     font-weight: 400;
 }
 
+.task-table a {
+    color: #0067c5;
+    text-decoration: underline;
+}
+
+.task-table a:hover {
+    text-decoration-thickness: 2px;
+}
+
 .task-table tr > th,
 .task-table tr > td {
     padding: 12px 24px;

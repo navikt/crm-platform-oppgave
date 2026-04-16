@@ -15,7 +15,11 @@
             <tbody>
                 <template for:each={data} for:item="row">
                     <tr key={row.id}>
-                        <td>{row.oppgavetype}</td>
+                        <td>
+                            <a href={row.recordUrl} data-record-id={row.id} onclick={handleRecordClick}>
+                                {row.oppgavetype}
+                            </a>
+                        </td>
                         <td>{row.tema}</td>
                         <td>{row.gjelder}</td>
                         <td>{row.status}</td>
