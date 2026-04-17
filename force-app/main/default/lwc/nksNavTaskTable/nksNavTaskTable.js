@@ -2,11 +2,21 @@ import { api, LightningElement, wire } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import getNavTaskRecords from '@salesforce/apex/CRM_NavTaskListViewCtrl.getRecords';
 
+// const QUERY_FIELDS = [
+// 	'NKS_TaskType__r.Name',
+// 	'NKS_Theme__r.Name',
+// 	'CRM_GjelderFormula__c',
+// 	'NKS_Status__c',
+// 	'NKS_Date_Registered__c',
+// 	'CRM_DueDate__c',
+// 	'CRM_NavUnit__r.Name'
+// ];
+
 const QUERY_FIELDS = [
-	'NKS_TaskType__r.Name',
-	'NKS_Theme__r.Name',
+	'Name',
+	'NKS_Themeformula__c',
 	'CRM_GjelderFormula__c',
-	'NKS_Status__c',
+	'NKS_StatusFormula__c',
 	'NKS_Date_Registered__c',
 	'CRM_DueDate__c',
 	'CRM_NavUnit__r.Name'
@@ -30,8 +40,8 @@ export default class NksNavTaskTable extends NavigationMixin(LightningElement) {
 			this.data = data.map((row) => ({
 				id: row.Id,
 				recordUrl: `/lightning/r/NavTask__c/${row.Id}/view`,
-				oppgavetype: row.NKS_TaskType__r?.Name || '',
-				tema: row.NKS_Theme__r?.Name || '',
+				oppgavetype: row.Name || '',
+				tema: row.NKS_Themeformula__c || '',
 				gjelder: row.CRM_GjelderFormula__c || '',
 				status: row.NKS_Status__c || '',
 				registrert: this.formatDate(row.NKS_Date_Registered__c),
