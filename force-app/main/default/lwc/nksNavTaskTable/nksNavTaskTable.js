@@ -1,6 +1,7 @@
 import { api, LightningElement, wire } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import getNavTaskRecords from '@salesforce/apex/CRM_NavTaskListViewCtrl.getRecords';
+import { refreshApex } from '@salesforce/apex';
 
 // const QUERY_FIELDS = [
 // 	'NKS_TaskType__r.Name',
@@ -14,10 +15,10 @@ import getNavTaskRecords from '@salesforce/apex/CRM_NavTaskListViewCtrl.getRecor
 
 const QUERY_FIELDS = [
 	'Name',
-	'NKS_Themeformula__c',
-	'CRM_GjelderFormula__c',
+	'CRM_Theme__c',
+	'CRM_SubTheme__c',
 	'NKS_StatusFormula__c',
-	'NKS_Date_Registered__c',
+	'CreatedDate',
 	'CRM_DueDate__c',
 	'CRM_NavUnit__r.Name'
 ];
@@ -26,8 +27,12 @@ export default class NksNavTaskTable extends NavigationMixin(LightningElement) {
 	@api numRecords = 25;
 	@api ownedByRunningUser = false;
 
+	allRows = [];
 	data = [];
 	error;
+	selectedTaskScope = 'open';
+	isRefreshing = false;
+	wiredTasksResult;
 
 	@wire(getNavTaskRecords, {
 		fieldsToQuery: QUERY_FIELDS,
@@ -35,25 +40,82 @@ export default class NksNavTaskTable extends NavigationMixin(LightningElement) {
 		ownedByRunningUser: '$ownedByRunningUser',
 		numRecords: '$numRecords'
 	})
-	wiredTasks({ data, error }) {
+	wiredTasks(result) {
+		this.wiredTasksResult = result;
+
+		const { data, error } = result;
+
 		if (data) {
-			this.data = data.map((row) => ({
+			this.allRows = data.map((row) => ({
+					...this.parseStatus(row.NKS_StatusFormula__c),
 				id: row.Id,
 				recordUrl: `/lightning/r/NavTask__c/${row.Id}/view`,
 				oppgavetype: row.Name || '',
-				tema: row.NKS_Themeformula__c || '',
-				gjelder: row.CRM_GjelderFormula__c || '',
-				status: row.NKS_Status__c || '',
-				registrert: this.formatDate(row.NKS_Date_Registered__c),
+				tema: row.CRM_Theme__c || '',
+				gjelder: row.CRM_SubTheme__c || '',
+				registrert: this.formatDate(row.CreatedDate),
 				frist: this.formatDate(row.CRM_DueDate__c),
 				navEnhet: row.CRM_NavUnit__r?.Name || ''
 			}));
+			this.applyClientFilters();
 			this.error = undefined;
 			return;
 		}
 
+		this.allRows = [];
 		this.data = [];
 		this.error = error;
+	}
+
+	handleMineToggle(event) {
+		this.ownedByRunningUser = event.target.checked;
+	}
+
+	handleScopeChange(event) {
+		this.selectedTaskScope = event.target.value;
+		this.applyClientFilters();
+	}
+
+	async handleRefresh() {
+		if (!this.wiredTasksResult || this.isRefreshing) {
+			return;
+		}
+
+		this.isRefreshing = true;
+
+		try {
+			await refreshApex(this.wiredTasksResult);
+		} finally {
+			this.isRefreshing = false;
+		}
+	}
+
+	applyClientFilters() {
+		if (this.selectedTaskScope === 'all') {
+			this.data = this.allRows;
+			return;
+		}
+
+		this.data = this.allRows.filter((row) => {
+			const status = (row.statusText || '').toLowerCase();
+			return status.includes('open') || status.includes('apen') || status.includes('åpen');
+		});
+	}
+
+	parseStatus(statusFormulaValue) {
+		const rawStatus = statusFormulaValue || '';
+		const srcMatch = rawStatus.match(/src\s*=\s*"([^"]+)"/i);
+		const altMatch = rawStatus.match(/alt\s*=\s*"([^"]*)"/i);
+		const statusText = this.stripHtml(rawStatus).trim();
+
+		return {
+			statusIconUrl: srcMatch ? srcMatch[1] : '',
+			statusText: statusText || (altMatch ? altMatch[1] : '')
+		};
+	}
+
+	stripHtml(value) {
+		return String(value || '').replace(/<[^>]*>/g, ' ');
 	}
 
 	handleRecordClick(event) {
@@ -94,6 +156,14 @@ export default class NksNavTaskTable extends NavigationMixin(LightningElement) {
 
 	get hasNoRows() {
 		return !this.error && this.data.length === 0;
+	}
+
+	get isOpenScope() {
+		return this.selectedTaskScope === 'open';
+	}
+
+	get isAllScope() {
+		return this.selectedTaskScope === 'all';
 	}
 
 	get errorMessage() {

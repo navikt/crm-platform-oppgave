@@ -1,5 +1,45 @@
 <template>
-    <lightning-card title="Oppgaver">
+    <lightning-card>
+        <div slot="title" class="task-card__header slds-grid slds-grid_vertical-align-center slds-size_1-of-1">
+            <span class="task-card__title">Oppgaver</span>
+
+            <div class="task-card__controls slds-col_bump-left slds-grid slds-grid_vertical-align-center slds-gutters_small">
+                <label class="task-table__option">
+                    <input type="checkbox" checked={ownedByRunningUser} onchange={handleMineToggle} />
+                    <span>Vis mine oppgaver</span>
+                </label>
+
+                <label class="task-table__option">
+                    <input
+                        type="radio"
+                        name="taskScope"
+                        value="open"
+                        checked={isOpenScope}
+                        onchange={handleScopeChange}
+                    />
+                    <span>Åpne oppgaver</span>
+                </label>
+
+                <label class="task-table__option">
+                    <input
+                        type="radio"
+                        name="taskScope"
+                        value="all"
+                        checked={isAllScope}
+                        onchange={handleScopeChange}
+                    />
+                    <span>Alle oppgaver</span>
+                </label>
+                <lightning-button-icon
+                    icon-name="utility:refresh"
+                    alternative-text="Oppdater"
+                    title="Oppdater"
+                    onclick={handleRefresh}
+                    disabled={isRefreshing}
+                ></lightning-button-icon>
+            </div>
+        </div>
+
         <table class="task-table">
             <thead>
                 <tr>

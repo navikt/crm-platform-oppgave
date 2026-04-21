@@ -2,11 +2,22 @@
     border-bottom: 1px solid #B8B8B8;
 }
 
-.task-table th{
+.task-table th {
     font-weight: 700;
 }
 
 .task-table td {
+    font-weight: 400;
+}
+
+.task-card__title {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.task-table__option {
+    display: inline-flex;
+    gap: 8px;
     font-weight: 400;
 }
 
