@@ -122,16 +122,20 @@ public without sharing class OppgaveService extends ApiController {
         JSONParser parser = JSON.createParser(jsonParams);
 
         while (parser.nextToken() != null) {
+            // Loop until we find a field name, then format the key and value accordingly. This allows us to handle both simple values and arrays in the query object.
             if (parser.getCurrentToken() == JSONToken.FIELD_NAME) {
                 String key = formatKeyName(parser.getText());
                 String value;
                 parser.nextToken();
 
+                // Check if the value is an array, if so, convert it to a comma-separated string
                 if (parser.getCurrentToken() == JSONToken.START_ARRAY) {
                     List<String> valueList = new List<String>();
                     while (parser.nextToken() != JSONToken.END_ARRAY) {
+                        // Add each value in the array to the list after formatting it
                         valueList.add(formatQueryParam(parser, key));
                     }
+                    // Join the list into a comma-separated string for the query parameter
                     value = String.join(valueList, ',');
                 } else {
                     value = formatQueryParam(parser, key);
@@ -145,6 +149,7 @@ public without sharing class OppgaveService extends ApiController {
     }
 
     private String formatKeyName(String key) {
+        // Limit is a reserved keyword in Apex
         switch on key {
             when 'returnLimit' {
                 return 'limit';
@@ -156,6 +161,7 @@ public without sharing class OppgaveService extends ApiController {
     }
 
     private String formatQueryParam(JSONParser parser, String key) {
+        // Format the param to the expected format
         if (key.equals('fristFom') || key.equals('fristTom')) {
             return parser.getDatetimeValue().format('yyyy-MM-dd');
         } else if (key.equals('opprettetFom')) {
