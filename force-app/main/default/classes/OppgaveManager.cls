@@ -172,7 +172,7 @@ public with sharing class OppgaveManager {
         return responses;
     }
 
-    private static OppgaveResponse postTask(OppgaveRequest request) {
+    public static OppgaveResponse postTask(OppgaveRequest request) {
         LoggerUtility postLogger = String.isNotBlank(request.logCategory)
             ? new LoggerUtility(request.logCategory)
             : logger;
@@ -238,7 +238,7 @@ public with sharing class OppgaveManager {
         return result;
     }
 
-    private static OppgaveResponse patchEditTask(OppgaveRequest request) {
+    public static OppgaveResponse patchEditTask(OppgaveRequest request) {
         LoggerUtility patchLogger = String.isNotBlank(request.logCategory)
             ? new LoggerUtility(request.logCategory)
             : logger;

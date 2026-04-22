@@ -1,4 +1,4 @@
-// Invocable wrapper for flows - might not need all these variables
+// Invocable wrapper for flows
 public class OppgaveRequest {
     @AuraEnabled
     @invocableVariable
@@ -75,7 +75,7 @@ public class OppgaveRequest {
     @invocableVariable
     public Boolean kommentarAutomatiskGenerert;
 
-    // Request metadata
+    // Request metadata for internal use, not mapped to Oppgave fields
     @AuraEnabled
     @invocableVariable(label='Method type [POST, PATCH]')
     public String methodType;
