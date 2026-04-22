@@ -47,7 +47,7 @@ public class Oppgave {
     @AuraEnabled
     public LegacyIdent ident;
     @AuraEnabled
-    public String personIdent;
+    public String personident;
     @AuraEnabled
     public OppgaveMetadata metadata; // Hidden in Swagger, but still in use
     @AuraEnabled

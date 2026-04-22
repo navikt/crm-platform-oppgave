@@ -58,7 +58,7 @@ public class OppgaveRequest {
     public Integer versjon;
     @AuraEnabled
     @invocableVariable
-    public String personIdent;
+    public String personident;
     @AuraEnabled
     @invocableVariable
     public String aktoerId;
@@ -109,7 +109,7 @@ public class OppgaveRequest {
         o.prioritet = this.prioritet;
         o.status = String.isNotBlank(this.status) ? OppgaveStatuskategori.valueOf(this.status) : null;
         o.versjon = this.versjon;
-        o.personIdent = this.personIdent;
+        o.personident = this.personident;
         o.aktoerId = this.aktoerId;
         o.orgnr = this.orgnr;
         if (String.isNotBlank(this.eksternHenvendelseId)) {

@@ -106,7 +106,7 @@ public with sharing class OppgaveManager {
         OppgaveService service = new OppgaveService();
         CRM_OppgaveQueryList query = new CRM_OppgaveQueryList();
         query.aktoerId = new List<String>{ personIdent };
-        query.returnLimit = 100;
+        query.returnLimit = 500;
         if (offset != null && offset > 0) {
             query.offset = offset;
         }
@@ -197,7 +197,6 @@ public with sharing class OppgaveManager {
             } else if (statusCode == 400 || statusCode == 401 || statusCode == 403) {
                 // No retry
                 retry = false;
-                //TODO: Throw error to show frontend cause and message
                 postLogger.httpError(
                     'Error posting oppgave',
                     response,
@@ -225,13 +224,8 @@ public with sharing class OppgaveManager {
             return OppgaveResponse.failure(ex.getMessage(), retry);
         } finally {
             if (retry) {
-                try {
-                    String scheduledRequest = JSON.serialize(request);
-                    OppgaveRetry.createScheduledRequest('Post', scheduledRequest);
-                } catch (Exception except) {
-                    // TODO: Ka gjør vi her?
-                    postLogger.exception(except, null, CRM_ApplicationDomain.Domain.NKS);
-                }
+                String scheduledRequest = JSON.serialize(request);
+                OppgaveRetry.createScheduledRequest('Post', scheduledRequest);
             }
             postLogger.publish();
         }
@@ -267,7 +261,6 @@ public with sharing class OppgaveManager {
             } else if (statusCode == 400 || statusCode == 401 || statusCode == 403 || statusCode == 409) {
                 // No retry
                 retry = false;
-                //TODO: Throw error to show frontend cause and message
                 patchLogger.httpError(
                     'Error editing oppgave',
                     response,
