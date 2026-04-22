@@ -10,12 +10,18 @@ public without sharing class OppgaveService extends ApiController {
     private String transactionId;
 
     public OppgaveService() {
-        LoggerUtility logger = new LoggerUtility('Oppgave');
-        setLogCategory('Oppgave')
+        this('Oppgave', CRM_ApplicationDomain.Domain.NKS);
+    }
+
+    public OppgaveService(String logCategory, CRM_ApplicationDomain.Domain domain) {
+        String loggingCategory = String.isNotBlank(logCategory) ? logCategory : 'Oppgave';
+        CRM_ApplicationDomain.Domain loggingDomain = domain != null ? domain : CRM_ApplicationDomain.Domain.NKS;
+        LoggerUtility logger = new LoggerUtility(loggingCategory);
+        setLogCategory(loggingCategory)
             .setLogger(logger)
             .setLogCalloutRequest()
             .publishLogAfterCallout()
-            .setLogDomain(CRM_ApplicationDomain.Domain.NKS);
+            .setLogDomain(loggingDomain);
         addSaasProxyServiceAuthHeader();
         setHeaders(new Map<String, String>{ 'Content-Type' => 'application/json', 'accept' => 'application/json' });
     }

@@ -180,7 +180,7 @@ public with sharing class OppgaveManager {
         Boolean retry = true;
         OppgaveResponse result;
         try {
-            OppgaveService oppgaveService = new OppgaveService();
+            OppgaveService oppgaveService = new OppgaveService(request.logCategory, CRM_ApplicationDomain.Domain.NKS);
             if (
                 request.POST_AS_SYSTEM == true ||
                 !hasPersonAccess(request) ||
@@ -249,7 +249,7 @@ public with sharing class OppgaveManager {
             if (request.versjon == null || request.versjon == 0) {
                 throw new IllegalArgumentException('Versjon is required for edit requests');
             }
-            OppgaveService oppgaveService = new OppgaveService();
+            OppgaveService oppgaveService = new OppgaveService(request.logCategory, CRM_ApplicationDomain.Domain.NKS);
             if (
                 request.POST_AS_SYSTEM == true ||
                 !hasPersonAccess(request) ||
