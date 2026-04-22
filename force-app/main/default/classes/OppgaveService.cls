@@ -16,7 +16,7 @@ public without sharing class OppgaveService extends ApiController {
             .setLogCalloutRequest()
             .publishLogAfterCallout()
             .setLogDomain(CRM_ApplicationDomain.Domain.NKS);
-        addServiceAuthHeader('Oppgave');
+        addSaasProxyServiceAuthHeader();
         setHeaders(new Map<String, String>{ 'Content-Type' => 'application/json', 'accept' => 'application/json' });
     }
 
@@ -58,13 +58,10 @@ public without sharing class OppgaveService extends ApiController {
 
     public HttpResponse getOppgaveList(CRM_OppgaveQueryList query) {
         initRequest('Oppgave_API', 'GET_OPPGAVE');
-        Map<String, List<String>> convertedParams = convertToQueryParams(query);
+        Map<String, String> convertedParams = convertToQueryParams(query);
         for (String param : convertedParams.keySet()) {
-            if (!convertedParams.get(param).isEmpty()) {
-                for (String paramValue : convertedParams.get(param)) {
-                    addUrlParam(param, paramValue);
-                }
-            }
+            String paramValue = convertedParams.get(param);
+            addUrlParam(param, paramValue);
         }
 
         addXCorrelation();
@@ -119,24 +116,27 @@ public without sharing class OppgaveService extends ApiController {
         transactionId = requestId;
     }
 
-    private Map<String, List<String>> convertToQueryParams(CRM_OppgaveQueryList query) {
-        Map<String, List<String>> returnMap = new Map<String, List<String>>();
+    private Map<String, String> convertToQueryParams(CRM_OppgaveQueryList query) {
+        Map<String, String> returnMap = new Map<String, String>();
         String jsonParams = JSON.serialize(query, true); //Suppressing null values
         JSONParser parser = JSON.createParser(jsonParams);
 
         while (parser.nextToken() != null) {
             if (parser.getCurrentToken() == JSONToken.FIELD_NAME) {
-                String key = parser.getText();
-                List<String> value = new List<String>();
+                String key = formatKeyName(parser.getText());
+                String value;
                 parser.nextToken();
 
                 if (parser.getCurrentToken() == JSONToken.START_ARRAY) {
+                    List<String> valueList = new List<String>();
                     while (parser.nextToken() != JSONToken.END_ARRAY) {
-                        addFilteredQueryParams(parser, key, value);
+                        valueList.add(formatQueryParam(parser, key));
                     }
+                    value = String.join(valueList, ',');
                 } else {
-                    addFilteredQueryParams(parser, key, value);
+                    value = formatQueryParam(parser, key);
                 }
+
                 returnMap.put(key, value);
             }
         }
@@ -144,17 +144,26 @@ public without sharing class OppgaveService extends ApiController {
         return returnMap;
     }
 
-    private void addFilteredQueryParams(JSONParser parser, String key, List<String> value) {
+    private String formatKeyName(String key) {
+        switch on key {
+            when 'returnLimit' {
+                return 'limit';
+            }
+            when else {
+                return key;
+            }
+        }
+    }
+
+    private String formatQueryParam(JSONParser parser, String key) {
         if (key.equals('fristFom') || key.equals('fristTom')) {
-            value.add(parser.getDatetimeValue().format('yyyy-MM-dd'));
+            return parser.getDatetimeValue().format('yyyy-MM-dd');
         } else if (key.equals('opprettetFom')) {
-            value.add(parser.getDatetimeValue().format('yyyy-MM-dd\'T\'HH:mm:ss'));
+            return parser.getDatetimeValue().format('yyyy-MM-dd\'T\'HH:mm:ss');
         } else if (key.equals('returnlimit')) {
-            //limit is reserved in SF so need special parsing handling
-            key = 'limit';
-            value.add(String.valueOf(parser.getIntegerValue()));
+            return String.valueOf(parser.getIntegerValue());
         } else {
-            value.add(parser.getText());
+            return parser.getText();
         }
     }
 
