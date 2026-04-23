@@ -2,7 +2,7 @@ public with sharing class OppgaveManager {
     static LoggerUtility logger = new LoggerUtility('Oppgave');
 
     // TODO: Will be implemented as part of getOppgaveById when oppgave v2 api is ready by appending ?include=kommentarer in req.
-    /*@AuraEnabled
+    @AuraEnabled
     public static List<CRM_OppgaveOppfolging> getOppgaveOppfolging(String oppgaveId) {
         OppgaveService service = new OppgaveService();
         HttpResponse response = service.getOppgaveOppfolgingById(oppgaveId);
@@ -22,7 +22,7 @@ public with sharing class OppgaveManager {
             );
         }
         return null;
-    }*/
+    }
 
     @AuraEnabled
     public static Oppgave getOppgaveById(String oppgaveId) {

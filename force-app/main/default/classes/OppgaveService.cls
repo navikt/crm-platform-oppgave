@@ -6,7 +6,6 @@
  * @last modified by  : mamikals
  **/
 public without sharing class OppgaveService extends ApiController {
-    private Boolean isSystemContext = false;
     private String transactionId;
 
     public OppgaveService() {
@@ -27,32 +26,13 @@ public without sharing class OppgaveService extends ApiController {
     }
 
     // TODO: Will be implemented as part of getOppgaveById when oppgave v2 api is ready by appending ?include=kommentarer in req.
-    /*
     public HttpResponse getOppgaveOppfolgingById(String Id) {
-        ApiController apiCtrl = new ApiController();
-        Map<String, String> httpHeaders = new Map<String, String>{
-            'Content-Type' => 'application/json',
-            'accept' => 'application/json'
-        };
-        //If no person access, callout is performed in system mode
-        switch on this.apiContext {
-            when SYSTEM_CONTEXT {
-                apiCtrl.setSystemContext();
-            }
-            when else {
-                //No context change
-            }
-        }
-        Map<String, String> queryParams = new Map<String, String>{ 'id' => Id };
+        initRequest('Oppgave_API', 'GET_OPPGAVEOPPFOLGING_BY_ID', new Map<String, String>{ 'id' => Id });
 
-        apiCtrl.initRequest('Oppgave_API', 'GET_OPPGAVEOPPFOLGING_BY_ID', queryParams);
-        apiCtrl.addServiceAuthHeader('Oppgave');
-        apiCtrl.setHeaders(httpHeaders);
-
-        addXCorrelation(apiCtrl);
-        apiCtrl.doCallout();
-        return apiCtrl.getResponse();
-    }*/
+        addXCorrelation();
+        doCallout();
+        return getResponse();
+    }
 
     public HttpResponse getOppgaveById(String Id) {
         initRequest('Oppgave_API', 'GET_OPPGAVE_BY_ID', new Map<String, String>{ 'id' => Id });
