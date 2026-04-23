@@ -2,7 +2,7 @@ public with sharing class OppgaveManager {
     static LoggerUtility logger = new LoggerUtility('Oppgave');
 
     // TODO: Will be implemented as part of getOppgaveById when oppgave v2 api is ready by appending ?include=kommentarer in req.
-    @AuraEnabled
+    @AuraEnabled(cacheable=true)
     public static List<CRM_OppgaveOppfolging> getOppgaveOppfolging(String oppgaveId) {
         OppgaveService service = new OppgaveService();
         HttpResponse response = service.getOppgaveOppfolgingById(oppgaveId);
@@ -68,6 +68,22 @@ public with sharing class OppgaveManager {
             logger.publish();
         }
         return null;
+    }
+
+    @AuraEnabled
+    public static Map<String, Person__c> getPersonInfo(List<String> personIdents) {
+        Map<String, Person__c> result = new Map<String, Person__c>();
+        if (personIdents == null || personIdents.isEmpty()) {
+            return result;
+        }
+        for (Person__c p : [
+            SELECT Name, CRM_FullName__c, CRM_Age__c
+            FROM Person__c
+            WHERE Name IN :personIdents
+        ]) {
+            result.put(p.Name, p);
+        }
+        return result;
     }
 
     @AuraEnabled
@@ -232,6 +248,7 @@ public with sharing class OppgaveManager {
         return result;
     }
 
+    @AuraEnabled
     public static OppgaveResponse patchEditTask(OppgaveRequest request) {
         LoggerUtility patchLogger = String.isNotBlank(request.logCategory)
             ? new LoggerUtility(request.logCategory)

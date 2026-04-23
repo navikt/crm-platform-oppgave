@@ -532,4 +532,22 @@ public with sharing class OppgaveManager_Test {
         Assert.areEqual(0, schRequestsBefore.size(), 'No scheduled requests before');
         Assert.areEqual(0, schRequestsAfter.size(), 'No scheduled requests after');
     }
+
+    @IsTest
+    static void getPersonInfoTest() {
+        Test.startTest();
+        Map<String, Person__c> result = OppgaveManager.getPersonInfo(new List<String>{ '12345678901' });
+        Test.stopTest();
+
+        Assert.areEqual(1, result.size());
+    }
+
+    @IsTest
+    static void getPersonInfoNullTest() {
+        Test.startTest();
+        Map<String, Person__c> result = OppgaveManager.getPersonInfo(null);
+        Test.stopTest();
+
+        Assert.areEqual(0, result.size());
+    }
 }

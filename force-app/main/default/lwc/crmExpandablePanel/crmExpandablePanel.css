@@ -1,0 +1,60 @@
+.panel-background {
+    background-color: var(--override-background-color, #ffffff);
+    color: black;
+}
+
+.panel-background-bottom-border {
+    border-bottom: 1px solid #a9a9a9;
+}
+
+.panel-header-expandable:hover,
+.custom-icon-background {
+    background-color: #e9f0ff;
+}
+
+.panel-body {
+    padding-left: 1rem;
+    background-color: #ffffff;
+    word-break: break-word;
+    border-left: 2px solid #c1c4cb;
+    margin: 0.5rem 0 1rem 1.1rem;
+}
+
+.custom-icon-chevron,
+.panel-header-custom:hover .custom-icon-background {
+    fill: #00459c;
+}
+
+.custom-icon-background,
+.panel-header-custom:hover .custom-icon-chevron {
+    fill: #e9f0ff;
+}
+
+.custom-icon-chevron {
+    fill: #00459c;
+}
+
+.rotate-chevron {
+    transform: rotate(-180deg);
+}
+
+.rotate-chevron,
+.custom-chevron {
+    transition: transform 0.2s ease;
+}
+
+.panel-header-custom {
+    align-items: center;
+    font-weight: 400;
+    font-size: 14px;
+    padding: 0.6rem 1rem 0.6rem 0.5rem;
+    color: black;
+}
+
+.chevron-container {
+    margin-right: 0.75rem;
+}
+
+.panel-header-expandable {
+    cursor: pointer;
+}
