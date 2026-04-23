@@ -9,7 +9,7 @@ public with sharing class OppgaveRetry {
             insert schRequest;
             return schRequest;
         } catch (Exception e) {
-            LoggerUtility logger = new LoggerUtility('Oppgave Retry');
+            LoggerUtility logger = new LoggerUtility('Oppgave Retry Creation');
             logger.error(
                 'Could not insert scheduled request for Oppgave. Method:' + methodName + ', payload: ' + payload,
                 null,
@@ -32,29 +32,40 @@ public with sharing class OppgaveRetry {
             OppgaveRequest taskRequest = (OppgaveRequest) JSON.deserialize(requestString, OppgaveRequest.class);
 
             HttpResponse response;
-            switch on method {
-                when 'Post' {
-                    OppgaveService oppgaveService = new OppgaveService();
-                    oppgaveService.setSystemContext();
-
-                    response = oppgaveService.postTask(taskRequest.toOppgave());
+            try {
+                switch on method {
+                    when 'Post' {
+                        OppgaveService oppgaveService = new OppgaveService(
+                            'Oppgave Retry',
+                            CRM_ApplicationDomain.Domain.NKS,
+                            true
+                        );
+                        response = oppgaveService.postTask(taskRequest.toOppgave());
+                    }
+                    when 'Patch' {
+                        OppgaveService oppgaveService = new OppgaveService(
+                            'Oppgave Retry',
+                            CRM_ApplicationDomain.Domain.NKS,
+                            true
+                        );
+                        response = oppgaveService.editTask(taskRequest.toOppgave());
+                    }
+                    when else {
+                        logger.error(
+                            'Unknown method for scheduled request retry: ' + method,
+                            schRequest,
+                            CRM_ApplicationDomain.Domain.NKS
+                        );
+                        schRequest.status__c = 'Failed';
+                        requestsToUpdate.add(schRequest);
+                        continue;
+                    }
                 }
-                when 'Patch' {
-                    OppgaveService oppgaveService = new OppgaveService();
-                    oppgaveService.setSystemContext();
-
-                    response = oppgaveService.editTask(taskRequest.toOppgave());
-                }
-                when else {
-                    logger.error(
-                        'Unknown method for scheduled request retry: ' + method,
-                        schRequest,
-                        CRM_ApplicationDomain.Domain.NKS
-                    );
-                    schRequest.status__c = 'Failed';
-                    requestsToUpdate.add(schRequest);
-                    continue;
-                }
+            } catch (Exception ex) {
+                logger.exception(ex, schRequest, CRM_ApplicationDomain.Domain.NKS);
+                schRequest.status__c = 'Failed';
+                requestsToUpdate.add(schRequest);
+                continue;
             }
             Integer statusCode = response.getStatusCode();
             if (statusCode == 200 || statusCode == 201) {
