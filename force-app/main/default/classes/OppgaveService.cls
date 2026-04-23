@@ -9,10 +9,14 @@ public without sharing class OppgaveService extends ApiController {
     private String transactionId;
 
     public OppgaveService() {
-        this('Oppgave', CRM_ApplicationDomain.Domain.NKS);
+        this('Oppgave', CRM_ApplicationDomain.Domain.NKS, false);
     }
 
     public OppgaveService(String logCategory, CRM_ApplicationDomain.Domain domain) {
+        this(logCategory, domain, false);
+    }
+
+    public OppgaveService(String logCategory, CRM_ApplicationDomain.Domain domain, Boolean systemContext) {
         String loggingCategory = String.isNotBlank(logCategory) ? logCategory : 'Oppgave';
         CRM_ApplicationDomain.Domain loggingDomain = domain != null ? domain : CRM_ApplicationDomain.Domain.NKS;
         LoggerUtility logger = new LoggerUtility(loggingCategory);
@@ -21,6 +25,11 @@ public without sharing class OppgaveService extends ApiController {
             .setLogCalloutRequest()
             .publishLogAfterCallout()
             .setLogDomain(loggingDomain);
+        // Set system context for callouts made from batch due to session cache not being supported in batch, which causes authentication to fail for callouts made from batch
+        // System token uses platform cache - OBO token uses session cache
+        if (systemContext) {
+            setSystemContext();
+        }
         addSaasProxyServiceAuthHeader();
         setHeaders(new Map<String, String>{ 'Content-Type' => 'application/json', 'accept' => 'application/json' });
     }
