@@ -1,0 +1,39 @@
+<template>
+    <div class="panel-background panel-background-bottom-border">
+        <div
+            class={panelHeaderStyle}
+            role="button"
+            tabindex="0"
+            aria-expanded={isExpanded}
+            onclick={toggleExpand}
+            onkeydown={handleKeydown}
+        >
+            <lightning-layout vertical-align="center">
+                <lightning-layout-item>
+                    <span class="chevron-container">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 26 26"
+                            class={chevronClass}
+                            aria-hidden="true"
+                        >
+                            <rect width="26" height="26" rx="10" class="custom-icon-background" />
+                            <path
+                                d="M20.4769 11.1613L13.3808 18.3267C13.1731 18.5343 12.8269 18.5343 12.6192 18.3267L5.52308 11.1613C5.31539 10.9536 5.31539 10.6074 5.52308 10.3997L6.28462 9.63819C6.49231 9.4305 6.83846 9.4305 7.04616 9.63819L12.6192 15.2805C12.8269 15.4882 13.1731 15.4882 13.3808 15.2805L18.9538 9.67281C19.1615 9.46511 19.5077 9.46511 19.7154 9.67281L20.4769 10.4343C20.65 10.642 20.65 10.9536 20.4769 11.1613Z"
+                                class="custom-icon-chevron"
+                            />
+                        </svg>
+                    </span>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="grow">
+                    <slot name="header"></slot>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+        <template lwc:if={isExpanded}>
+            <div class="panel-body">
+                <slot></slot>
+            </div>
+        </template>
+    </div>
+</template>

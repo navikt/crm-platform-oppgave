@@ -64,6 +64,7 @@ public class Oppgave {
     }
 
     public class Kommentar {
+        @AuraEnabled
         public String tekst;
         public Boolean automatiskGenerert;
     }
