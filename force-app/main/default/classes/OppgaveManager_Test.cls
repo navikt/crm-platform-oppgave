@@ -7,19 +7,19 @@ public with sharing class OppgaveManager_Test {
 
     @IsTest
     static void getOppgaveById_Success() {
-        ApiMock.setTestMock('GET_OPPGAVE_BY_ID', 200, 'OK');
+        ApiMock.setTestMock('GET_OPPGAVE_BY_ID_V2', 200, 'OK');
         Test.startTest();
-        Oppgave oppg = OppgaveManager.getOppgaveById('1234');
+        OppgaveV2 oppg = OppgaveManager.getOppgaveById('1234');
         Test.stopTest();
         Assert.isNotNull(oppg, 'Should return an Oppgave');
     }
 
     @IsTest
     static void getOppgaveById_Error() {
-        ApiMock.setTestMock('GET_OPPGAVE_BY_ID', 500, 'Error');
+        ApiMock.setTestMock('GET_OPPGAVE_BY_ID_V2', 500, 'Error');
         List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c WHERE Category__c = 'Oppgave'];
         Test.startTest();
-        Oppgave oppg = OppgaveManager.getOppgaveById('1234');
+        OppgaveV2 oppg = OppgaveManager.getOppgaveById('1234');
         Test.stopTest();
         List<Application_Log__c> logsAfter = [SELECT Id, UUID__c FROM Application_Log__c WHERE Category__c = 'Oppgave'];
         Assert.isNull(oppg, 'Should not return an Oppgave');

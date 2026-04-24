@@ -1,5 +1,5 @@
 import { LightningElement, api, wire } from 'lwc';
-import getOppgaveOppfolging from '@salesforce/apex/OppgaveManager.getOppgaveOppfolging';
+import getOppgaveById from '@salesforce/apex/OppgaveManager.getOppgaveById';
 
 export default class CrmOppgaveComments extends LightningElement {
     @api oppgaveId;
@@ -7,13 +7,13 @@ export default class CrmOppgaveComments extends LightningElement {
     comment;
     errorMessage;
 
-    @wire(getOppgaveOppfolging, { oppgaveId: '$oppgaveId' })
+    @wire(getOppgaveById, { oppgaveId: '$oppgaveId' })
     wiredComment({ data, error }) {
         if (data) {
-            this.comment = data.map((item) => ({
+            this.comment = (data.kommentarer ?? []).map((item) => ({
                 ...item,
-                opprettetTidspunktFormatted: item.opprettetTidspunkt
-                    ? new Date(item.opprettetTidspunkt).toLocaleString('nb-NO', {
+                opprettetTidspunktFormatted: item.opprettet?.tidspunkt
+                    ? new Date(item.opprettet.tidspunkt).toLocaleString('nb-NO', {
                           day: '2-digit',
                           month: '2-digit',
                           year: 'numeric',

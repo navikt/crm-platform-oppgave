@@ -1,35 +1,12 @@
 public with sharing class OppgaveManager {
     static LoggerUtility logger = new LoggerUtility('Oppgave');
 
-    // TODO: Will be implemented as part of getOppgaveById when oppgave v2 api is ready by appending ?include=kommentarer in req.
-    @AuraEnabled(cacheable=true)
-    public static List<CRM_OppgaveOppfolging> getOppgaveOppfolging(String oppgaveId) {
-        OppgaveService service = new OppgaveService();
-        HttpResponse response = service.getOppgaveOppfolgingById(oppgaveId);
-        if (response.getStatusCode() == 200) {
-            List<CRM_OppgaveOppfolging> oppfolgingList = (List<CRM_OppgaveOppfolging>) JSON.deserialize(
-                response.getBody(),
-                List<CRM_OppgaveOppfolging>.class
-            );
-            return oppfolgingList;
-        } else {
-            logger.httpError(
-                'Error getting oppgaveOppfolging by ID',
-                response,
-                null,
-                CRM_ApplicationDomain.Domain.NKS,
-                service.getTransactionId()
-            );
-        }
-        return null;
-    }
-
     @AuraEnabled
-    public static Oppgave getOppgaveById(String oppgaveId) {
+    public static OppgaveV2 getOppgaveById(String oppgaveId) {
         OppgaveService service = new OppgaveService();
         HttpResponse response = service.getOppgaveById(oppgaveId);
         if (response.getStatusCode() == 200) {
-            Oppgave oppgave = (Oppgave) JSON.deserialize(response.getBody(), Oppgave.class);
+            OppgaveV2 oppgave = (OppgaveV2) JSON.deserialize(response.getBody(), OppgaveV2.class);
             return oppgave;
         } else {
             logger.httpError(

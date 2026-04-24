@@ -1,10 +1,3 @@
-/**
- * @description       :
- * @author            : mamikals
- * @group             :
- * @last modified on  : 10-02-2023
- * @last modified by  : mamikals
- **/
 public without sharing class OppgaveService extends ApiController {
     private String transactionId;
 
@@ -34,17 +27,9 @@ public without sharing class OppgaveService extends ApiController {
         setHeaders(new Map<String, String>{ 'Content-Type' => 'application/json', 'accept' => 'application/json' });
     }
 
-    // TODO: Will be implemented as part of getOppgaveById when oppgave v2 api is ready by appending ?include=kommentarer in req.
-    public HttpResponse getOppgaveOppfolgingById(String Id) {
-        initRequest('Oppgave_API', 'GET_OPPGAVEOPPFOLGING_BY_ID', new Map<String, String>{ 'id' => Id });
-
-        addXCorrelation();
-        doCallout();
-        return getResponse();
-    }
-
     public HttpResponse getOppgaveById(String Id) {
-        initRequest('Oppgave_API', 'GET_OPPGAVE_BY_ID', new Map<String, String>{ 'id' => Id });
+        initRequest('Oppgave_API', 'GET_OPPGAVE_BY_ID_V2', new Map<String, String>{ 'id' => Id });
+        addUrlParam('include', 'kommentarer');
         addXCorrelation();
 
         doCallout();
