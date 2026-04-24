@@ -4,7 +4,8 @@ public with sharing class OppgaveRetry {
             Scheduled_Request__c schRequest = new Scheduled_Request__c(
                 Status__c = 'Scheduled',
                 Method__c = methodName,
-                Payload__c = payload
+                Payload__c = payload,
+                Domain__c = 'NKS'
             );
             insert schRequest;
             return schRequest;

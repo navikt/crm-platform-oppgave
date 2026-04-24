@@ -12,7 +12,8 @@ public with sharing class OppgaveRetry_Test {
         Scheduled_Request__c schRequest = new Scheduled_Request__c(
             Method__c = 'Post',
             Status__c = 'Scheduled',
-            Payload__c = payload
+            Payload__c = payload,
+            Domain__c = 'NKS'
         );
         insert schRequest;
 
@@ -46,7 +47,8 @@ public with sharing class OppgaveRetry_Test {
         Scheduled_Request__c schRequest = new Scheduled_Request__c(
             Method__c = 'Post',
             Status__c = 'Scheduled',
-            Payload__c = payload
+            Payload__c = payload,
+            Domain__c = 'NKS'
         );
         insert schRequest;
 
@@ -85,7 +87,8 @@ public with sharing class OppgaveRetry_Test {
         Scheduled_Request__c schRequest = new Scheduled_Request__c(
             Method__c = 'Post',
             Status__c = 'Scheduled',
-            Payload__c = payload
+            Payload__c = payload,
+            Domain__c = 'NKS'
         );
         insert schRequest;
 
@@ -124,7 +127,8 @@ public with sharing class OppgaveRetry_Test {
         Scheduled_Request__c schRequest = new Scheduled_Request__c(
             Method__c = 'Post',
             Status__c = 'Scheduled',
-            Payload__c = payload
+            Payload__c = payload,
+            Domain__c = 'NKS'
         );
         insert schRequest;
         Test.setCreatedDate(schRequest.Id, DateTime.now().addDays(-2));
@@ -173,7 +177,8 @@ public with sharing class OppgaveRetry_Test {
         Scheduled_Request__c schRequest = new Scheduled_Request__c(
             Method__c = 'Patch',
             Status__c = 'Scheduled',
-            Payload__c = payload
+            Payload__c = payload,
+            Domain__c = 'NKS'
         );
         insert schRequest;
 
@@ -209,7 +214,8 @@ public with sharing class OppgaveRetry_Test {
         Scheduled_Request__c schRequest = new Scheduled_Request__c(
             Method__c = 'Patch',
             Status__c = 'Scheduled',
-            Payload__c = payload
+            Payload__c = payload,
+            Domain__c = 'NKS'
         );
         insert schRequest;
 
@@ -250,7 +256,8 @@ public with sharing class OppgaveRetry_Test {
         Scheduled_Request__c schRequest = new Scheduled_Request__c(
             Method__c = 'Patch',
             Status__c = 'Scheduled',
-            Payload__c = payload
+            Payload__c = payload,
+            Domain__c = 'NKS'
         );
         insert schRequest;
 
@@ -291,7 +298,8 @@ public with sharing class OppgaveRetry_Test {
         Scheduled_Request__c schRequest = new Scheduled_Request__c(
             Method__c = 'Patch',
             Status__c = 'Scheduled',
-            Payload__c = payload
+            Payload__c = payload,
+            Domain__c = 'NKS'
         );
         insert schRequest;
         Test.setCreatedDate(schRequest.Id, DateTime.now().addDays(-2));
@@ -334,7 +342,8 @@ public with sharing class OppgaveRetry_Test {
         Scheduled_Request__c schRequest = new Scheduled_Request__c(
             Method__c = 'Unknown',
             Status__c = 'Scheduled',
-            Payload__c = '{}'
+            Payload__c = '{}',
+            Domain__c = 'NKS'
         );
         insert schRequest;
         Test.startTest();
@@ -406,10 +415,20 @@ public with sharing class OppgaveRetry_Test {
         oppgReq2.personIdent = '12345678904';
         oppgReq2.oppgavetype = 'BEH_HENV';
         requests.add(
-            new Scheduled_Request__c(Method__c = 'Post', Status__c = 'Scheduled', Payload__c = JSON.serialize(oppgReq1))
+            new Scheduled_Request__c(
+                Method__c = 'Post',
+                Status__c = 'Scheduled',
+                Payload__c = JSON.serialize(oppgReq1),
+                Domain__c = 'NKS'
+            )
         );
         requests.add(
-            new Scheduled_Request__c(Method__c = 'Post', Status__c = 'Scheduled', Payload__c = JSON.serialize(oppgReq2))
+            new Scheduled_Request__c(
+                Method__c = 'Post',
+                Status__c = 'Scheduled',
+                Payload__c = JSON.serialize(oppgReq2),
+                Domain__c = 'NKS'
+            )
         );
         insert requests;
 
