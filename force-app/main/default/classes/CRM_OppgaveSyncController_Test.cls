@@ -8,6 +8,11 @@ public class CRM_OppgaveSyncController_Test {
             new Common_Code__c(CRM_Code_Set__c = 'Oppgavetyper', CRM_Code__c = 'FDR')
         );
         CRM_OPPGAVE_TestDataFactory.createRecord(new Common_Code__c(CRM_Code_Set__c = 'Tema', CRM_Code__c = 'BID'));
+        CRM_OPPGAVE_TestDataFactory.createRecord(new NavUnit__c(INT_UnitNumber__c = '0100'));
+        CRM_OPPGAVE_TestDataFactory.createRecord(
+            new Common_Code__c(CRM_Code_Set__c = 'Oppgavetyper', CRM_Code__c = 'HAST_BANK_OPPLYS')
+        );
+        CRM_OPPGAVE_TestDataFactory.createRecord(new Common_Code__c(CRM_Code_Set__c = 'Tema', CRM_Code__c = 'AAP'));
     }
 
     @isTest
