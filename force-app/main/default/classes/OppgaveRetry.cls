@@ -69,9 +69,22 @@ public with sharing class OppgaveRetry {
             }
             Integer statusCode = response.getStatusCode();
             if (statusCode == 200 || statusCode == 201) {
-                logger.info(
+                // This copies the info method of LoggerUtility, without logging the request itself
+                Integer oppgaveId = ((Oppgave) JSON.deserialize(response.getBody(), Oppgave.class))?.id;
+                String payload =
+                    'Method: ' +
+                    method +
+                    ', Oppgave ID: ' +
+                    oppgaveId +
+                    ', Original Request ID: ' +
+                    schRequest.Id;
+                logger.logMessage(
+                    LoggerUtility.logLevel.Info,
+                    schRequest.Id,
+                    schRequest.getSObjectType().getDescribe().getName(),
                     'Deleting scheduled request after successful retry',
-                    schRequest,
+                    payload,
+                    null,
                     CRM_ApplicationDomain.Domain.NKS
                 );
                 requestsToDelete.add(schRequest);
