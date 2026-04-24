@@ -15,8 +15,10 @@
         "CustomerCommunityPlus",
         "ServiceCloud",
         "LightningServiceConsole",
+        "ContactsToMultipleAccounts",
         "FIELDSERVICE:1",
-        "Knowledge"
+        "Knowledge",
+        "LiveMessage"
     ],
     "country": "NO",
     "language": "en_US",
