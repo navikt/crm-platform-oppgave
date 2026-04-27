@@ -6,7 +6,8 @@ public with sharing class OppgaveManager {
         OppgaveService service = new OppgaveService();
         HttpResponse response = service.getOppgaveById(oppgaveId);
         if (response.getStatusCode() == 200) {
-            OppgaveV2 oppgave = (OppgaveV2) JSON.deserialize(response.getBody(), OppgaveV2.class);
+            String body = response.getBody().replace('"system":', '"systemKilde":');
+            OppgaveV2 oppgave = (OppgaveV2) JSON.deserialize(body, OppgaveV2.class);
             return oppgave;
         } else {
             logger.httpError(

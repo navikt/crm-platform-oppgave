@@ -88,7 +88,7 @@ public class OppgaveV2 {
         @AuraEnabled
         public Medarbeider medarbeider;
         @AuraEnabled
-        public String system;
+        public String systemKilde;
     }
 
     public class Kommentar {
