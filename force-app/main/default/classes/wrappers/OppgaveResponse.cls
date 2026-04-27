@@ -1,17 +1,22 @@
 public class OppgaveResponse {
     @invocableVariable(label='Success')
+    @AuraEnabled
     public Boolean isSuccess;
 
     @invocableVariable(label='Error message')
+    @AuraEnabled
     public String errorMessage;
 
     @invocableVariable(label='Error UUID')
+    @AuraEnabled
     public String errorUuid;
 
     @invocableVariable(label='Will be retried?')
+    @AuraEnabled
     public Boolean isRetry;
 
     @invocableVariable(label='Oppgave')
+    @AuraEnabled
     public Oppgave oppgave;
 
     public static OppgaveResponse success(Oppgave oppgave) {

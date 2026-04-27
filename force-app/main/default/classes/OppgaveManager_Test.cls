@@ -550,4 +550,20 @@ public with sharing class OppgaveManager_Test {
 
         Assert.areEqual(0, result.size());
     }
+
+    @IsTest
+    static void patchEditTaskFromLwc_Success() {
+        ApiMock.setTestMock('PATCH_EDIT_OPPGAVE', 200, 'OK');
+        OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.personIdent = '12345678902';
+        taskRequest.id = 12345;
+        taskRequest.versjon = 2;
+        taskRequest.methodType = 'PATCH';
+
+        Test.startTest();
+        OppgaveResponse result = OppgaveManager.patchEditTaskFromLwc(JSON.serialize(taskRequest));
+        Test.stopTest();
+
+        Assert.isTrue(result.isSuccess);
+    }
 }

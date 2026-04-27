@@ -1,0 +1,42 @@
+.card-wrapper {
+    background-color: #ffffff;
+    border-radius: 0.25rem;
+    border: 1px solid #dddbda;
+}
+
+.header-row {
+    display: flex;
+    align-items: center;
+    min-height: 5.5rem;
+}
+
+.header-title-col {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.header-actions-col {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    max-width: 55%;
+}
+
+.error-message-box {
+    display: flex;
+    align-items: flex-start;
+    min-width: 0;
+}
+
+.warning-icon {
+    flex: 0 0 auto;
+    margin-right: 0.5rem;
+    margin-top: 2px;
+}
+
+.error-text {
+    color: #c23934;
+    font-size: 0.8rem;
+    white-space: pre-line;
+}

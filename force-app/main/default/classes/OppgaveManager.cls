@@ -227,6 +227,12 @@ public with sharing class OppgaveManager {
     }
 
     @AuraEnabled
+    public static OppgaveResponse patchEditTaskFromLwc(String requestJson) {
+        OppgaveRequest request = (OppgaveRequest) JSON.deserialize(requestJson, OppgaveRequest.class);
+        return patchEditTask(request);
+    }
+
+    @AuraEnabled
     public static OppgaveResponse patchEditTask(OppgaveRequest request) {
         LoggerUtility patchLogger = String.isNotBlank(request.logCategory)
             ? new LoggerUtility(request.logCategory)

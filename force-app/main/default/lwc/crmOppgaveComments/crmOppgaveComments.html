@@ -1,17 +1,14 @@
 <template>
     <h2 class="slds-text-heading_small slds-var-m-bottom_small">Oppfølgingskommentarer</h2>
     <template lwc:if={hasComments}>
-        <template for:each={comment} for:item="item">
-            <div key={item.id} class="slds-m-bottom_x-small">
-                <p>{item.kommentar}</p>
+        <template for:each={formattedComments} for:item="item">
+            <div key={item.tekst} class="slds-m-bottom_x-small">
+                <p>{item.tekst}</p>
                 <p class="slds-text-color_weak slds-text-body_small">
                     {item.opprettetAv} - {item.opprettetTidspunktFormatted}
                 </p>
             </div>
         </template>
-    </template>
-    <template lwc:elseif={errorMessage}>
-        <p class="slds-text-color_error">{errorMessage}</p>
     </template>
     <template lwc:else>
         <p class="slds-text-color_weak">Ingen kommentarer på oppgaven.</p>

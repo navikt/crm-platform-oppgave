@@ -1,0 +1,25 @@
+.beskrivelse-textarea {
+    height: 7.3rem;
+}
+.static-value {
+    display: block;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #dddbda;
+    font-size: 0.875rem;
+}
+
+.error-message-box {
+    display: flex;
+    align-items: flex-start;
+    overflow: hidden;
+}
+
+.warning-icon {
+    margin-right: 1rem;
+    margin-top: 3px;
+}
+
+.error-text {
+    color: #c23934;
+    font-size: 0.8rem;
+}

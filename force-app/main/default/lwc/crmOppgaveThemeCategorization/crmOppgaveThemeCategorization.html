@@ -1,0 +1,29 @@
+<template>
+    <lightning-layout size="12" multiple-rows="true">
+        <lightning-layout-item size="6" padding="around-small">
+            <lightning-combobox
+                name="Theme"
+                label="Tema"
+                options={themes}
+                required
+                placeholder="(Ikke valgt)"
+                value={chosenTheme}
+                onchange={handleThemeChange}
+                disabled={disabled}
+                dropdown-alignment="auto"
+            ></lightning-combobox>
+        </lightning-layout-item>
+        <lightning-layout-item size="6" padding="around-small">
+            <lightning-combobox
+                name="Gjelder"
+                label={gjelderLabel}
+                placeholder={gjelderPlaceholder}
+                options={gjelderList}
+                value={chosenGjelder}
+                onchange={handleGjelderChange}
+                disabled={gjelderDisabled}
+                dropdown-alignment="auto"
+            ></lightning-combobox>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>
