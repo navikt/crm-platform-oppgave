@@ -126,7 +126,7 @@ public with sharing class OppgaveManager {
     }
 
     public static List<Oppgave> getOppgaver(CRM_OppgaveQueryList query) {
-        OppgaveService service = new OppgaveService();
+        OppgaveService service = new OppgaveService('getOppgaver', CRM_ApplicationDomain.Domain.NKS, true);
         HttpResponse response = service.getOppgaveList(query);
         if (response.getStatusCode() == 200) {
             OppgaveListResponse oppgaver = (OppgaveListResponse) JSON.deserialize(
@@ -174,15 +174,20 @@ public with sharing class OppgaveManager {
         Boolean retry = true;
         OppgaveResponse result;
         try {
-            OppgaveService oppgaveService = new OppgaveService(request.logCategory, CRM_ApplicationDomain.Domain.NKS);
+            Boolean systemContext = false;
             if (
                 request.POST_AS_SYSTEM == true ||
                 !hasPersonAccess(request) ||
                 !UserInfo.getUserType().equalsIgnoreCase('Standard')
             ) {
-                oppgaveService.setSystemContext();
+                systemContext = true;
             }
 
+            OppgaveService oppgaveService = new OppgaveService(
+                request.logCategory,
+                CRM_ApplicationDomain.Domain.NKS,
+                systemContext
+            );
             HttpResponse response = oppgaveService.postTask(request.toOppgave());
             Integer statusCode = response.getStatusCode();
             if (statusCode == 200 || statusCode == 201) {
@@ -238,15 +243,21 @@ public with sharing class OppgaveManager {
             if (request.versjon == null || request.versjon == 0) {
                 throw new IllegalArgumentException('Versjon is required for edit requests');
             }
-            OppgaveService oppgaveService = new OppgaveService(request.logCategory, CRM_ApplicationDomain.Domain.NKS);
+
+            Boolean systemContext = false;
             if (
                 request.POST_AS_SYSTEM == true ||
                 !hasPersonAccess(request) ||
                 !UserInfo.getUserType().equalsIgnoreCase('Standard')
             ) {
-                oppgaveService.setSystemContext();
+                systemContext = true;
             }
 
+            OppgaveService oppgaveService = new OppgaveService(
+                request.logCategory,
+                CRM_ApplicationDomain.Domain.NKS,
+                systemContext
+            );
             HttpResponse response = oppgaveService.editTask(request.toOppgave());
             Integer statusCode = response.getStatusCode();
 
