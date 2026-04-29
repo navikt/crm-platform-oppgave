@@ -20,6 +20,7 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
 	isLoading = false;
 	offset = 0;
 	navIdent;
+    aktorId;
 
 	@wire(getRecord, { recordId: userId, fields: [USER_NAV_IDENT_FIELD] })
 	wiredUser({ data }) {
@@ -33,25 +34,36 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
 	}
 
 	async loadOppgaver() {
-		if (this.isLoading) {
-			return;
-		}
+		// if (this.isLoading) {
+		// 	return;
+		// }
 
 
-		this.isLoading = true;
+		// this.isLoading = true;
+        console.log('før try-catch');
+        
 
 		try {
+            console.log('try trigga');
+            
 			const result = await this.fetchOppgaver();
 
+            console.log('from async load oppgave try. result next line');
+            console.log(result);
+            
 			const rows = (result || []).map((oppgave) => this.mapOppgaveToRow(oppgave));
 			this.allRows = rows.slice(0, this.numRecords);
 			this.applyClientFilters();
 			this.error = undefined;
 		} catch (error) {
+            console.log('catch trigga');
+            
 			this.allRows = [];
 			this.data = [];
 			this.error = error;
 		} finally {
+            console.log('finally trigga');
+            
 			this.isLoading = false;
 		}
 	}
@@ -61,21 +73,23 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         
 
         
-		if (this.ownedByRunningUser) {
-			if (!this.navIdent) {
-				return [];
-			}
-			return getAllAssignedOpenOppgaver({ navIdent: this.navIdent });
-		}
+		// if (this.ownedByRunningUser) {
+		// 	if (!this.navIdent) {
+		// 		return [];
+		// 	}
+		// 	return getAllAssignedOpenOppgaver({ navIdent: this.navIdent });
+		// }
 
-		if (this.selectedTaskScope === 'open') {
-			return getOpenOppgaver({ personId: this.recordId, offset: this.offset });
-		}
+		// if (this.selectedTaskScope === 'open') {
+		// 	return getOpenOppgaver({ personId: this.recordId, offset: this.offset });
+		// }
 
         console.log('neste linje! :D ');
+        console.log(this.recordId + ' ' + this.offset);
         
-		console.log(getAllOppgaver({ personId: this.recordId, offset: this.offset }));
-		return getAllOppgaver({ personId: this.recordId, offset: this.offset });
+		console.log(getAllOppgaver({ personIdent: 12345678901, offset: this.offset }));
+		//return getAllOppgaver({ personId: recordId, offset: offset });
+		return getAllOppgaver({ personIdent: 12345678901, offset: this.offset });
 	}
 
 	mapOppgaveToRow(oppgave) {
@@ -84,7 +98,6 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         return {
 			id: externalId,
 			recordUrl: externalId ? `#${externalId}` : '#', //TODO 
-			recordId: externalId,
 			oppgavetype: oppgave?.oppgavetype,
 			tema: oppgave?.tema,
 			gjelder: oppgave?.behandlingstema,

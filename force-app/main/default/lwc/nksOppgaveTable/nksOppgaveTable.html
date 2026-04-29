@@ -3,7 +3,7 @@
         <div slot="title" class="task-card__header slds-grid slds-grid_vertical-align-center slds-size_1-of-1">
             <span class="task-card__title">Oppgaver</span>
 
-            <div class="task-card__controls slds-col_bump-left slds-grid slds-grid_vertical-align-center slds-gutters_small">
+            <div class="task-card__controls slds-col_bump-left slds-grid slds-grid_vertical-align-center slds-gutters_small slds-float_right">
                 <label class="task-table__option">
                     <input type="checkbox" checked={ownedByRunningUser} onchange={handleMineToggle} />
                     <span>Vis mine oppgaver</span>
@@ -74,6 +74,7 @@
             </tbody>
         </table>
         <div if:true={error} class="slds-text-color_error slds-p-horizontal_small slds-p-bottom_small">
+            <p>lol</p>
             {errorMessage}
         </div>
     </lightning-card>
