@@ -14,7 +14,7 @@ public class OppgaveV2 {
     @AuraEnabled
     public String status;
     @AuraEnabled
-    public String arkivreferanse;
+    public Arkivreferanse arkivreferanse;
     @AuraEnabled
     public String tilknyttetSystem;
     @AuraEnabled
@@ -96,5 +96,12 @@ public class OppgaveV2 {
         public String tekst;
         @AuraEnabled
         public Tidspunkt opprettet;
+    }
+
+    public class Arkivreferanse {
+        @AuraEnabled
+        public String saksnr;
+        @AuraEnabled
+        public String journalpostId;
     }
 }
