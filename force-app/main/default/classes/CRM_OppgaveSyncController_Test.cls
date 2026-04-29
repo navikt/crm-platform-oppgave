@@ -3,7 +3,12 @@ public class CRM_OppgaveSyncController_Test {
     @TestSetup
     static void makeData() {
         //Make necessary common code records
-        CRM_OPPGAVE_TestDataFactory.createRecord(new NavUnit__c(INT_UnitNumber__c = '4100'));
+        CRM_OPPGAVE_TestDataFactory.createRecord(new NavUnit__c(INT_UnitNumber__c = '2820'));
+        CRM_OPPGAVE_TestDataFactory.createRecord(
+            new Common_Code__c(CRM_Code_Set__c = 'Oppgavetyper', CRM_Code__c = 'FDR')
+        );
+        CRM_OPPGAVE_TestDataFactory.createRecord(new Common_Code__c(CRM_Code_Set__c = 'Tema', CRM_Code__c = 'BID'));
+        CRM_OPPGAVE_TestDataFactory.createRecord(new NavUnit__c(INT_UnitNumber__c = '0100'));
         CRM_OPPGAVE_TestDataFactory.createRecord(
             new Common_Code__c(CRM_Code_Set__c = 'Oppgavetyper', CRM_Code__c = 'HAST_BANK_OPPLYS')
         );
@@ -13,11 +18,11 @@ public class CRM_OppgaveSyncController_Test {
     @isTest
     static void testOppgaveSync() {
         ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
-        CRM_OPPGAVE_TestDataFactory.createRecord(new Person__c(INT_ActorId__c = '1234567891113'));
+        CRM_OPPGAVE_TestDataFactory.createRecord(new Person__c(INT_ActorId__c = '2092852764905'));
 
         Test.startTest();
         CRM_OppgaveQuery query = new CRM_OppgaveQuery();
-        query.aktoerId = '1234567891113';
+        query.aktoerId = '2092852764905';
         CRM_OppgaveSyncController.doOppgaveSync(JSON.serialize(query));
         Test.stopTest();
 

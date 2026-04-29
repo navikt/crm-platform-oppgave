@@ -1,4 +1,9 @@
 public enum OppgaveStatuskategori {
     AAPEN,
-    AVSLUTTET
+    AAPNET,
+    AVSLUTTET,
+    OPPRETTET,
+    UNDER_BEHANDLING,
+    FERDIGSTILT,
+    FEILREGISTRERT
 }

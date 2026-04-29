@@ -1,76 +1,90 @@
-public class Oppgave implements Comparable {
+// Swagger: https://oppgave.intern.dev.nav.no/#/Oppgave
+public class Oppgave {
+    @AuraEnabled
     public Integer id;
+    @AuraEnabled
     public String tildeltEnhetsnr; //Enheten oppgaven er tildelt. Dersom enhet ikke er angitt, så vil oppgaven automatisk fordeles iht. standard arbeidsfordelingsregler (se norg2)
+    @AuraEnabled
     public String opprettetAvEnhetsnr;
+    @AuraEnabled
     public String journalpostId;
+    @AuraEnabled
     public String journalpostkilde;
+    @AuraEnabled
     public String behandlesAvApplikasjon;
+    @AuraEnabled
     public String tilordnetRessurs;
+    @AuraEnabled
+    public String endretAvEnhetsnr; // Unit Number fra User
+    @AuraEnabled
     public String beskrivelse;
+    @AuraEnabled
+    public String beskrivelseAvOppgaven;
+    @AuraEnabled
+    public String saksreferanse;
+    @AuraEnabled
     public String tema;
+    @AuraEnabled
     public String behandlingstema;
+    @AuraEnabled
     public String oppgavetype; // REQUIRED
+    @AuraEnabled
     public String behandlingstype;
+    @AuraEnabled
     public String aktivDato; //Datestring, REQUIRED
+    @AuraEnabled
     public String fristFerdigstillelse; //Datestring
+    @AuraEnabled
     public String prioritet; // [HOY, NORM, LAV],
+    @AuraEnabled
     public String opprettetTidspunkt; //Datetime String
-    public String status; //ENUM: [OPPRETTET, AAPNET, UNDER_BEHANDLING, FERDIGSTILT, FEILREGISTRERT]
+    @AuraEnabled
+    public OppgaveStatuskategori status; //ENUM: [OPPRETTET, AAPNET, UNDER_BEHANDLING, FERDIGSTILT, FEILREGISTRERT]
+    @AuraEnabled
     public Integer versjon;
-    public List<Ident> identer; //To-be model
+    @AuraEnabled
+    public List<Ident> identer;
+    @AuraEnabled
     public LegacyIdent ident;
-    public OppgaveMetadata metadata;
+    @AuraEnabled
+    public String personident;
+    @AuraEnabled
+    public OppgaveMetadata metadata; // Hidden in Swagger, but still in use
+    @AuraEnabled
     public String aktoerId;
+    @AuraEnabled
     public String orgnr;
+    @AuraEnabled
+    public Kommentar kommentar;
+    @AuraEnabled
+    public Bruker bruker;
 
     public class OppgaveMetadata {
         public String EKSTERN_HENVENDELSE_ID;
     }
 
-
-    public Integer compareTo(Object compareToObj) {
-        CRM_KafkaOppgave compareOppg = (CRM_KafkaOppgave) compareToObj;
-
-        Integer returnValue = 0;
-        if (versjon > compareOppg.versjon) {
-            returnValue = 1;
-        } else if (versjon > compareOppg.versjon) {
-            returnValue = -1;
-        }
-
-        return returnValue;
+    public class Kommentar {
+        @AuraEnabled
+        public String tekst;
+        public Boolean automatiskGenerert;
     }
 
+    // Hidden in Swagger, but still in use
     public class Ident {
         public String ident;
         public String gruppe;
     }
 
+    // Hidden in Swagger, but still in use
     public class LegacyIdent {
         public String identType;
         public String verdi;
     }
 
-    public String getActorId() {
-        String actorId;
-        if (
-            ident != null &&
-            String.isNotBlank(this.ident.identType) &&
-            this.ident.identType.equalsIgnoreCase('AKTOERID')
-        ) {
-            actorId = this.ident.verdi;
-        } else if (String.isNotBlank(this.aktoerId)) {
-            actorId = this.aktoerId;
-        } else {
-            if (this.identer != null) {
-                for (Ident idt : this.identer) {
-                    if (String.isNotBlank(idt.gruppe) && idt.gruppe.equalsIgnoreCase('AKTOERID')) {
-                        actorId = idt.ident;
-                    }
-                }
-            }
-        }
-
-        return actorId;
+    public class Bruker {
+        @AuraEnabled
+        public String ident;
+        @AuraEnabled
+        public String type; //ENUM: [ PERSON, ARBEIDSGIVER, SAMHANDLER ]
     }
 }
