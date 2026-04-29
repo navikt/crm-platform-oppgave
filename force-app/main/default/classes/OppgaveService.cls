@@ -23,12 +23,12 @@ public without sharing class OppgaveService extends ApiController {
         if (systemContext) {
             setSystemContext();
         }
-        addSaasProxyServiceAuthHeader();
         setHeaders(new Map<String, String>{ 'Content-Type' => 'application/json', 'accept' => 'application/json' });
     }
 
     public HttpResponse getOppgaveById(String Id) {
         initRequest('Oppgave_API', 'GET_OPPGAVE_BY_ID_V2', new Map<String, String>{ 'id' => Id });
+        addSaasProxyServiceAuthHeader();
         addUrlParam('include', 'kommentarer');
         addXCorrelation();
 
@@ -38,6 +38,7 @@ public without sharing class OppgaveService extends ApiController {
 
     public HttpResponse getOppgaveList(CRM_OppgaveQueryList query) {
         initRequest('Oppgave_API', 'GET_OPPGAVE');
+        addSaasProxyServiceAuthHeader();
         Map<String, String> convertedParams = convertToQueryParams(query);
         for (String param : convertedParams.keySet()) {
             String paramValue = convertedParams.get(param);
@@ -51,8 +52,8 @@ public without sharing class OppgaveService extends ApiController {
 
     public HttpResponse postTask(Oppgave request) {
         initRequest('Oppgave_API', 'POST_CREATE_OPPGAVE');
+        addSaasProxyServiceAuthHeader();
         setBody(JSON.serialize(request, true));
-
         addXCorrelation();
         doCallout();
         return getResponse();
@@ -67,8 +68,8 @@ public without sharing class OppgaveService extends ApiController {
         }
 
         initRequest('Oppgave_API', 'PATCH_EDIT_OPPGAVE', new Map<String, String>{ 'id' => String.valueOf(request.id) });
+        addSaasProxyServiceAuthHeader();
         setBody(JSON.serialize(request, true));
-
         addXCorrelation();
         doCallout();
         return getResponse();
@@ -76,7 +77,7 @@ public without sharing class OppgaveService extends ApiController {
 
     public HttpResponse getTaskTypes(String themeCode) {
         initRequest('Oppgave_API', 'GET_OPPGAVETYPE', new Map<String, String>{ 'tema' => themeCode });
-
+        addSaasProxyServiceAuthHeader();
         addXCorrelation();
         doCallout();
         return getResponse();
@@ -84,7 +85,7 @@ public without sharing class OppgaveService extends ApiController {
 
     public HttpResponse getGjelderValues() {
         initRequest('Oppgave_API', 'GET_OPPGAVE_GJELDER');
-
+        addSaasProxyServiceAuthHeader();
         addXCorrelation();
         doCallout();
         return getResponse();
