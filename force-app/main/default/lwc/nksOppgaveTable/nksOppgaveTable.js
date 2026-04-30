@@ -8,7 +8,7 @@ import getOpenOppgaver from '@salesforce/apex/OppgaveManager.getOpenOppgaver';
 import getAllAssignedOpenOppgaver from '@salesforce/apex/OppgaveManager.getAllAssignedOpenOppgaver';
 
 export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
-	@api numRecords = 25;
+	//@api numRecords = 25;
 	@api ownedByRunningUser = false;
 	@api recordId;
 
@@ -51,9 +51,13 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
             console.log('from async load oppgave try. result next line');
             console.log(result);
             
-			const rows = (result || []).map((oppgave) => this.mapOppgaveToRow(oppgave));
-			this.allRows = rows.slice(0, this.numRecords);
-			this.applyClientFilters();
+			const rows = (result || []).map((oppgave) => this.mapOppgaveToRow(oppgave))
+            console.log('neste jsonStringify');
+            
+            console.log(JSON.stringify(rows));
+            
+			//this.allRows = rows.slice(0, this.numRecords);
+			//this.applyClientFilters();
 			this.error = undefined;
 		} catch (error) {
             console.log('catch trigga');
@@ -87,12 +91,16 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         console.log('neste linje! :D ');
         console.log(this.recordId + ' ' + this.offset);
         
-		console.log(getAllOppgaver({ personIdent: 12345678901, offset: this.offset }));
+		console.log(getAllOppgaver({ personIdent: '12345678901', offset: this.offset }));
 		//return getAllOppgaver({ personId: recordId, offset: offset });
-		return getAllOppgaver({ personIdent: 12345678901, offset: this.offset });
+		return getAllOppgaver({ personIdent: '12345678901', offset: this.offset });
 	}
 
 	mapOppgaveToRow(oppgave) {
+        console.log('mapOppgaveToRow sin oppgave logges på neste');
+        
+        console.log(oppgave);
+        
 		const externalId = oppgave?.id ? String(oppgave.id) : '';
 		//TODO dobbeltsjekk feltnavn
         return {
@@ -132,31 +140,31 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
 		}
 	}
 
-	applyClientFilters() {
-		if (this.selectedTaskScope === 'all') {
-			this.data = this.allRows;
-			return;
-		}
+	// applyClientFilters() {
+	// 	if (this.selectedTaskScope === 'all') {
+	// 		this.data = this.allRows;
+	// 		return;
+	// 	}
 
-		this.data = this.allRows.filter((row) => {
-			const status = (row.status || '').toLowerCase();
-			return status.includes('open');
-		});
-	}
+	// 	this.data = this.allRows.filter((row) => {
+	// 		const status = (row.status || '').toString().toLowerCase();
+	// 		return status.includes('open');
+	// 	});
+	// }
 
 	handleRecordClick(event) {
 		event.preventDefault();
 
-		const { recordId } = event.currentTarget.dataset;
+		const { oppgaveId } = event.currentTarget.dataset;
 
-		if (!recordId) {
+		if (!oppgaveId) {
 			return;
 		}
 
 		this[NavigationMixin.Navigate]({
 			type: 'standard__recordPage',
 			attributes: {
-				recordId,
+				oppgaveId,
 				actionName: 'view'
 			}
 		});
@@ -180,16 +188,15 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
 
 	get hasNoRows() {
 		return !this.error && this.data.length === 0;
-        return false;
 	}
 
-	get isOpenScope() {
-		return this.selectedTaskScope === 'open';
-	}
+	// get isOpenScope() {
+	// 	return this.selectedTaskScope === 'open';
+	// }
 
-	get isAllScope() {
-		return this.selectedTaskScope === 'all';
-	}
+	// get isAllScope() {
+	// 	return this.selectedTaskScope === 'all';
+	// }
 
 
 	get errorMessage() {
