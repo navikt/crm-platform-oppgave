@@ -30,6 +30,7 @@ public without sharing class OppgaveService extends ApiController {
         initRequest('Oppgave_API', 'GET_OPPGAVE_BY_ID_V2', new Map<String, String>{ 'id' => Id });
         addSaasProxyServiceAuthHeader();
         addUrlParam('include', 'kommentarer');
+        addUrlParam('include', 'utvidelser');
         addXCorrelation();
 
         doCallout();

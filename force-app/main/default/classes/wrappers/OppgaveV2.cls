@@ -31,6 +31,8 @@ public class OppgaveV2 {
     public Tidspunkt avsluttet;
     @AuraEnabled
     public List<Kommentar> kommentarer;
+    @AuraEnabled
+    public Utvidelser utvidelser;
 
     public class Kategorisering {
         @AuraEnabled
@@ -96,5 +98,10 @@ public class OppgaveV2 {
         public String tekst;
         @AuraEnabled
         public Tidspunkt opprettet;
+    }
+
+    public class Utvidelser {
+        @AuraEnabled
+        public String henvendelseId;
     }
 }
