@@ -56,8 +56,8 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
             
             console.log(JSON.stringify(rows));
             
-			//this.allRows = rows.slice(0, this.numRecords);
-			//this.applyClientFilters();
+			this.allRows = rows;
+			this.applyClientFilters();
 			this.error = undefined;
 		} catch (error) {
             console.log('catch trigga');
@@ -140,31 +140,31 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
 		}
 	}
 
-	// applyClientFilters() {
-	// 	if (this.selectedTaskScope === 'all') {
-	// 		this.data = this.allRows;
-	// 		return;
-	// 	}
+	applyClientFilters() {
+		if (this.selectedTaskScope === 'all') {
+			this.data = this.allRows;
+			return;
+		}
 
-	// 	this.data = this.allRows.filter((row) => {
-	// 		const status = (row.status || '').toString().toLowerCase();
-	// 		return status.includes('open');
-	// 	});
-	// }
+		this.data = this.allRows.filter((row) => {
+			const status = (row.status || '').toString().toLowerCase();
+			return status.includes('open') || status.includes('aapen') || status.includes('åpen');
+		});
+	}
 
 	handleRecordClick(event) {
 		event.preventDefault();
 
-		const { oppgaveId } = event.currentTarget.dataset;
+		const { recordId } = event.currentTarget.dataset;
 
-		if (!oppgaveId) {
+		if (!recordId) {
 			return;
 		}
 
 		this[NavigationMixin.Navigate]({
 			type: 'standard__recordPage',
 			attributes: {
-				oppgaveId,
+				recordId,
 				actionName: 'view'
 			}
 		});
@@ -190,13 +190,13 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
 		return !this.error && this.data.length === 0;
 	}
 
-	// get isOpenScope() {
-	// 	return this.selectedTaskScope === 'open';
-	// }
+	get isOpenScope() {
+		return this.selectedTaskScope === 'open';
+	}
 
-	// get isAllScope() {
-	// 	return this.selectedTaskScope === 'all';
-	// }
+	get isAllScope() {
+		return this.selectedTaskScope === 'all';
+	}
 
 
 	get errorMessage() {
