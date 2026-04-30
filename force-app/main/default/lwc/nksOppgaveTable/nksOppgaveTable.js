@@ -162,12 +162,16 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
 		}
 
 		this[NavigationMixin.Navigate]({
-			type: 'standard__recordPage',
+			type: 'standard__component',
 			attributes: {
-				recordId,
-				actionName: 'view'
+				componentName: 'c__crmOppgaveRedirect'
+			},
+			state: {
+				c__oppgaveId: recordId
 			}
 		});
+
+        
 	}
 
 	formatDate(value) {
