@@ -1,5 +1,5 @@
 .task-table tr {
-    border-bottom: 1px solid #B8B8B8;
+    border-bottom: 1px solid #b8b8b8;
 }
 
 .task-table th {
@@ -17,8 +17,18 @@
 
 .task-table__option {
     display: inline-flex;
-    gap: 8px;
     font-weight: 400;
+    gap: 0.2rem;
+    cursor: pointer;
+}
+
+.task-card__controls {
+    gap: 1rem;
+}
+
+.task-card__refresh {
+    margin-left: 1.5rem;
+    margin-right: 0.5rem;
 }
 
 .task-table a {
@@ -34,10 +44,10 @@
 .task-table tr > td {
     padding: 12px 24px;
     color: #000;
-    font-feature-settings: 'liga' off, 'clig' off;
-    /* font-family: "SF Pro"; */
+    font-feature-settings:
+        'liga' off,
+        'clig' off;
     font-size: 13px;
     font-style: normal;
     line-height: 24px;
 }
-

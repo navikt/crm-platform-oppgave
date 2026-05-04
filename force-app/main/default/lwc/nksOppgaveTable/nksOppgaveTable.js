@@ -1,209 +1,258 @@
 import { api, LightningElement, wire } from 'lwc';
-import { NavigationMixin } from 'lightning/navigation';
+import { NavigationMixin, CurrentPageReference } from 'lightning/navigation';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
+import { subscribe, unsubscribe, APPLICATION_SCOPE, MessageContext } from 'lightning/messageService';
 import userId from '@salesforce/user/Id';
 import USER_NAV_IDENT_FIELD from '@salesforce/schema/User.CRM_NAV_Ident__c';
 import getAllOppgaver from '@salesforce/apex/OppgaveManager.getAllOppgaver';
 import getOpenOppgaver from '@salesforce/apex/OppgaveManager.getOpenOppgaver';
 import getAllAssignedOpenOppgaver from '@salesforce/apex/OppgaveManager.getAllAssignedOpenOppgaver';
+import OPPGAVE_CREATED_CHANNEL from '@salesforce/messageChannel/oppgaveCreated__c';
+
+const PERSON_FIELDS_BY_OBJECT = {
+    Case: ['Case.Account.CRM_Person__r.Name', 'Case.Account.CRM_Person__r.INT_ActorId__c'],
+    Account: ['Account.CRM_Person__r.Name', 'Account.CRM_Person__r.INT_ActorId__c']
+};
+
+const STATUS_LABELS = {
+    OPPRETTET: 'Opprettet',
+    AAPNET: 'Åpen',
+    UNDER_BEHANDLING: 'Under behandling',
+    FERDIGSTILT: 'Ferdigstilt',
+    FEILREGISTRERT: 'Feilregistrert'
+};
 
 export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
-	//@api numRecords = 25;
-	@api ownedByRunningUser = false;
-	@api recordId;
+    @api ownedByRunningUser = false;
+    @api recordId;
+    @api objectApiName;
 
-	allRows = [];
-	data = [];
-	error;
-	selectedTaskScope = 'open';
-	isRefreshing = false;
-	isLoading = false;
-	offset = 0;
-	navIdent;
-    aktorId;
+    data = [];
+    error;
+    selectedTaskScope = 'open';
+    isRefreshing = false;
+    isLoading = false;
+    offset = 0;
+    navIdent;
+    personIdent;
+    actorId;
+    statePersonIdent;
+    stateActorId;
+    oppgaveCreatedSubscription;
 
-	@wire(getRecord, { recordId: userId, fields: [USER_NAV_IDENT_FIELD] })
-	wiredUser({ data }) {
-		if (data) {
-			this.navIdent = getFieldValue(data, USER_NAV_IDENT_FIELD);
-		}
-	}
+    @wire(MessageContext) messageContext;
 
-	connectedCallback() {
-		this.loadOppgaver();
-	}
+    @wire(getRecord, { recordId: userId, fields: [USER_NAV_IDENT_FIELD] })
+    wiredUser({ data }) {
+        if (data) {
+            this.navIdent = getFieldValue(data, USER_NAV_IDENT_FIELD);
+        }
+    }
 
-	async loadOppgaver() {
-		// if (this.isLoading) {
-		// 	return;
-		// }
+    @wire(CurrentPageReference)
+    wiredPageReference(pageRef) {
+        const state = pageRef?.state || {};
+        this.statePersonIdent = state.c__personIdent || state.personIdent || null;
+        this.stateActorId = state.c__actorId || state.actorId || null;
+    }
 
+    @wire(getRecord, { recordId: '$recordId', fields: '$personFieldsForRecord' })
+    wiredPersonRecord({ data, error }) {
+        if (data) {
+            const fields = this.personFieldsForRecord;
+            if (!fields || fields.length === 0) {
+                return;
+            }
+            this.personIdent = getFieldValue(data, fields[0]);
+            this.actorId = getFieldValue(data, fields[1]);
+            this.loadOppgaver();
+        } else if (error) {
+            this.error = error;
+        }
+    }
 
-		// this.isLoading = true;
-        console.log('før try-catch');
-        
+    connectedCallback() {
+        // No recordid => URL-addressable context
+        if (!this.recordId) {
+            this.loadOppgaver();
+        }
+        this.subscribeToOppgaveCreated();
+    }
 
-		try {
-            console.log('try trigga');
-            
-			const result = await this.fetchOppgaver();
+    disconnectedCallback() {
+        if (this.oppgaveCreatedSubscription) {
+            unsubscribe(this.oppgaveCreatedSubscription);
+            this.oppgaveCreatedSubscription = null;
+        }
+    }
 
-            console.log('from async load oppgave try. result next line');
-            console.log(result);
-            
-			const rows = (result || []).map((oppgave) => this.mapOppgaveToRow(oppgave))
-            console.log('neste jsonStringify');
-            
-            console.log(JSON.stringify(rows));
-            
-			this.allRows = rows;
-			this.applyClientFilters();
-			this.error = undefined;
-		} catch (error) {
-            console.log('catch trigga');
-            
-			this.allRows = [];
-			this.data = [];
-			this.error = error;
-		} finally {
-            console.log('finally trigga');
-            
-			this.isLoading = false;
-		}
-	}
+    subscribeToOppgaveCreated() {
+        if (this.oppgaveCreatedSubscription) return;
+        this.oppgaveCreatedSubscription = subscribe(
+            this.messageContext,
+            OPPGAVE_CREATED_CHANNEL,
+            () => this.loadOppgaver(),
+            { scope: APPLICATION_SCOPE }
+        );
+    }
 
-	async fetchOppgaver() {
-        console.log('fetchOppgaver er heraaa');
-        
+    async loadOppgaver() {
+        if (this.isLoading) {
+            return;
+        }
+        this.isLoading = true;
 
-        
-		// if (this.ownedByRunningUser) {
-		// 	if (!this.navIdent) {
-		// 		return [];
-		// 	}
-		// 	return getAllAssignedOpenOppgaver({ navIdent: this.navIdent });
-		// }
+        try {
+            const result = await this.fetchOppgaver();
+            const rows = (result || []).map((oppgave) => this.mapOppgaveToRow(oppgave));
+            await Promise.all(
+                rows.map(async (row) => {
+                    row.oppgaveHref = await this[NavigationMixin.GenerateUrl](
+                        this.buildOppgavePageReference(row.id, row.oppgavetype)
+                    );
+                })
+            );
+            this.data = rows;
+            this.error = undefined;
+        } catch (error) {
+            this.data = [];
+            this.error = error;
+        } finally {
+            this.isLoading = false;
+        }
+    }
 
-		// if (this.selectedTaskScope === 'open') {
-		// 	return getOpenOppgaver({ personId: this.recordId, offset: this.offset });
-		// }
+    // TODO: Add caching maybe?
+    async fetchOppgaver() {
+        if (this.ownedByRunningUser) {
+            if (!this.navIdent) {
+                return [];
+            }
+            // TODO: Add apex method which fetches all assigned oppgaver regardless of status?
+            return getAllAssignedOpenOppgaver({ navIdent: this.navIdent });
+        }
 
-        console.log('neste linje! :D ');
-        console.log(this.recordId + ' ' + this.offset);
-        
-		console.log(getAllOppgaver({ personIdent: '12345678901', offset: this.offset }));
-		//return getAllOppgaver({ personId: recordId, offset: offset });
-		return getAllOppgaver({ personIdent: '12345678901', offset: this.offset });
-	}
+        const ident = this.resolvedActorId || this.resolvedPersonIdent;
+        if (!ident) {
+            return [];
+        }
 
-	mapOppgaveToRow(oppgave) {
-        console.log('mapOppgaveToRow sin oppgave logges på neste');
-        
-        console.log(oppgave);
-        
-		const externalId = oppgave?.id ? String(oppgave.id) : '';
-		//TODO dobbeltsjekk feltnavn
+        if (this.isOpenScope) {
+            return getOpenOppgaver({ personIdent: ident, offset: this.offset });
+        }
+
+        return getAllOppgaver({ personIdent: ident, offset: this.offset });
+    }
+
+    mapOppgaveToRow(oppgave) {
         return {
-			id: externalId,
-			recordUrl: externalId ? `#${externalId}` : '#', //TODO 
-			oppgavetype: oppgave?.oppgavetype,
-			tema: oppgave?.tema,
-			gjelder: oppgave?.behandlingstema,
-			status: oppgave?.status,
-			registrert: this.formatDate(oppgave?.aktivDato),
-			frist: this.formatDate(oppgave?.fristFerdigstillelse),
-			navEnhet: oppgave?.tildeltEnhetsnr
-		};
-	}
+            id: String(oppgave.id),
+            oppgavetype: oppgave?.oppgavetype,
+            tema: oppgave?.tema,
+            gjelder: oppgave?.behandlingstema, // TODO: Fix gjelder field mapping
+            status: STATUS_LABELS[oppgave?.status] ?? oppgave?.status,
+            registrert: this.formatDate(oppgave?.aktivDato),
+            frist: this.formatDate(oppgave?.fristFerdigstillelse),
+            navEnhet: oppgave?.tildeltEnhetsnr
+        };
+    }
 
-	handleMineToggle(event) {
-		this.ownedByRunningUser = event.target.checked;
-		this.loadOppgaver();
-	}
+    buildOppgavePageReference(oppgaveId, oppgavetype) {
+        return {
+            type: 'standard__component',
+            attributes: {
+                componentName: 'c__crmOppgaveNavigation'
+            },
+            state: {
+                c__oppgaveId: oppgaveId,
+                c__oppgavetype: oppgavetype
+            }
+        };
+    }
 
-	handleScopeChange(event) {
-		this.selectedTaskScope = event.target.value;
-		this.loadOppgaver();
-	}
+    handleMineToggle(event) {
+        this.ownedByRunningUser = event.target.checked;
+        this.loadOppgaver();
+    }
 
-	async handleRefresh() {
-		if (this.isRefreshing) {
-			return;
-		}
+    handleScopeChange(event) {
+        this.selectedTaskScope = event.target.value;
+        this.loadOppgaver();
+    }
 
-		this.isRefreshing = true;
+    async handleRefresh() {
+        if (this.isRefreshing) {
+            return;
+        }
 
-		try {
-			await this.loadOppgaver();
-		} finally {
-			this.isRefreshing = false;
-		}
-	}
+        this.isRefreshing = true;
 
-	applyClientFilters() {
-		if (this.selectedTaskScope === 'all') {
-			this.data = this.allRows;
-			return;
-		}
+        try {
+            await this.loadOppgaver();
+        } finally {
+            this.isRefreshing = false;
+        }
+    }
 
-		this.data = this.allRows.filter((row) => {
-			const status = (row.status || '').toString().toLowerCase();
-			return status.includes('open') || status.includes('aapen') || status.includes('åpen');
-		});
-	}
+    handleRecordClick(event) {
+        event.preventDefault();
 
-	handleRecordClick(event) {
-		event.preventDefault();
+        const { oppgaveid, oppgavetype } = event.currentTarget.dataset;
 
-		const { recordId } = event.currentTarget.dataset;
+        if (!oppgaveid) {
+            return;
+        }
 
-		if (!recordId) {
-			return;
-		}
+        this[NavigationMixin.Navigate](this.buildOppgavePageReference(oppgaveid, oppgavetype));
+    }
 
-		this[NavigationMixin.Navigate]({
-			type: 'standard__component',
-			attributes: {
-				componentName: 'c__crmOppgaveRedirect'
-			},
-			state: {
-				c__oppgaveId: recordId
-			}
-		});
+    formatDate(value) {
+        if (!value) {
+            return '';
+        }
 
-        
-	}
+        const normalizedValue = String(value).replace(' ', 'T');
+        const date = new Date(normalizedValue.includes('T') ? normalizedValue : `${normalizedValue}T00:00:00.000Z`);
 
-	formatDate(value) {
-		if (!value) {
-			return '';
-		}
+        if (isNaN(date.getTime())) {
+            return '';
+        }
 
-        //TODO rydd her
-		const normalizedValue = String(value).replace(' ', 'T');
-		const date = new Date(normalizedValue.includes('T') ? normalizedValue : `${normalizedValue}T00:00:00.000Z`);
+        return new Intl.DateTimeFormat('nb-NO', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        }).format(date);
+    }
 
-		return new Intl.DateTimeFormat('nb-NO', {
-			year: 'numeric',
-			month: '2-digit',
-			day: '2-digit'
-		}).format(date);
-	}
+    get personFieldsForRecord() {
+        if (!this.recordId || !this.objectApiName) {
+            return undefined;
+        }
+        return PERSON_FIELDS_BY_OBJECT[this.objectApiName];
+    }
 
-	get hasNoRows() {
-		return !this.error && this.data.length === 0;
-	}
+    get resolvedPersonIdent() {
+        return this.personIdent || this.statePersonIdent || null;
+    }
 
-	get isOpenScope() {
-		return this.selectedTaskScope === 'open';
-	}
+    get resolvedActorId() {
+        return this.actorId || this.stateActorId || null;
+    }
 
-	get isAllScope() {
-		return this.selectedTaskScope === 'all';
-	}
+    get hasNoRows() {
+        return !this.error && this.data.length === 0;
+    }
 
+    get isOpenScope() {
+        return this.selectedTaskScope === 'open';
+    }
 
-	get errorMessage() {
-		return this.error?.body?.message || this.error?.message || 'Kunne ikke hente oppgaver';
-	}
+    get isAllScope() {
+        return this.selectedTaskScope === 'all';
+    }
+
+    get errorMessage() {
+        return this.error?.body?.message || this.error?.message || 'Kunne ikke hente oppgaver';
+    }
 }

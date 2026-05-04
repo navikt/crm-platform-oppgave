@@ -107,7 +107,7 @@ public class OppgaveRequest {
             ? this.fristFerdigstillelse
             : String.valueOf(CRM_DueDateUtility.setDueDate(this));
         o.prioritet = this.prioritet;
-        o.status = String.isNotBlank(this.status) ? OppgaveStatuskategori.valueOf(this.status) : null;
+        o.status = String.isNotBlank(this.status) ? this.status : null;
         o.versjon = this.versjon;
         o.personident = this.personident;
         o.aktoerId = this.aktoerId;

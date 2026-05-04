@@ -39,7 +39,7 @@ public class Oppgave {
     @AuraEnabled
     public String opprettetTidspunkt; //Datetime String
     @AuraEnabled
-    public OppgaveStatuskategori status; //ENUM: [OPPRETTET, AAPNET, UNDER_BEHANDLING, FERDIGSTILT, FEILREGISTRERT]
+    public String status; //ENUM: [OPPRETTET, AAPNET, UNDER_BEHANDLING, FERDIGSTILT, FEILREGISTRERT] - treat as string to avoid lwc enum deserialization issues
     @AuraEnabled
     public Integer versjon;
     @AuraEnabled
