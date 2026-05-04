@@ -1,5 +1,5 @@
 import { api, LightningElement, wire } from 'lwc';
-import { NavigationMixin, CurrentPageReference } from 'lightning/navigation';
+import { NavigationMixin } from 'lightning/navigation';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import { subscribe, unsubscribe, APPLICATION_SCOPE, MessageContext } from 'lightning/messageService';
 import userId from '@salesforce/user/Id';
@@ -26,6 +26,8 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     @api ownedByRunningUser = false;
     @api recordId;
     @api objectApiName;
+    @api personIdent;
+    @api actorId;
 
     data = [];
     error;
@@ -34,10 +36,8 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     isLoading = false;
     offset = 0;
     navIdent;
-    personIdent;
-    actorId;
-    statePersonIdent;
-    stateActorId;
+    recordPersonIdent;
+    recordActorId;
     oppgaveCreatedSubscription;
 
     @wire(MessageContext) messageContext;
@@ -49,13 +49,6 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         }
     }
 
-    @wire(CurrentPageReference)
-    wiredPageReference(pageRef) {
-        const state = pageRef?.state || {};
-        this.statePersonIdent = state.c__personIdent || state.personIdent || null;
-        this.stateActorId = state.c__actorId || state.actorId || null;
-    }
-
     @wire(getRecord, { recordId: '$recordId', fields: '$personFieldsForRecord' })
     wiredPersonRecord({ data, error }) {
         if (data) {
@@ -63,8 +56,8 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
             if (!fields || fields.length === 0) {
                 return;
             }
-            this.personIdent = getFieldValue(data, fields[0]);
-            this.actorId = getFieldValue(data, fields[1]);
+            this.recordPersonIdent = getFieldValue(data, fields[0]);
+            this.recordActorId = getFieldValue(data, fields[1]);
             this.loadOppgaver();
         } else if (error) {
             this.error = error;
@@ -233,11 +226,11 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     }
 
     get resolvedPersonIdent() {
-        return this.personIdent || this.statePersonIdent || null;
+        return this.recordPersonIdent || this.personIdent || null;
     }
 
     get resolvedActorId() {
-        return this.actorId || this.stateActorId || null;
+        return this.recordActorId || this.actorId || null;
     }
 
     get hasNoRows() {

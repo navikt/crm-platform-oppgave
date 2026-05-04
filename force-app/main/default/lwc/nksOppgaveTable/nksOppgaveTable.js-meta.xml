@@ -3,11 +3,9 @@
     <apiVersion>66.0</apiVersion>
     <isExposed>true</isExposed>
     <masterLabel>NKS Oppgave Table</masterLabel>
-    <description>Table component for NAV tasks</description>
+    <description>Table component for NAV oppgaver</description>
     <targets>
         <target>lightning__AppPage</target>
-        <target>lightning__HomePage</target>
         <target>lightning__RecordPage</target>
-        <target>lightning__UrlAddressable</target>
     </targets>
 </LightningComponentBundle>
