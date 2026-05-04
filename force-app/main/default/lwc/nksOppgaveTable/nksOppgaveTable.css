@@ -2,6 +2,11 @@
     border-bottom: 1px solid #b8b8b8;
 }
 
+.task-table__wrapper {
+    position: relative;
+    min-height: 4rem;
+}
+
 .task-table th {
     font-weight: 700;
 }
@@ -13,6 +18,9 @@
 .task-card__title {
     font-size: 1rem;
     font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .task-table__option {

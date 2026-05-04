@@ -34,6 +34,7 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     selectedTaskScope = 'open';
     isRefreshing = false;
     isLoading = false;
+    hasLoaded = false;
     offset = 0;
     navIdent;
     recordPersonIdent;
@@ -112,10 +113,13 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
             this.error = error;
         } finally {
             this.isLoading = false;
+            this.hasLoaded = true;
         }
     }
 
     // TODO: Add caching maybe?
+    // TODO: Add sorting
+    // TODO: Add lazy loading
     async fetchOppgaver() {
         if (this.ownedByRunningUser) {
             if (!this.navIdent) {
@@ -234,7 +238,7 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     }
 
     get hasNoRows() {
-        return !this.error && this.data.length === 0;
+        return this.hasLoaded && !this.isLoading && !this.error && this.data.length === 0;
     }
 
     get isOpenScope() {

@@ -1,6 +1,11 @@
 <template>
     <lightning-card>
-        <span slot="title" class="task-card__title">Oppgaver</span>
+        <span slot="title" class="task-card__title">
+            <span class="slds-icon_container">
+                <lightning-icon icon-name="custom:custom45" size="small"></lightning-icon>
+            </span>
+            <span>Oppgaver</span>
+        </span>
 
         <div slot="actions" class="task-card__controls slds-grid slds-grid_vertical-align-center slds-gutters_small">
             <label class="task-table__option">
@@ -27,44 +32,49 @@
             ></lightning-button-icon>
         </div>
 
-        <table class="task-table">
-            <thead>
-                <tr>
-                    <th scope="col">Oppgavetype</th>
-                    <th scope="col">Tema</th>
-                    <th scope="col">Gjelder</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Registrert</th>
-                    <th scope="col">Frist</th>
-                    <th scope="col">Nav enhet</th>
-                </tr>
-            </thead>
-            <tbody>
-                <template for:each={data} for:item="row">
-                    <tr key={row.id}>
-                        <td>
-                            <a
-                                href={row.oppgaveHref}
-                                data-oppgaveid={row.id}
-                                data-oppgavetype={row.oppgavetype}
-                                onclick={handleRecordClick}
-                            >
-                                {row.oppgavetype}
-                            </a>
-                        </td>
-                        <td>{row.tema}</td>
-                        <td>{row.gjelder}</td>
-                        <td>{row.status}</td>
-                        <td>{row.registrert}</td>
-                        <td>{row.frist}</td>
-                        <td>{row.navEnhet}</td>
+        <div class="task-table__wrapper">
+            <table class="task-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Oppgavetype</th>
+                        <th scope="col">Tema</th>
+                        <th scope="col">Gjelder</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Registrert</th>
+                        <th scope="col">Frist</th>
+                        <th scope="col">Nav enhet</th>
                     </tr>
-                </template>
-                <tr if:true={hasNoRows}>
-                    <td colspan="7">Ingen oppgaver funnet</td>
-                </tr>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <template for:each={data} for:item="row">
+                        <tr key={row.id}>
+                            <td>
+                                <a
+                                    href={row.oppgaveHref}
+                                    data-oppgaveid={row.id}
+                                    data-oppgavetype={row.oppgavetype}
+                                    onclick={handleRecordClick}
+                                >
+                                    {row.oppgavetype}
+                                </a>
+                            </td>
+                            <td>{row.tema}</td>
+                            <td>{row.gjelder}</td>
+                            <td>{row.status}</td>
+                            <td>{row.registrert}</td>
+                            <td>{row.frist}</td>
+                            <td>{row.navEnhet}</td>
+                        </tr>
+                    </template>
+                    <tr if:true={hasNoRows}>
+                        <td colspan="7">Ingen oppgaver funnet</td>
+                    </tr>
+                </tbody>
+            </table>
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Laster oppgaver" size="small"></lightning-spinner>
+            </template>
+        </div>
         <div if:true={error} class="slds-text-color_error slds-p-horizontal_small slds-p-bottom_small">
             {errorMessage}
         </div>
