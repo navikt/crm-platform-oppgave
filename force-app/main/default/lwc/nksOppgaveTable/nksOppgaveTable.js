@@ -204,6 +204,7 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
             tema: temaCode ? (commonCodeNames[temaCode] ?? temaCode) : '',
             gjelder: this.buildGjelder(oppgave, commonCodeNames),
             status: STATUS_LABELS[oppgave?.status] ?? oppgave?.status,
+            statusIconClass: `task-table__status-dot task-table__status-dot_${oppgave?.status ?? 'AAPNET'}`,
             registrert: this.formatDate(oppgave?.opprettetTidspunkt),
             frist: this.formatDate(oppgave?.fristFerdigstillelse),
             navEnhet: enhetsnr ? (enhetName ? `${enhetsnr} ${enhetName}` : enhetsnr) : '',

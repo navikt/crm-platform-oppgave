@@ -100,8 +100,39 @@ input {
 .task-table td > a,
 .task-table__cell {
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
     overflow-wrap: anywhere;
+}
+
+.task-table__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.task-table__status-dot {
+    flex: 0 0 auto;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background: #6b7a99;
+}
+
+.task-table__status-dot_OPPRETTET,
+.task-table__status-dot_AAPNET {
+    background: #6b8aff;
+}
+
+.task-table__status-dot_UNDER_BEHANDLING {
+    background: #f5c84c;
+}
+
+.task-table__status-dot_FERDIGSTILT {
+    background: #4cc88a;
+}
+
+.task-table__status-dot_FEILREGISTRERT {
+    background: #f0a23a;
 }
