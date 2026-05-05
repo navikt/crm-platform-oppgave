@@ -76,18 +76,18 @@
                                 <a
                                     href={row.oppgaveHref}
                                     data-oppgaveid={row.id}
-                                    data-oppgavetype={row.oppgavetype}
+                                    data-oppgavetype={row.oppgavetypeCode}
                                     onclick={handleRecordClick}
                                 >
                                     {row.oppgavetype}
                                 </a>
                             </td>
-                            <td>{row.tema}</td>
-                            <td>{row.gjelder}</td>
-                            <td>{row.status}</td>
-                            <td>{row.registrert}</td>
-                            <td>{row.frist}</td>
-                            <td>{row.navEnhet}</td>
+                            <td><span class="task-table__cell">{row.tema}</span></td>
+                            <td><span class="task-table__cell">{row.gjelder}</span></td>
+                            <td><span class="task-table__cell">{row.status}</span></td>
+                            <td><span class="task-table__cell">{row.registrert}</span></td>
+                            <td><span class="task-table__cell">{row.frist}</span></td>
+                            <td><span class="task-table__cell">{row.navEnhet}</span></td>
                         </tr>
                     </template>
                     <tr if:true={hasNoRows}>
