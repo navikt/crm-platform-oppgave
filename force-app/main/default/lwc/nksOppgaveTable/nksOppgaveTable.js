@@ -22,6 +22,16 @@ const STATUS_LABELS = {
     FEILREGISTRERT: 'Feilregistrert'
 };
 
+const COLUMNS = [
+    { field: 'oppgavetype', label: 'Oppgavetype' },
+    { field: 'tema', label: 'Tema' },
+    { field: 'gjelder', label: 'Gjelder' },
+    { field: 'status', label: 'Status' },
+    { field: 'registrert', label: 'Registrert' },
+    { field: 'frist', label: 'Frist' },
+    { field: 'navEnhet', label: 'Nav enhet' }
+];
+
 export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     @api ownedByRunningUser = false;
     @api recordId;
@@ -40,6 +50,8 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     recordPersonIdent;
     recordActorId;
     oppgaveCreatedSubscription;
+    sortField;
+    sortDirection = 'asc';
 
     @wire(MessageContext) messageContext;
 
@@ -117,15 +129,16 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         }
     }
 
+    // TODO: Query nav units, oppgavetype, tema og gjelder og mellomlagre så vi ikke trenger querye alt på nytt ved last mer
+    // TODO: For gjelder kan vi bruke query fra common code på oppgavens behandlingstema og behandlingstype og kombinere name fra de recordsa hvis code matcher, hvis kun behnadlingstema eller behandlingstype bruker vi bare name fra det recordet som matcher
     // TODO: Add caching maybe?
-    // TODO: Add sorting
     // TODO: Add lazy loading
     async fetchOppgaver() {
         if (this.ownedByRunningUser) {
             if (!this.navIdent) {
                 return [];
             }
-            // TODO: Add apex method which fetches all assigned oppgaver regardless of status?
+            // TODO: Remove this and only use "Vis bare mine åpne oppgaver" as a filter (hide oppgaver not owned by running user in that case)
             return getAllAssignedOpenOppgaver({ navIdent: this.navIdent });
         }
 
@@ -146,7 +159,7 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
             id: String(oppgave.id),
             oppgavetype: oppgave?.oppgavetype,
             tema: oppgave?.tema,
-            gjelder: oppgave?.behandlingstema, // TODO: Fix gjelder field mapping
+            gjelder: oppgave?.behandlingstema,
             status: STATUS_LABELS[oppgave?.status] ?? oppgave?.status,
             registrert: this.formatDate(oppgave?.aktivDato),
             frist: this.formatDate(oppgave?.fristFerdigstillelse),
@@ -222,6 +235,30 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         }).format(date);
     }
 
+    handleSort(event) {
+        const field = event.currentTarget.dataset.field;
+        if (!field) {
+            return;
+        }
+        if (this.sortField === field) {
+            this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            this.sortField = field;
+            this.sortDirection = 'asc';
+        }
+    }
+
+    getSortValue(row, field) {
+        if (field === 'registrert' || field === 'frist') {
+            const value = row[field];
+            if (!value) return '';
+            const [day, month, year] = value.split('.');
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+        }
+        const value = row[field];
+        return value == null ? '' : String(value).toLowerCase();
+    }
+
     get personFieldsForRecord() {
         if (!this.recordId || !this.objectApiName) {
             return undefined;
@@ -239,6 +276,38 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
 
     get hasNoRows() {
         return this.hasLoaded && !this.isLoading && !this.error && this.data.length === 0;
+    }
+
+    get displayData() {
+        if (!this.sortField) {
+            return this.data;
+        }
+        const field = this.sortField;
+        const direction = this.sortDirection === 'desc' ? -1 : 1;
+        return [...this.data].sort((a, b) => {
+            const av = this.getSortValue(a, field);
+            const bv = this.getSortValue(b, field);
+            if (av < bv) return -1 * direction;
+            if (av > bv) return 1 * direction;
+            return 0;
+        });
+    }
+
+    get sortableHeaders() {
+        return COLUMNS.map((col) => {
+            const isSorted = this.sortField === col.field;
+            let iconName = 'utility:arrowdown';
+            if (isSorted) {
+                iconName = this.sortDirection === 'asc' ? 'utility:arrowup' : 'utility:arrowdown';
+            }
+            return {
+                ...col,
+                iconName,
+                buttonClass: isSorted
+                    ? 'task-table__sort-button task-table__sort-button_active'
+                    : 'task-table__sort-button'
+            };
+        });
     }
 
     get isOpenScope() {

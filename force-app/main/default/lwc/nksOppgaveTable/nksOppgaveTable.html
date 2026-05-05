@@ -10,7 +10,7 @@
         <div slot="actions" class="task-card__controls slds-grid slds-grid_vertical-align-center slds-gutters_small">
             <label class="task-table__option">
                 <input type="checkbox" checked={ownedByRunningUser} onchange={handleMineToggle} />
-                <span>Vis mine oppgaver</span>
+                <span>Vis bare mine oppgaver</span>
             </label>
 
             <label class="task-table__option">
@@ -36,17 +36,27 @@
             <table class="task-table">
                 <thead>
                     <tr>
-                        <th scope="col">Oppgavetype</th>
-                        <th scope="col">Tema</th>
-                        <th scope="col">Gjelder</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Registrert</th>
-                        <th scope="col">Frist</th>
-                        <th scope="col">Nav enhet</th>
+                        <template for:each={sortableHeaders} for:item="header">
+                            <th key={header.field} scope="col">
+                                <button
+                                    type="button"
+                                    class={header.buttonClass}
+                                    data-field={header.field}
+                                    onclick={handleSort}
+                                >
+                                    <span>{header.label}</span>
+                                    <lightning-icon
+                                        icon-name={header.iconName}
+                                        size="xx-small"
+                                        alternative-text="Sorter"
+                                    ></lightning-icon>
+                                </button>
+                            </th>
+                        </template>
                     </tr>
                 </thead>
                 <tbody>
-                    <template for:each={data} for:item="row">
+                    <template for:each={displayData} for:item="row">
                         <tr key={row.id}>
                             <td>
                                 <a
