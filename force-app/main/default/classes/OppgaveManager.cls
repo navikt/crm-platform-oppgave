@@ -326,7 +326,7 @@ public with sharing class OppgaveManager {
     }
 
     @AuraEnabled(cacheable=true)
-    public static Map<String, String> getGjelderNames(List<String> codes) {
+    public static Map<String, String> getCommonCodeNames(List<String> codes) {
         Map<String, String> result = new Map<String, String>();
         if (codes == null || codes.isEmpty()) {
             return result;
@@ -334,9 +334,27 @@ public with sharing class OppgaveManager {
         for (Common_Code__c cc : [
             SELECT Name, CRM_Code__c
             FROM Common_Code__c
-            WHERE CRM_Code__c IN :codes AND CRM_Code_Set__c IN ('Behandlingstema', 'Behandlingstyper')
+            WHERE
+                CRM_Code__c IN :codes
+                AND CRM_Code_Set__c IN ('Behandlingstema', 'Behandlingstyper', 'Tema', 'Oppgavetyper')
         ]) {
             result.put(cc.CRM_Code__c, cc.Name);
+        }
+        return result;
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static Map<String, String> getNavUnitNames(List<String> unitNumbers) {
+        Map<String, String> result = new Map<String, String>();
+        if (unitNumbers == null || unitNumbers.isEmpty()) {
+            return result;
+        }
+        for (NavUnit__c nu : [
+            SELECT NKS_Name_Short__c, INT_UnitNumber__c
+            FROM NavUnit__c
+            WHERE INT_UnitNumber__c IN :unitNumbers
+        ]) {
+            result.put(nu.INT_UnitNumber__c, nu.NKS_Name_Short__c);
         }
         return result;
     }

@@ -7,7 +7,8 @@ import USER_NAV_IDENT_FIELD from '@salesforce/schema/User.CRM_NAV_Ident__c';
 import getAllOppgaver from '@salesforce/apex/OppgaveManager.getAllOppgaver';
 import getOpenOppgaver from '@salesforce/apex/OppgaveManager.getOpenOppgaver';
 import getAllAssignedOpenOppgaver from '@salesforce/apex/OppgaveManager.getAllAssignedOpenOppgaver';
-import getGjelderNames from '@salesforce/apex/OppgaveManager.getGjelderNames';
+import getCommonCodeNames from '@salesforce/apex/OppgaveManager.getCommonCodeNames';
+import getNavUnitNames from '@salesforce/apex/OppgaveManager.getNavUnitNames';
 import OPPGAVE_CREATED_CHANNEL from '@salesforce/messageChannel/oppgaveCreated__c';
 
 const PERSON_FIELDS_BY_OBJECT = {
@@ -113,12 +114,15 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         try {
             const result = await this.fetchOppgaver();
             const oppgaver = result || [];
-            const gjelderNames = await this.fetchGjelderNames(oppgaver);
-            const rows = oppgaver.map((oppgave) => this.mapOppgaveToRow(oppgave, gjelderNames));
+            const [commonCodeNames, navUnitNames] = await Promise.all([
+                this.fetchCommonCodeNames(oppgaver),
+                this.fetchNavUnitNames(oppgaver)
+            ]);
+            const rows = oppgaver.map((oppgave) => this.mapOppgaveToRow(oppgave, commonCodeNames, navUnitNames));
             await Promise.all(
                 rows.map(async (row) => {
                     row.oppgaveHref = await this[NavigationMixin.GenerateUrl](
-                        this.buildOppgavePageReference(row.id, row.oppgavetype)
+                        this.buildOppgavePageReference(row.id, row.oppgavetypeCode)
                     );
                 })
             );
@@ -133,9 +137,11 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         }
     }
 
-    async fetchGjelderNames(oppgaver) {
+    async fetchCommonCodeNames(oppgaver) {
         const codes = new Set();
         oppgaver.forEach((o) => {
+            if (o?.oppgavetype) codes.add(o.oppgavetype);
+            if (o?.tema) codes.add(o.tema);
             if (o?.behandlingstema) codes.add(o.behandlingstema);
             if (o?.behandlingstype) codes.add(o.behandlingstype);
         });
@@ -143,13 +149,27 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
             return {};
         }
         try {
-            return await getGjelderNames({ codes: [...codes] });
+            return await getCommonCodeNames({ codes: [...codes] });
         } catch (e) {
             return {};
         }
     }
 
-    // TODO: Query nav units og tema og mellomlagre så vi ikke trenger querye alt på nytt ved last mer
+    async fetchNavUnitNames(oppgaver) {
+        const numbers = new Set();
+        oppgaver.forEach((o) => {
+            if (o?.tildeltEnhetsnr) numbers.add(o.tildeltEnhetsnr);
+        });
+        if (numbers.size === 0) {
+            return {};
+        }
+        try {
+            return await getNavUnitNames({ unitNumbers: [...numbers] });
+        } catch (e) {
+            return {};
+        }
+    }
+
     // TODO: Add caching maybe?
     // TODO: Add lazy loading
     async fetchOppgaver() {
@@ -172,16 +192,21 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         return getAllOppgaver({ personIdent: ident, offset: this.offset });
     }
 
-    mapOppgaveToRow(oppgave, gjelderNames = {}) {
+    mapOppgaveToRow(oppgave, commonCodeNames = {}, navUnitNames = {}) {
+        const oppgavetypeCode = oppgave?.oppgavetype;
+        const temaCode = oppgave?.tema;
+        const enhetsnr = oppgave?.tildeltEnhetsnr;
+        const enhetName = enhetsnr ? navUnitNames[enhetsnr] : null;
         return {
             id: String(oppgave.id),
-            oppgavetype: oppgave?.oppgavetype,
-            tema: oppgave?.tema,
-            gjelder: this.buildGjelder(oppgave, gjelderNames),
+            oppgavetypeCode: oppgavetypeCode,
+            oppgavetype: oppgavetypeCode ? (commonCodeNames[oppgavetypeCode] ?? oppgavetypeCode) : '',
+            tema: temaCode ? (commonCodeNames[temaCode] ?? temaCode) : '',
+            gjelder: this.buildGjelder(oppgave, commonCodeNames),
             status: STATUS_LABELS[oppgave?.status] ?? oppgave?.status,
             registrert: this.formatDate(oppgave?.opprettetTidspunkt),
             frist: this.formatDate(oppgave?.fristFerdigstillelse),
-            navEnhet: oppgave?.tildeltEnhetsnr,
+            navEnhet: enhetsnr ? (enhetName ? `${enhetsnr} ${enhetName}` : enhetsnr) : '',
             tilordnetRessurs: oppgave?.tilordnetRessurs
         };
     }
