@@ -7,6 +7,7 @@ import USER_NAV_IDENT_FIELD from '@salesforce/schema/User.CRM_NAV_Ident__c';
 import getAllOppgaver from '@salesforce/apex/OppgaveManager.getAllOppgaver';
 import getOpenOppgaver from '@salesforce/apex/OppgaveManager.getOpenOppgaver';
 import getAllAssignedOpenOppgaver from '@salesforce/apex/OppgaveManager.getAllAssignedOpenOppgaver';
+import getGjelderNames from '@salesforce/apex/OppgaveManager.getGjelderNames';
 import OPPGAVE_CREATED_CHANNEL from '@salesforce/messageChannel/oppgaveCreated__c';
 
 const PERSON_FIELDS_BY_OBJECT = {
@@ -83,6 +84,7 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
             this.loadOppgaver();
         }
         this.subscribeToOppgaveCreated();
+        console.log(this.ownedByRunningUser);
     }
 
     disconnectedCallback() {
@@ -110,7 +112,9 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
 
         try {
             const result = await this.fetchOppgaver();
-            const rows = (result || []).map((oppgave) => this.mapOppgaveToRow(oppgave));
+            const oppgaver = result || [];
+            const gjelderNames = await this.fetchGjelderNames(oppgaver);
+            const rows = oppgaver.map((oppgave) => this.mapOppgaveToRow(oppgave, gjelderNames));
             await Promise.all(
                 rows.map(async (row) => {
                     row.oppgaveHref = await this[NavigationMixin.GenerateUrl](
@@ -129,16 +133,30 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         }
     }
 
-    // TODO: Query nav units, oppgavetype, tema og gjelder og mellomlagre så vi ikke trenger querye alt på nytt ved last mer
-    // TODO: For gjelder kan vi bruke query fra common code på oppgavens behandlingstema og behandlingstype og kombinere name fra de recordsa hvis code matcher, hvis kun behnadlingstema eller behandlingstype bruker vi bare name fra det recordet som matcher
+    async fetchGjelderNames(oppgaver) {
+        const codes = new Set();
+        oppgaver.forEach((o) => {
+            if (o?.behandlingstema) codes.add(o.behandlingstema);
+            if (o?.behandlingstype) codes.add(o.behandlingstype);
+        });
+        if (codes.size === 0) {
+            return {};
+        }
+        try {
+            return await getGjelderNames({ codes: [...codes] });
+        } catch (e) {
+            return {};
+        }
+    }
+
+    // TODO: Query nav units og tema og mellomlagre så vi ikke trenger querye alt på nytt ved last mer
     // TODO: Add caching maybe?
     // TODO: Add lazy loading
     async fetchOppgaver() {
-        if (this.ownedByRunningUser) {
+        if (this.isAssignedOnlyMode) {
             if (!this.navIdent) {
                 return [];
             }
-            // TODO: Remove this and only use "Vis bare mine åpne oppgaver" as a filter (hide oppgaver not owned by running user in that case)
             return getAllAssignedOpenOppgaver({ navIdent: this.navIdent });
         }
 
@@ -154,17 +172,29 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         return getAllOppgaver({ personIdent: ident, offset: this.offset });
     }
 
-    mapOppgaveToRow(oppgave) {
+    mapOppgaveToRow(oppgave, gjelderNames = {}) {
         return {
             id: String(oppgave.id),
             oppgavetype: oppgave?.oppgavetype,
             tema: oppgave?.tema,
-            gjelder: oppgave?.behandlingstema,
+            gjelder: this.buildGjelder(oppgave, gjelderNames),
             status: STATUS_LABELS[oppgave?.status] ?? oppgave?.status,
-            registrert: this.formatDate(oppgave?.aktivDato),
+            registrert: this.formatDate(oppgave?.opprettetTidspunkt),
             frist: this.formatDate(oppgave?.fristFerdigstillelse),
-            navEnhet: oppgave?.tildeltEnhetsnr
+            navEnhet: oppgave?.tildeltEnhetsnr,
+            tilordnetRessurs: oppgave?.tilordnetRessurs
         };
+    }
+
+    buildGjelder(oppgave, gjelderNames) {
+        const temaCode = oppgave?.behandlingstema;
+        const typeCode = oppgave?.behandlingstype;
+        const temaName = temaCode ? (gjelderNames[temaCode] ?? temaCode) : null;
+        const typeName = typeCode ? (gjelderNames[typeCode] ?? typeCode) : null;
+        if (temaName && typeName) {
+            return `${temaName} - ${typeName}`;
+        }
+        return temaName || typeName || '';
     }
 
     buildOppgavePageReference(oppgaveId, oppgavetype) {
@@ -182,7 +212,6 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
 
     handleMineToggle(event) {
         this.ownedByRunningUser = event.target.checked;
-        this.loadOppgaver();
     }
 
     handleScopeChange(event) {
@@ -275,16 +304,29 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     }
 
     get hasNoRows() {
-        return this.hasLoaded && !this.isLoading && !this.error && this.data.length === 0;
+        return this.hasLoaded && !this.isLoading && !this.error && this.displayData.length === 0;
+    }
+
+    get isAssignedOnlyMode() {
+        console.log(this.ownedByRunningUser);
+        return !this.recordId && this.ownedByRunningUser;
+    }
+
+    get showControls() {
+        return !this.isAssignedOnlyMode;
     }
 
     get displayData() {
+        let rows = this.data;
+        if (this.ownedByRunningUser && !this.isAssignedOnlyMode && this.navIdent) {
+            rows = rows.filter((row) => row.tilordnetRessurs === this.navIdent);
+        }
         if (!this.sortField) {
-            return this.data;
+            return rows;
         }
         const field = this.sortField;
         const direction = this.sortDirection === 'desc' ? -1 : 1;
-        return [...this.data].sort((a, b) => {
+        return [...rows].sort((a, b) => {
             const av = this.getSortValue(a, field);
             const bv = this.getSortValue(b, field);
             if (av < bv) return -1 * direction;
