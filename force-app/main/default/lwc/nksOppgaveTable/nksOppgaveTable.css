@@ -15,6 +15,10 @@
     cursor: pointer;
 }
 
+input {
+    cursor: pointer;
+}
+
 .task-table__sort-button:hover,
 .task-table__sort-button:focus {
     color: #014486;
@@ -49,6 +53,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    padding-left: 1rem;
 }
 
 .task-table__option {
@@ -60,10 +65,7 @@
 
 .task-card__controls {
     gap: 1rem;
-}
-
-.task-card__refresh {
-    margin-right: 0.5rem;
+    margin-right: 1rem;
 }
 
 .task-table a {

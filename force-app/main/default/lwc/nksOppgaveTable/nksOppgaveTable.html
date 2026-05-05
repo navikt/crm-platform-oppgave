@@ -8,20 +8,34 @@
         </span>
 
         <div slot="actions" class="task-card__controls slds-grid slds-grid_vertical-align-center slds-gutters_small">
-            <label class="task-table__option">
-                <input type="checkbox" checked={ownedByRunningUser} onchange={handleMineToggle} />
-                <span>Vis bare mine oppgaver</span>
-            </label>
+            <template if:true={showControls}>
+                <label class="task-table__option">
+                    <input type="checkbox" checked={ownedByRunningUser} onchange={handleMineToggle} />
+                    <span>Vis bare mine oppgaver</span>
+                </label>
 
-            <label class="task-table__option">
-                <input type="radio" name="taskScope" value="open" checked={isOpenScope} onchange={handleScopeChange} />
-                <span>Åpne oppgaver</span>
-            </label>
+                <label class="task-table__option">
+                    <input
+                        type="radio"
+                        name="taskScope"
+                        value="open"
+                        checked={isOpenScope}
+                        onchange={handleScopeChange}
+                    />
+                    <span>Åpne oppgaver</span>
+                </label>
 
-            <label class="task-table__option">
-                <input type="radio" name="taskScope" value="all" checked={isAllScope} onchange={handleScopeChange} />
-                <span>Alle oppgaver</span>
-            </label>
+                <label class="task-table__option">
+                    <input
+                        type="radio"
+                        name="taskScope"
+                        value="all"
+                        checked={isAllScope}
+                        onchange={handleScopeChange}
+                    />
+                    <span>Alle oppgaver</span>
+                </label>
+            </template>
             <lightning-button-icon
                 class="task-card__refresh"
                 icon-name="utility:refresh"
@@ -32,7 +46,7 @@
             ></lightning-button-icon>
         </div>
 
-        <div class="task-table__wrapper">
+        <div class="task-table__wrapper slds-p-horizontal_medium slds-p-bottom_medium">
             <table class="task-table">
                 <thead>
                     <tr>
