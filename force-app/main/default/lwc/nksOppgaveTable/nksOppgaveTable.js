@@ -192,7 +192,7 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         await Promise.all(
             rows.map(async (row) => {
                 row.oppgaveHref = await this[NavigationMixin.GenerateUrl](
-                    this.buildOppgavePageReference(row.id, row.oppgavetypeCode)
+                    this.buildOppgavePageReference(row.id, row.oppgavetype)
                 );
             })
         );
