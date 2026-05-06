@@ -117,7 +117,6 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
             this.loadOppgaver();
         }
         this.subscribeToOppgaveCreated();
-        console.log(this.ownedByRunningUser);
     }
 
     disconnectedCallback() {
@@ -389,7 +388,12 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     }
 
     get isAssignedOnlyMode() {
-        return !this.recordId && this.ownedByRunningUser;
+        return !this.hasPersonContext && this.ownedByRunningUser;
+    }
+
+    // False if user is on assigned only from home screen
+    get hasPersonContext() {
+        return Boolean(this.recordId || this.resolvedPersonIdent || this.resolvedActorId);
     }
 
     get showControls() {
