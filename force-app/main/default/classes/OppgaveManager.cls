@@ -28,6 +28,9 @@ public with sharing class OppgaveManager {
         CRM_OppgaveQueryList query = new CRM_OppgaveQueryList();
         query.tilordnetRessurs = navIdent;
         query.statuskategori = OppgaveStatuskategori.AAPEN;
+        query.returnLimit = 500;
+        query.sorteringsfelt = 'OPPRETTET_TIDSPUNKT';
+        query.sorteringsrekkefolge = 'DESC';
         HttpResponse response = service.getOppgaveList(query);
         if (response.getStatusCode() == 200) {
             OppgaveListResponse oppgaver = (OppgaveListResponse) JSON.deserialize(
@@ -70,7 +73,9 @@ public with sharing class OppgaveManager {
         CRM_OppgaveQueryList query = new CRM_OppgaveQueryList();
         query.aktoerId = new List<String>{ personIdent };
         query.statuskategori = OppgaveStatuskategori.AAPEN;
-        query.returnLimit = 100;
+        query.returnLimit = 200;
+        query.sorteringsfelt = 'OPPRETTET_TIDSPUNKT';
+        query.sorteringsrekkefolge = 'DESC';
         if (offset != null && offset > 0) {
             query.offset = offset;
         }
@@ -100,7 +105,9 @@ public with sharing class OppgaveManager {
         OppgaveService service = new OppgaveService();
         CRM_OppgaveQueryList query = new CRM_OppgaveQueryList();
         query.aktoerId = new List<String>{ personIdent };
-        query.returnLimit = 500;
+        query.returnLimit = 200;
+        query.sorteringsfelt = 'OPPRETTET_TIDSPUNKT';
+        query.sorteringsrekkefolge = 'DESC';
         if (offset != null && offset > 0) {
             query.offset = offset;
         }
@@ -326,17 +333,12 @@ public with sharing class OppgaveManager {
     }
 
     @AuraEnabled(cacheable=true)
-    public static Map<String, String> getCommonCodeNames(List<String> codes) {
+    public static Map<String, String> getCommonCodeNames() {
         Map<String, String> result = new Map<String, String>();
-        if (codes == null || codes.isEmpty()) {
-            return result;
-        }
         for (Common_Code__c cc : [
             SELECT Name, CRM_Code__c
             FROM Common_Code__c
-            WHERE
-                CRM_Code__c IN :codes
-                AND CRM_Code_Set__c IN ('Behandlingstema', 'Behandlingstyper', 'Tema', 'Oppgavetyper')
+            WHERE CRM_Code_Set__c IN ('Behandlingstema', 'Behandlingstyper', 'Tema', 'Oppgavetyper')
         ]) {
             result.put(cc.CRM_Code__c, cc.Name);
         }
@@ -344,16 +346,9 @@ public with sharing class OppgaveManager {
     }
 
     @AuraEnabled(cacheable=true)
-    public static Map<String, String> getNavUnitNames(List<String> unitNumbers) {
+    public static Map<String, String> getNavUnitNames() {
         Map<String, String> result = new Map<String, String>();
-        if (unitNumbers == null || unitNumbers.isEmpty()) {
-            return result;
-        }
-        for (NavUnit__c nu : [
-            SELECT NKS_Name_Short__c, INT_UnitNumber__c
-            FROM NavUnit__c
-            WHERE INT_UnitNumber__c IN :unitNumbers
-        ]) {
+        for (NavUnit__c nu : [SELECT NKS_Name_Short__c, INT_UnitNumber__c FROM NavUnit__c]) {
             result.put(nu.INT_UnitNumber__c, nu.NKS_Name_Short__c);
         }
         return result;
