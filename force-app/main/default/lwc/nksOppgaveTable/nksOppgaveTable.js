@@ -44,8 +44,31 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     @api ownedByRunningUser = false;
     @api recordId;
     @api objectApiName;
-    @api personIdent;
-    @api actorId;
+
+    _personIdent;
+    _actorId;
+
+    @api
+    get personIdent() {
+        return this._personIdent;
+    }
+    set personIdent(value) {
+        this._personIdent = value;
+        if (!this.recordId && value) {
+            this.loadOppgaver();
+        }
+    }
+
+    @api
+    get actorId() {
+        return this._actorId;
+    }
+    set actorId(value) {
+        this._actorId = value;
+        if (!this.recordId && value) {
+            this.loadOppgaver();
+        }
+    }
 
     data = [];
     error;
@@ -109,8 +132,8 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     }
 
     connectedCallback() {
-        // No recordid => URL-addressable context
-        if (!this.recordId) {
+        // Skip the load if we're waiting for personIdent/actorId to arrive async; the setters will trigger it.
+        if (!this.recordId && (this.isAssignedOnlyMode || this.resolvedPersonIdent || this.resolvedActorId)) {
             this.loadOppgaver();
         }
         this.subscribeToOppgaveCreated();
