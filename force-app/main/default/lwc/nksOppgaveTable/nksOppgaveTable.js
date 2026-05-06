@@ -48,7 +48,6 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     @api actorId;
 
     data = [];
-    oppgaver = [];
     error;
     selectedTaskScope = 'open';
     isRefreshing = false;
@@ -72,20 +71,18 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     @wire(MessageContext) messageContext;
 
     @wire(getCommonCodeNames)
-    async wiredCommonCodeNames({ data }) {
+    wiredCommonCodeNames({ data }) {
         if (data) {
             this.commonCodeNames = data;
             this.resolveCommonCodes();
-            this.data = await this.buildRows(this.oppgaver);
         }
     }
 
     @wire(getNavUnitNames)
-    async wiredNavUnitNames({ data }) {
+    wiredNavUnitNames({ data }) {
         if (data) {
             this.navUnitNames = data;
             this.resolveNavUnits();
-            this.data = await this.buildRows(this.oppgaver);
         }
     }
 
@@ -149,7 +146,6 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
             await this.waitForWires();
             this.serverHasMore = this.canPaginate && oppgaver.length === APEX_QUERY_LIMIT;
             this.offset = oppgaver.length;
-            this.oppgaver = oppgaver;
             this.data = await this.buildRows(oppgaver);
             this.error = undefined;
         } catch (error) {
@@ -176,7 +172,6 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
             const oppgaver = (await this.fetchOppgaver()) || [];
             this.serverHasMore = oppgaver.length === APEX_QUERY_LIMIT;
             this.offset += oppgaver.length;
-            this.oppgaver = [...this.oppgaver, ...oppgaver];
             const newRows = await this.buildRows(oppgaver);
             this.data = [...this.data, ...newRows];
         } catch (error) {
