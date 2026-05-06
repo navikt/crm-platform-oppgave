@@ -17,12 +17,18 @@ const PERSON_FIELDS_BY_OBJECT = {
 };
 
 const STATUS_LABELS = {
+    AVSLUTTET: 'Ferdigstilt',
     OPPRETTET: 'Opprettet',
+    AAPEN: 'Åpen',
     AAPNET: 'Åpen',
     UNDER_BEHANDLING: 'Under behandling',
     FERDIGSTILT: 'Ferdigstilt',
     FEILREGISTRERT: 'Feilregistrert'
 };
+
+const INITIAL_VISIBLE = 10;
+const LOAD_MORE_INCREMENT = 50;
+const APEX_QUERY_LIMIT = 200;
 
 const COLUMNS = [
     { field: 'oppgavetype', label: 'Oppgavetype' },
@@ -42,20 +48,46 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     @api actorId;
 
     data = [];
+    oppgaver = [];
     error;
     selectedTaskScope = 'open';
     isRefreshing = false;
     isLoading = false;
+    isLoadingMore = false;
     hasLoaded = false;
     offset = 0;
+    visibleCount = INITIAL_VISIBLE;
+    serverHasMore = false;
     navIdent;
     recordPersonIdent;
     recordActorId;
     oppgaveCreatedSubscription;
-    sortField;
-    sortDirection = 'asc';
+    sortField = 'registrert';
+    sortDirection = 'desc';
+    commonCodeNames = {};
+    navUnitNames = {};
+    commonCodesReady = new Promise((resolve) => (this.resolveCommonCodes = resolve));
+    navUnitsReady = new Promise((resolve) => (this.resolveNavUnits = resolve));
 
     @wire(MessageContext) messageContext;
+
+    @wire(getCommonCodeNames)
+    async wiredCommonCodeNames({ data }) {
+        if (data) {
+            this.commonCodeNames = data;
+            this.resolveCommonCodes();
+            this.data = await this.buildRows(this.oppgaver);
+        }
+    }
+
+    @wire(getNavUnitNames)
+    async wiredNavUnitNames({ data }) {
+        if (data) {
+            this.navUnitNames = data;
+            this.resolveNavUnits();
+            this.data = await this.buildRows(this.oppgaver);
+        }
+    }
 
     @wire(getRecord, { recordId: userId, fields: [USER_NAV_IDENT_FIELD] })
     wiredUser({ data }) {
@@ -110,68 +142,64 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
             return;
         }
         this.isLoading = true;
+        this.offset = 0;
+        this.visibleCount = INITIAL_VISIBLE;
 
         try {
-            const result = await this.fetchOppgaver();
-            const oppgaver = result || [];
-            const [commonCodeNames, navUnitNames] = await Promise.all([
-                this.fetchCommonCodeNames(oppgaver),
-                this.fetchNavUnitNames(oppgaver)
-            ]);
-            const rows = oppgaver.map((oppgave) => this.mapOppgaveToRow(oppgave, commonCodeNames, navUnitNames));
-            await Promise.all(
-                rows.map(async (row) => {
-                    row.oppgaveHref = await this[NavigationMixin.GenerateUrl](
-                        this.buildOppgavePageReference(row.id, row.oppgavetypeCode)
-                    );
-                })
-            );
-            this.data = rows;
+            const oppgaver = (await this.fetchOppgaver()) || [];
+            await this.waitForWires();
+            this.serverHasMore = this.canPaginate && oppgaver.length === APEX_QUERY_LIMIT;
+            this.offset = oppgaver.length;
+            this.oppgaver = oppgaver;
+            this.data = await this.buildRows(oppgaver);
             this.error = undefined;
         } catch (error) {
             this.data = [];
             this.error = error;
+            this.serverHasMore = false;
         } finally {
             this.isLoading = false;
             this.hasLoaded = true;
         }
     }
 
-    async fetchCommonCodeNames(oppgaver) {
-        const codes = new Set();
-        oppgaver.forEach((o) => {
-            if (o?.oppgavetype) codes.add(o.oppgavetype);
-            if (o?.tema) codes.add(o.tema);
-            if (o?.behandlingstema) codes.add(o.behandlingstema);
-            if (o?.behandlingstype) codes.add(o.behandlingstype);
-        });
-        if (codes.size === 0) {
-            return {};
+    // Wait for wires before rendering the table so that we have all the common code and nav unit data first
+    waitForWires() {
+        return Promise.all([this.commonCodesReady, this.navUnitsReady]);
+    }
+
+    async loadMoreFromServer() {
+        if (this.isLoadingMore || !this.serverHasMore) {
+            return;
         }
+        this.isLoadingMore = true;
         try {
-            return await getCommonCodeNames({ codes: [...codes] });
-        } catch (e) {
-            return {};
+            const oppgaver = (await this.fetchOppgaver()) || [];
+            this.serverHasMore = oppgaver.length === APEX_QUERY_LIMIT;
+            this.offset += oppgaver.length;
+            this.oppgaver = [...this.oppgaver, ...oppgaver];
+            const newRows = await this.buildRows(oppgaver);
+            this.data = [...this.data, ...newRows];
+        } catch (error) {
+            this.error = error;
+            this.serverHasMore = false;
+        } finally {
+            this.isLoadingMore = false;
         }
     }
 
-    async fetchNavUnitNames(oppgaver) {
-        const numbers = new Set();
-        oppgaver.forEach((o) => {
-            if (o?.tildeltEnhetsnr) numbers.add(o.tildeltEnhetsnr);
-        });
-        if (numbers.size === 0) {
-            return {};
-        }
-        try {
-            return await getNavUnitNames({ unitNumbers: [...numbers] });
-        } catch (e) {
-            return {};
-        }
+    async buildRows(oppgaver) {
+        const rows = oppgaver.map((oppgave) => this.mapOppgaveToRow(oppgave));
+        await Promise.all(
+            rows.map(async (row) => {
+                row.oppgaveHref = await this[NavigationMixin.GenerateUrl](
+                    this.buildOppgavePageReference(row.id, row.oppgavetypeCode)
+                );
+            })
+        );
+        return rows;
     }
 
-    // TODO: Add caching maybe?
-    // TODO: Add lazy loading
     async fetchOppgaver() {
         if (this.isAssignedOnlyMode) {
             if (!this.navIdent) {
@@ -192,17 +220,19 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         return getAllOppgaver({ personIdent: ident, offset: this.offset });
     }
 
-    mapOppgaveToRow(oppgave, commonCodeNames = {}, navUnitNames = {}) {
+    mapOppgaveToRow(oppgave) {
         const oppgavetypeCode = oppgave?.oppgavetype;
         const temaCode = oppgave?.tema;
+        const behandlingstemaCode = oppgave?.behandlingstema;
+        const behandlingstypeCode = oppgave?.behandlingstype;
         const enhetsnr = oppgave?.tildeltEnhetsnr;
-        const enhetName = enhetsnr ? navUnitNames[enhetsnr] : null;
+        const enhetName = enhetsnr ? this.navUnitNames[enhetsnr] : null;
         return {
             id: String(oppgave.id),
-            oppgavetypeCode: oppgavetypeCode,
-            oppgavetype: oppgavetypeCode ? (commonCodeNames[oppgavetypeCode] ?? oppgavetypeCode) : '',
-            tema: temaCode ? (commonCodeNames[temaCode] ?? temaCode) : '',
-            gjelder: this.buildGjelder(oppgave, commonCodeNames),
+            oppgavetypeCode,
+            oppgavetype: oppgavetypeCode ? (this.commonCodeNames[oppgavetypeCode] ?? oppgavetypeCode) : '',
+            tema: temaCode ? (this.commonCodeNames[temaCode] ?? temaCode) : '',
+            gjelder: this.buildGjelderFromCodes(behandlingstemaCode, behandlingstypeCode),
             status: STATUS_LABELS[oppgave?.status] ?? oppgave?.status,
             statusIconClass: `task-table__status-dot task-table__status-dot_${oppgave?.status ?? 'AAPNET'}`,
             registrert: this.formatDate(oppgave?.opprettetTidspunkt),
@@ -212,11 +242,13 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         };
     }
 
-    buildGjelder(oppgave, gjelderNames) {
-        const temaCode = oppgave?.behandlingstema;
-        const typeCode = oppgave?.behandlingstype;
-        const temaName = temaCode ? (gjelderNames[temaCode] ?? temaCode) : null;
-        const typeName = typeCode ? (gjelderNames[typeCode] ?? typeCode) : null;
+    buildGjelderFromCodes(behandlingstemaCode, behandlingstypeCode) {
+        const temaName = behandlingstemaCode
+            ? (this.commonCodeNames[behandlingstemaCode] ?? behandlingstemaCode)
+            : null;
+        const typeName = behandlingstypeCode
+            ? (this.commonCodeNames[behandlingstypeCode] ?? behandlingstypeCode)
+            : null;
         if (temaName && typeName) {
             return `${temaName} - ${typeName}`;
         }
@@ -243,6 +275,15 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     handleScopeChange(event) {
         this.selectedTaskScope = event.target.value;
         this.loadOppgaver();
+    }
+
+    async handleLoadMore() {
+        const target = this.visibleCount + LOAD_MORE_INCREMENT;
+        const filteredLength = this.filteredAndSortedData.length;
+        if (target > filteredLength && this.serverHasMore) {
+            await this.loadMoreFromServer();
+        }
+        this.visibleCount = Math.min(target, this.filteredAndSortedData.length);
     }
 
     async handleRefresh() {
@@ -333,8 +374,21 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         return this.hasLoaded && !this.isLoading && !this.error && this.displayData.length === 0;
     }
 
+    get canPaginate() {
+        return !this.isAssignedOnlyMode;
+    }
+
+    get hasMore() {
+        if (!this.hasLoaded) return false;
+        if (this.filteredAndSortedData.length === 0) return false; // since "mine" filtering is client-side, it means that if none of the currently loaded oppgaver are assigned to user, the user can't paginate further to look for matches
+        return this.serverHasMore || this.filteredAndSortedData.length > this.visibleCount;
+    }
+
+    get isLoadMoreDisabled() {
+        return this.isLoading || this.isLoadingMore;
+    }
+
     get isAssignedOnlyMode() {
-        console.log(this.ownedByRunningUser);
         return !this.recordId && this.ownedByRunningUser;
     }
 
@@ -342,7 +396,7 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         return !this.isAssignedOnlyMode;
     }
 
-    get displayData() {
+    get filteredAndSortedData() {
         let rows = this.data;
         if (this.ownedByRunningUser && !this.isAssignedOnlyMode && this.navIdent) {
             rows = rows.filter((row) => row.tilordnetRessurs === this.navIdent);
@@ -359,6 +413,10 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
             if (av > bv) return 1 * direction;
             return 0;
         });
+    }
+
+    get displayData() {
+        return this.filteredAndSortedData.slice(0, this.visibleCount);
     }
 
     get sortableHeaders() {

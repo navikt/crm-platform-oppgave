@@ -78,21 +78,22 @@
                                     data-oppgaveid={row.id}
                                     data-oppgavetype={row.oppgavetypeCode}
                                     onclick={handleRecordClick}
+                                    title={row.oppgavetype}
                                 >
                                     {row.oppgavetype}
                                 </a>
                             </td>
-                            <td><span class="task-table__cell">{row.tema}</span></td>
-                            <td><span class="task-table__cell">{row.gjelder}</span></td>
+                            <td><span class="task-table__cell" title={row.tema}>{row.tema}</span></td>
+                            <td><span class="task-table__cell" title={row.gjelder}>{row.gjelder}</span></td>
                             <td>
-                                <span class="task-table__cell task-table__status">
+                                <span class="task-table__cell task-table__status" title={row.status}>
                                     <span class={row.statusIconClass}></span>
                                     <span>{row.status}</span>
                                 </span>
                             </td>
-                            <td><span class="task-table__cell">{row.registrert}</span></td>
-                            <td><span class="task-table__cell">{row.frist}</span></td>
-                            <td><span class="task-table__cell">{row.navEnhet}</span></td>
+                            <td><span class="task-table__cell" title={row.registrert}>{row.registrert}</span></td>
+                            <td><span class="task-table__cell" title={row.frist}>{row.frist}</span></td>
+                            <td><span class="task-table__cell" title={row.navEnhet}>{row.navEnhet}</span></td>
                         </tr>
                     </template>
                     <tr if:true={hasNoRows}>
@@ -102,6 +103,21 @@
             </table>
             <template if:true={isLoading}>
                 <lightning-spinner alternative-text="Laster oppgaver" size="small"></lightning-spinner>
+            </template>
+            <template if:true={hasMore}>
+                <div class="task-table__load-more">
+                    <button
+                        type="button"
+                        class="task-table__load-more-button"
+                        onclick={handleLoadMore}
+                        disabled={isLoadMoreDisabled}
+                    >
+                        <template if:true={isLoadingMore}>
+                            <lightning-spinner alternative-text="Laster" size="x-small"></lightning-spinner>
+                        </template>
+                        Last flere
+                    </button>
+                </div>
             </template>
         </div>
         <div if:true={error} class="slds-text-color_error slds-p-horizontal_small slds-p-bottom_small">
