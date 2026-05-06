@@ -44,6 +44,7 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     @api ownedByRunningUser = false;
     @api recordId;
     @api objectApiName;
+    @api ytelser;
 
     _personIdent;
     _actorId;
@@ -231,10 +232,10 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         }
 
         if (this.isOpenScope) {
-            return getOpenOppgaver({ personIdent: ident, offset: this.offset });
+            return getOpenOppgaver({ personIdent: ident, offset: this.offset, ytelser: this.ytelserArray });
         }
 
-        return getAllOppgaver({ personIdent: ident, offset: this.offset });
+        return getAllOppgaver({ personIdent: ident, offset: this.offset, ytelser: this.ytelserArray });
     }
 
     mapOppgaveToRow(oppgave) {
@@ -385,6 +386,18 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
 
     get resolvedActorId() {
         return this.recordActorId || this.actorId || null;
+    }
+
+    get ytelserArray() {
+        if (!this.ytelser) return null;
+        if (Array.isArray(this.ytelser)) {
+            return this.ytelser.length ? this.ytelser : null;
+        }
+        const list = String(this.ytelser)
+            .split(',')
+            .map((y) => y.trim())
+            .filter((y) => y);
+        return list.length ? list : null;
     }
 
     get hasNoRows() {

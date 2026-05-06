@@ -68,7 +68,7 @@ public with sharing class OppgaveManager {
     }
 
     @AuraEnabled
-    public static List<Oppgave> getOpenOppgaver(String personIdent, Integer offset) {
+    public static List<Oppgave> getOpenOppgaver(String personIdent, Integer offset, List<String> ytelser) {
         OppgaveService service = new OppgaveService();
         CRM_OppgaveQueryList query = new CRM_OppgaveQueryList();
         query.aktoerId = new List<String>{ personIdent };
@@ -79,6 +79,7 @@ public with sharing class OppgaveManager {
         if (offset != null && offset > 0) {
             query.offset = offset;
         }
+        query.tema = getTemaCodes(ytelser);
 
         HttpResponse response = service.getOppgaveList(query);
         if (response.getStatusCode() == 200) {
@@ -101,7 +102,7 @@ public with sharing class OppgaveManager {
     }
 
     @AuraEnabled
-    public static List<Oppgave> getAllOppgaver(String personIdent, Integer offset) {
+    public static List<Oppgave> getAllOppgaver(String personIdent, Integer offset, List<String> ytelser) {
         OppgaveService service = new OppgaveService();
         CRM_OppgaveQueryList query = new CRM_OppgaveQueryList();
         query.aktoerId = new List<String>{ personIdent };
@@ -111,6 +112,7 @@ public with sharing class OppgaveManager {
         if (offset != null && offset > 0) {
             query.offset = offset;
         }
+        query.tema = getTemaCodes(ytelser);
 
         HttpResponse response = service.getOppgaveList(query);
         if (response.getStatusCode() == 200) {
@@ -352,6 +354,21 @@ public with sharing class OppgaveManager {
             result.put(nu.INT_UnitNumber__c, nu.NKS_Name_Short__c);
         }
         return result;
+    }
+
+    private static List<String> getTemaCodes(List<String> ytelser) {
+        if (ytelser == null || ytelser.isEmpty()) {
+            return null;
+        }
+        List<String> codes = new List<String>();
+        for (Common_Code__c cc : [
+            SELECT CRM_Code__c
+            FROM Common_Code__c
+            WHERE CRM_Code_Set__c = 'Tema' AND Name IN :ytelser
+        ]) {
+            codes.add(cc.CRM_Code__c);
+        }
+        return codes.isEmpty() ? null : codes;
     }
 
     private class OppgaveListResponse {

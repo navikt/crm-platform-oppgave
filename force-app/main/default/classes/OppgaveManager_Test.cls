@@ -59,7 +59,7 @@ public with sharing class OppgaveManager_Test {
         ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
 
         Test.startTest();
-        List<Oppgave> oppgaver = OppgaveManager.getOpenOppgaver('12345678901', 0);
+        List<Oppgave> oppgaver = OppgaveManager.getOpenOppgaver('12345678901', 0, null);
         Test.stopTest();
         Assert.areNotEqual(0, oppgaver.size());
         Assert.isNotNull(oppgaver[0].id, 'Should get open Oppgaver');
@@ -70,7 +70,7 @@ public with sharing class OppgaveManager_Test {
         ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
 
         Test.startTest();
-        List<Oppgave> oppgaver = OppgaveManager.getOpenOppgaver('12345678901', 100);
+        List<Oppgave> oppgaver = OppgaveManager.getOpenOppgaver('12345678901', 100, null);
         Test.stopTest();
         Assert.areNotEqual(0, oppgaver.size());
         Assert.isNotNull(oppgaver[0].id, 'Should get open Oppgaver');
@@ -82,7 +82,7 @@ public with sharing class OppgaveManager_Test {
         List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c WHERE Category__c = 'Oppgave'];
 
         Test.startTest();
-        List<Oppgave> oppgaver = OppgaveManager.getOpenOppgaver('12345678901', 0);
+        List<Oppgave> oppgaver = OppgaveManager.getOpenOppgaver('12345678901', 0, null);
         Test.stopTest();
         List<Application_Log__c> logsAfter = [SELECT Id, UUID__c FROM Application_Log__c WHERE Category__c = 'Oppgave'];
         Assert.isNull(oppgaver, 'Should not return oppgave list');
@@ -96,7 +96,7 @@ public with sharing class OppgaveManager_Test {
         ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
 
         Test.startTest();
-        List<Oppgave> oppgaver = OppgaveManager.getOpenOppgaver('12345678901', null);
+        List<Oppgave> oppgaver = OppgaveManager.getOpenOppgaver('12345678901', null, null);
         Test.stopTest();
         Assert.areNotEqual(0, oppgaver.size());
         Assert.isNotNull(oppgaver[0].id, 'Should get open Oppgaver');
@@ -107,7 +107,7 @@ public with sharing class OppgaveManager_Test {
         ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
 
         Test.startTest();
-        List<Oppgave> oppgaver = OppgaveManager.getAllOppgaver('12345678901', 0);
+        List<Oppgave> oppgaver = OppgaveManager.getAllOppgaver('12345678901', 0, null);
         Test.stopTest();
         Assert.areNotEqual(0, oppgaver.size());
         Assert.isNotNull(oppgaver[0].id, 'Should get all open Oppgaver');
@@ -118,10 +118,31 @@ public with sharing class OppgaveManager_Test {
         ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
 
         Test.startTest();
-        List<Oppgave> oppgaver = OppgaveManager.getAllOppgaver('12345678901', 100);
+        List<Oppgave> oppgaver = OppgaveManager.getAllOppgaver('12345678901', 100, null);
         Test.stopTest();
         Assert.areNotEqual(0, oppgaver.size());
         Assert.isNotNull(oppgaver[0].id, 'Should get all open Oppgaver');
+    }
+
+    @IsTest
+    static void getOpenOppgaver_WithYtelser_ResolvesTema() {
+        ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
+        insert new Common_Code__c(Name = 'Sykepenger', CRM_Code__c = 'SYK', CRM_Code_Set__c = 'Tema');
+
+        Test.startTest();
+        List<Oppgave> oppgaver = OppgaveManager.getOpenOppgaver('12345678901', 0, new List<String>{ 'Sykepenger' });
+        Test.stopTest();
+        Assert.areNotEqual(0, oppgaver.size(), 'Should get oppgaver when ytelser is provided');
+    }
+
+    @IsTest
+    static void getAllOppgaver_WithUnknownYtelser_StillCallsApi() {
+        ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
+
+        Test.startTest();
+        List<Oppgave> oppgaver = OppgaveManager.getAllOppgaver('12345678901', 0, new List<String>{ 'UkjentYtelse' });
+        Test.stopTest();
+        Assert.areNotEqual(0, oppgaver.size(), 'Should still call API even if ytelser cannot be resolved');
     }
 
     @IsTest
@@ -130,7 +151,7 @@ public with sharing class OppgaveManager_Test {
         List<Application_Log__c> logsBefore = [SELECT Id FROM Application_Log__c WHERE Category__c = 'Oppgave'];
 
         Test.startTest();
-        List<Oppgave> oppgaver = OppgaveManager.getAllOppgaver('12345678901', 0);
+        List<Oppgave> oppgaver = OppgaveManager.getAllOppgaver('12345678901', 0, null);
         Test.stopTest();
         List<Application_Log__c> logsAfter = [SELECT Id, UUID__c FROM Application_Log__c WHERE Category__c = 'Oppgave'];
         Assert.isNull(oppgaver, 'Should not return oppgave list');
