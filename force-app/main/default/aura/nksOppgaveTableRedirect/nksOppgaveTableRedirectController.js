@@ -13,7 +13,7 @@
         const workspace = component.find('workspace');
         workspace.getEnclosingTabId().then(function (tabId) {
             if (!tabId) return;
-            workspace.setTabLabel({ tabId: tabId, label: 'Oppgaver' });
+            workspace.setTabLabel({ tabId: tabId, label: 'Mine oppgaver på personbruker' });
             workspace.setTabIcon({ tabId: tabId, icon: 'standard:task' });
         });
     }
