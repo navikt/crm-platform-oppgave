@@ -42,6 +42,8 @@ input {
 .task-table__wrapper {
     position: relative;
     min-height: 4rem;
+    container-type: inline-size;
+    container-name: task-table;
 }
 
 .task-table__load-more {
@@ -85,7 +87,17 @@ input {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding-left: 1rem;
+    margin: 0;
+}
+
+.task-card__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .task-table__option {
@@ -96,8 +108,18 @@ input {
 }
 
 .task-card__controls {
-    gap: 1rem;
-    margin-right: 1rem;
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+}
+
+.task-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem 1rem;
 }
 
 .task-table a {
@@ -111,17 +133,38 @@ input {
 
 .task-table tr > th,
 .task-table tr > td {
-    padding: 12px 24px;
+    padding: 0.75rem 1.5rem;
     color: #000;
     font-feature-settings:
         'liga' off,
         'clig' off;
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-style: normal;
-    line-height: 24px;
+    line-height: 1.5rem;
     overflow-wrap: anywhere;
     word-break: break-word;
     vertical-align: top;
+}
+
+@container task-table (max-width: 60rem) {
+    .task-table tr > th,
+    .task-table tr > td {
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+@container task-table (max-width: 50rem) {
+    .task-table tr > th,
+    .task-table tr > td {
+        padding: 0.375rem 0.375rem;
+    }
+}
+
+@container task-table (max-width: 45rem) {
+    .task-table tr > th,
+    .task-table tr > td {
+        padding: 0;
+    }
 }
 
 .task-table td > a,

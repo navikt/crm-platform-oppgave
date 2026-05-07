@@ -1,50 +1,54 @@
 <template>
-    <lightning-card>
-        <span slot="title" class="task-card__title">
-            <span class="slds-icon_container">
-                <lightning-icon icon-name="custom:custom45" size="small"></lightning-icon>
-            </span>
-            <span>Oppgaver</span>
-        </span>
+    <article class="slds-card task-card">
+        <header class="task-card__header">
+            <h2 class="task-card__title">
+                <span class="slds-icon_container">
+                    <lightning-icon icon-name="custom:custom45" size="small"></lightning-icon>
+                </span>
+                <span>Oppgaver</span>
+            </h2>
 
-        <div slot="actions" class="task-card__controls slds-grid slds-grid_vertical-align-center slds-gutters_small">
-            <template if:true={showControls}>
-                <label class="task-table__option">
-                    <input type="checkbox" checked={ownedByRunningUser} onchange={handleMineToggle} />
-                    <span>Vis bare mine oppgaver</span>
-                </label>
+            <div class="task-card__actions">
+                <template if:true={showControls}>
+                    <div class="task-card__controls">
+                        <label class="task-table__option">
+                            <input type="checkbox" checked={ownedByRunningUser} onchange={handleMineToggle} />
+                            <span>Vis bare mine oppgaver</span>
+                        </label>
 
-                <label class="task-table__option">
-                    <input
-                        type="radio"
-                        name="taskScope"
-                        value="open"
-                        checked={isOpenScope}
-                        onchange={handleScopeChange}
-                    />
-                    <span>Åpne oppgaver</span>
-                </label>
+                        <label class="task-table__option">
+                            <input
+                                type="radio"
+                                name="taskScope"
+                                value="open"
+                                checked={isOpenScope}
+                                onchange={handleScopeChange}
+                            />
+                            <span>Åpne oppgaver</span>
+                        </label>
 
-                <label class="task-table__option">
-                    <input
-                        type="radio"
-                        name="taskScope"
-                        value="all"
-                        checked={isAllScope}
-                        onchange={handleScopeChange}
-                    />
-                    <span>Alle oppgaver</span>
-                </label>
-            </template>
-            <lightning-button-icon
-                class="task-card__refresh"
-                icon-name="utility:refresh"
-                alternative-text="Oppdater"
-                title="Oppdater"
-                onclick={handleRefresh}
-                disabled={isRefreshing}
-            ></lightning-button-icon>
-        </div>
+                        <label class="task-table__option">
+                            <input
+                                type="radio"
+                                name="taskScope"
+                                value="all"
+                                checked={isAllScope}
+                                onchange={handleScopeChange}
+                            />
+                            <span>Alle oppgaver</span>
+                        </label>
+                    </div>
+                </template>
+                <lightning-button-icon
+                    class="task-card__refresh"
+                    icon-name="utility:refresh"
+                    alternative-text="Oppdater"
+                    title="Oppdater"
+                    onclick={handleRefresh}
+                    disabled={isRefreshing}
+                ></lightning-button-icon>
+            </div>
+        </header>
 
         <div class="task-table__wrapper slds-p-horizontal_medium slds-p-bottom_medium">
             <table class="task-table">
@@ -123,5 +127,5 @@
         <div if:true={error} class="slds-text-color_error slds-p-horizontal_small slds-p-bottom_small">
             {errorMessage}
         </div>
-    </lightning-card>
+    </article>
 </template>
