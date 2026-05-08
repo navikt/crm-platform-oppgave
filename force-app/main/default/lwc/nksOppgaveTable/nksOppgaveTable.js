@@ -152,7 +152,10 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         this.oppgaveCreatedSubscription = subscribe(
             this.messageContext,
             OPPGAVE_CREATED_CHANNEL,
-            () => this.loadOppgaver(),
+            (message) => {
+                if (message?.actorId !== this.resolvedActorId) return;
+                this.loadOppgaver();
+            },
             { scope: APPLICATION_SCOPE }
         );
     }
