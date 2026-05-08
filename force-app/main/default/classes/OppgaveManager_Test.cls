@@ -630,8 +630,8 @@ public with sharing class OppgaveManager_Test {
         Test.stopTest();
 
         Assert.areEqual(2, result.size(), 'Should return one entry per NavUnit');
-        Assert.areEqual('Test 1', result.get('4100'));
-        Assert.areEqual('Test 2', result.get('4200'));
+        Assert.areEqual('NAV Test 1', result.get('4100'));
+        Assert.areEqual('NAV Test 2', result.get('4200'));
     }
 
     @IsTest
