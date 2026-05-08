@@ -587,4 +587,82 @@ public with sharing class OppgaveManager_Test {
 
         Assert.isTrue(result.isSuccess);
     }
+
+    @IsTest
+    static void getCommonCodeNames_ReturnsMatchingCodeSets() {
+        insert new List<Common_Code__c>{
+            new Common_Code__c(Name = 'Sykepenger', CRM_Code__c = 'SYK', CRM_Code_Set__c = 'Tema'),
+            new Common_Code__c(Name = 'Behandling', CRM_Code__c = 'BEH', CRM_Code_Set__c = 'Behandlingstema'),
+            new Common_Code__c(Name = 'Type', CRM_Code__c = 'TYP', CRM_Code_Set__c = 'Behandlingstyper'),
+            new Common_Code__c(Name = 'Oppgavetype', CRM_Code__c = 'OPP', CRM_Code_Set__c = 'Oppgavetyper')
+        };
+
+        Test.startTest();
+        Map<String, String> result = OppgaveManager.getCommonCodeNames();
+        Test.stopTest();
+
+        Assert.areEqual(4, result.size(), 'Should only include the four supported code sets');
+        Assert.areEqual('Sykepenger', result.get('SYK'));
+        Assert.areEqual('Behandling', result.get('BEH'));
+        Assert.areEqual('Type', result.get('TYP'));
+        Assert.areEqual('Oppgavetype', result.get('OPP'));
+    }
+
+    @IsTest
+    static void getCommonCodeNames_NoCommonCodes_ReturnsEmptyMap() {
+        Test.startTest();
+        Map<String, String> result = OppgaveManager.getCommonCodeNames();
+        Test.stopTest();
+
+        Assert.isNotNull(result, 'Should not return null');
+        Assert.areEqual(0, result.size(), 'Should return empty map when no common codes exist');
+    }
+
+    @IsTest
+    static void getNavUnitNames_ReturnsUnitNumberToShortNameMap() {
+        insert new List<NavUnit__c>{
+            new NavUnit__c(Name = 'NAV Test 1', INT_UnitNumber__c = '4100'),
+            new NavUnit__c(Name = 'NAV Test 2', INT_UnitNumber__c = '4200')
+        };
+
+        Test.startTest();
+        Map<String, String> result = OppgaveManager.getNavUnitNames();
+        Test.stopTest();
+
+        Assert.areEqual(2, result.size(), 'Should return one entry per NavUnit');
+        Assert.areEqual('Test 1', result.get('4100'));
+        Assert.areEqual('Test 2', result.get('4200'));
+    }
+
+    @IsTest
+    static void getNavUnitNames_NoUnits_ReturnsEmptyMap() {
+        Test.startTest();
+        Map<String, String> result = OppgaveManager.getNavUnitNames();
+        Test.stopTest();
+
+        Assert.isNotNull(result, 'Should not return null');
+        Assert.areEqual(0, result.size(), 'Should return empty map when no NavUnits exist');
+    }
+
+    @IsTest
+    static void getTemaCodes_NullYtelser_NoTemaQueryParam() {
+        ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
+
+        Test.startTest();
+        List<Oppgave> oppgaver = OppgaveManager.getOpenOppgaver('12345678901', 0, null);
+        Test.stopTest();
+
+        Assert.areNotEqual(0, oppgaver.size(), 'Should call API even when ytelser is null');
+    }
+
+    @IsTest
+    static void getTemaCodes_EmptyYtelser_NoTemaQueryParam() {
+        ApiMock.setTestMock('GET_OPPGAVE', 200, 'OK');
+
+        Test.startTest();
+        List<Oppgave> oppgaver = OppgaveManager.getOpenOppgaver('12345678901', 0, new List<String>{});
+        Test.stopTest();
+
+        Assert.areNotEqual(0, oppgaver.size(), 'Should call API even when ytelser is empty');
+    }
 }
