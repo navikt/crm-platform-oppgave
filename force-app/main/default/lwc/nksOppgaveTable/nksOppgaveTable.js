@@ -31,13 +31,13 @@ const LOAD_MORE_INCREMENT = 50;
 const APEX_QUERY_LIMIT = 200;
 
 const COLUMNS = [
-    { field: 'oppgavetype', label: 'Oppgavetype' },
+    { field: 'oppgavetype', label: 'Type' },
     { field: 'tema', label: 'Tema' },
     { field: 'gjelder', label: 'Gjelder' },
     { field: 'status', label: 'Status' },
     { field: 'registrert', label: 'Registrert' },
     { field: 'frist', label: 'Frist' },
-    { field: 'navEnhet', label: 'Nav enhet' }
+    { field: 'navEnhet', label: 'Enhet' }
 ];
 
 export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
