@@ -350,8 +350,8 @@ public with sharing class OppgaveManager {
     @AuraEnabled(cacheable=true)
     public static Map<String, String> getNavUnitNames() {
         Map<String, String> result = new Map<String, String>();
-        for (NavUnit__c nu : [SELECT NKS_Name_Short__c, INT_UnitNumber__c FROM NavUnit__c]) {
-            result.put(nu.INT_UnitNumber__c, nu.NKS_Name_Short__c);
+        for (NavUnit__c nu : [SELECT Name, INT_UnitNumber__c FROM NavUnit__c]) {
+            result.put(nu.INT_UnitNumber__c, nu.Name);
         }
         return result;
     }
