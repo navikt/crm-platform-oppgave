@@ -482,6 +482,10 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         return this.selectedTaskScope === 'all';
     }
 
+    get oppgaveCount() {
+        return this.displayData.length + (this.hasMore ? '+' : '');
+    }
+
     get errorMessage() {
         return this.error?.body?.message || this.error?.message || 'Kunne ikke hente oppgaver';
     }
