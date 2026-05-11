@@ -40,10 +40,12 @@ public without sharing class OppgaveService extends ApiController {
     public HttpResponse getOppgaveList(CRM_OppgaveQueryList query) {
         initRequest('Oppgave_API', 'GET_OPPGAVE');
         addSaasProxyServiceAuthHeader();
-        Map<String, String> convertedParams = convertToQueryParams(query);
+        Map<String, Set<String>> convertedParams = convertToQueryParams(query);
         for (String param : convertedParams.keySet()) {
-            String paramValue = convertedParams.get(param);
-            addUrlParam(param, paramValue);
+            Set<String> paramValue = convertedParams.get(param);
+            for (String value : paramValue) {
+                addUrlParam(param, value);
+            }
         }
 
         addXCorrelation();
@@ -98,8 +100,8 @@ public without sharing class OppgaveService extends ApiController {
         transactionId = requestId;
     }
 
-    private Map<String, String> convertToQueryParams(CRM_OppgaveQueryList query) {
-        Map<String, String> returnMap = new Map<String, String>();
+    private Map<String, Set<String>> convertToQueryParams(CRM_OppgaveQueryList query) {
+        Map<String, Set<String>> returnMap = new Map<String, Set<String>>();
         String jsonParams = JSON.serialize(query, true); //Suppressing null values
         JSONParser parser = JSON.createParser(jsonParams);
 
@@ -111,19 +113,19 @@ public without sharing class OppgaveService extends ApiController {
                 parser.nextToken();
 
                 // Check if the value is an array, if so, convert it to a comma-separated string
+                Set<String> valueSet = new Set<String>();
                 if (parser.getCurrentToken() == JSONToken.START_ARRAY) {
-                    List<String> valueList = new List<String>();
                     while (parser.nextToken() != JSONToken.END_ARRAY) {
                         // Add each value in the array to the list after formatting it
-                        valueList.add(formatQueryParam(parser, key));
+                        valueSet.add(formatQueryParam(parser, key));
                     }
                     // Join the list into a comma-separated string for the query parameter
-                    value = String.join(valueList, ',');
                 } else {
                     value = formatQueryParam(parser, key);
+                    valueSet.add(value);
                 }
 
-                returnMap.put(key, value);
+                returnMap.put(key, valueSet);
             }
         }
 
