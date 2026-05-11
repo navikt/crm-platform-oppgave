@@ -322,15 +322,24 @@ public with sharing class OppgaveManager {
     }
 
     private static Boolean hasPersonAccess(OppgaveRequest taskRequest) {
-        if (String.isBlank(taskRequest.personIdent)) {
+        list<Person__c> persons;
+        if (!String.isBlank(taskRequest.personIdent)) {
+            persons = [
+                SELECT Id
+                FROM Person__c
+                WHERE Name = :taskRequest.personIdent
+                LIMIT 1
+            ];
+        } else if (!String.isBlank(taskRequest.aktoerId)) {
+            persons = [
+                SELECT Id
+                FROM Person__c
+                WHERE INT_ActorId__c = :taskRequest.aktoerId
+                LIMIT 1
+            ];
+        } else {
             return false;
         }
-        List<Person__c> persons = [
-            SELECT Id
-            FROM Person__c
-            WHERE Name = :taskRequest.personIdent
-            LIMIT 1
-        ];
         return !persons.isEmpty();
     }
 
