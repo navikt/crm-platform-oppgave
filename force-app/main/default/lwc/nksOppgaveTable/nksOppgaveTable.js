@@ -18,7 +18,7 @@ const PERSON_FIELDS_BY_OBJECT = {
 
 const STATUS_LABELS = {
     AVSLUTTET: 'Ferdigstilt',
-    OPPRETTET: 'Opprettet',
+    OPPRETTET: 'Åpen',
     AAPEN: 'Åpen',
     AAPNET: 'Åpen',
     UNDER_BEHANDLING: 'Under behandling',
