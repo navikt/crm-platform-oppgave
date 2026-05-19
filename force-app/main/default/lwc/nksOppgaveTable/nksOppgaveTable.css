@@ -1,0 +1,199 @@
+.task-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.task-table tr {
+    border-bottom: 1px solid #b8b8b8;
+}
+
+.task-table__sort-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    font-weight: 700;
+    color: inherit;
+    cursor: pointer;
+}
+
+input {
+    cursor: pointer;
+}
+
+.task-table__sort-button:hover,
+.task-table__sort-button:focus {
+    color: #014486;
+    outline: none;
+}
+
+.task-table__sort-button lightning-icon {
+    opacity: 0.4;
+}
+
+.task-table__sort-button_active lightning-icon,
+.task-table__sort-button:hover lightning-icon {
+    opacity: 1;
+}
+
+.task-table__wrapper {
+    position: relative;
+    min-height: 4rem;
+    container-type: inline-size;
+    container-name: task-table;
+}
+
+.task-table__load-more {
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0 0;
+}
+
+.task-table__load-more-button {
+    position: relative;
+    background: transparent;
+    border: 0;
+    padding: 0.5rem 1rem;
+    font: inherit;
+    color: #014486;
+    cursor: pointer;
+}
+
+.task-table__load-more-button:hover:not(:disabled),
+.task-table__load-more-button:focus:not(:disabled) {
+    text-decoration: underline;
+    outline: none;
+}
+
+.task-table__load-more-button:disabled {
+    cursor: default;
+    opacity: 0.6;
+}
+
+.task-table th {
+    font-weight: 700;
+}
+
+.task-table td {
+    font-weight: 400;
+}
+
+.task-card__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.task-table__option {
+    display: inline-flex;
+    font-weight: 400;
+    gap: 0.2rem;
+    cursor: pointer;
+}
+
+.task-card__controls {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+}
+
+.task-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem 1rem;
+}
+
+.task-table a {
+    color: #0067c5;
+    text-decoration: underline;
+}
+
+.task-table a:hover {
+    text-decoration-thickness: 2px;
+}
+
+.task-table tr > th,
+.task-table tr > td {
+    padding: 0.75rem 1.5rem;
+    color: #000;
+    font-feature-settings:
+        'liga' off,
+        'clig' off;
+    font-size: 0.8125rem;
+    font-style: normal;
+    line-height: 1.5rem;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    vertical-align: top;
+}
+
+@container task-table (max-width: 60rem) {
+    .task-table tr > th,
+    .task-table tr > td {
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+@container task-table (max-width: 50rem) {
+    .task-table tr > th,
+    .task-table tr > td {
+        padding: 0.375rem 0.375rem;
+    }
+}
+
+@container task-table (max-width: 45rem) {
+    .task-table tr > th,
+    .task-table tr > td {
+        padding: 0;
+    }
+}
+
+.task-table td > a,
+.task-table__cell {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+}
+
+.task-table__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.task-table__status-dot {
+    flex: 0 0 auto;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background: #6b7a99;
+}
+
+.task-table__status-dot_OPPRETTET,
+.task-table__status-dot_AAPNET {
+    background: #6b8aff;
+}
+
+.task-table__status-dot_UNDER_BEHANDLING {
+    background: #f5c84c;
+}
+
+.task-table__status-dot_FERDIGSTILT {
+    background: #4cc88a;
+}
+
+.task-table__status-dot_FEILREGISTRERT {
+    background: #f0a23a;
+}

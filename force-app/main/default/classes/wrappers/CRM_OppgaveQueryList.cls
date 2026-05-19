@@ -11,11 +11,11 @@ public class CRM_OppgaveQueryList {
     public List<String> tema;
     public List<String> oppgavetype;
     public String tildeltEnhetsnr;
-    public boolean tildeltRessurs;
+    public Boolean tildeltRessurs;
     public String tilordnetRessurs;
     public String behandlingstema;
     public String behandlingstype;
-    public boolean erUtenMappe;
+    public Boolean erUtenMappe;
     public List<String> aktoerId;
     public List<String> journalpostId;
     public List<String> saksreferanse;

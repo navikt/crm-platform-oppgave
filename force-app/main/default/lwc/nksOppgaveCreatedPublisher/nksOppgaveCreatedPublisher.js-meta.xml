@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>NKS Oppgave Created Publisher</masterLabel>
+    <description>Publishes a message on the oppgaveCreated application-scoped LMS channel. Use as an invisible flow screen component after creating or updating a NAV oppgave.</description>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property
+                name="assignedResource"
+                label="Assigned Resource (NAV ident)"
+                type="String"
+                description="NAV ident of the resource the new oppgave is assigned to. Included in the published LMS message so subscribers can decide whether to refresh."
+                role="inputOnly"
+            />
+            <property
+                name="actorId"
+                label="Actor ID"
+                type="String"
+                description="ActorId of the user the new oppgave was created on. Included in the published LMS message so subscribers can decide whether to refresh."
+                role="inputOnly"
+            />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
