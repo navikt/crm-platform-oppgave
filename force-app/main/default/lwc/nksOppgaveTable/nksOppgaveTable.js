@@ -489,7 +489,7 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     }
 
     get sortableHeaders() {
-        const cols = this.isAssignedOnlyMode ? [...COLUMNS, { field: 'personNavn', label: 'Person' }] : COLUMNS;
+        const cols = this.isAssignedOnlyMode ? [...COLUMNS, { field: 'personNavn', label: 'Bruker' }] : COLUMNS;
         return cols.map((col) => {
             const isSorted = this.sortField === col.field;
             let iconName = 'utility:arrowdown';
