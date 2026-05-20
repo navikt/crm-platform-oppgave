@@ -7,6 +7,7 @@ import USER_NAV_IDENT_FIELD from '@salesforce/schema/User.CRM_NAV_Ident__c';
 import getAllOppgaver from '@salesforce/apex/OppgaveManager.getAllOppgaver';
 import getOpenOppgaver from '@salesforce/apex/OppgaveManager.getOpenOppgaver';
 import getAllAssignedOpenOppgaver from '@salesforce/apex/OppgaveManager.getAllAssignedOpenOppgaver';
+import getPersonInfo from '@salesforce/apex/OppgaveManager.getPersonInfo';
 import getCommonCodeNames from '@salesforce/apex/OppgaveManager.getCommonCodeNames';
 import getNavUnitNames from '@salesforce/apex/OppgaveManager.getNavUnitNames';
 import OPPGAVE_CREATED_CHANNEL from '@salesforce/messageChannel/oppgaveCreated__c';
@@ -89,6 +90,7 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     sortDirection = 'desc';
     commonCodeNames = {};
     navUnitNames = {};
+    personInfoMap = {};
     commonCodesReady = new Promise((resolve) => (this.resolveCommonCodes = resolve));
     navUnitsReady = new Promise((resolve) => (this.resolveNavUnits = resolve));
 
@@ -114,6 +116,9 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
     wiredUser({ data }) {
         if (data) {
             this.navIdent = getFieldValue(data, USER_NAV_IDENT_FIELD);
+            if (this.isAssignedOnlyMode) {
+                this.loadOppgaver();
+            }
         }
     }
 
@@ -134,7 +139,9 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
 
     connectedCallback() {
         // Skip the load if we're waiting for personIdent/actorId to arrive async; the setters will trigger it.
-        if (!this.recordId && (this.isAssignedOnlyMode || this.resolvedPersonIdent || this.resolvedActorId)) {
+        // isAssignedOnlyMode is intentionally excluded here: navIdent arrives async via wire, so loadOppgaver is
+        // triggered from wiredUser instead to avoid fetching before navIdent is available.
+        if (!this.recordId && (this.resolvedPersonIdent || this.resolvedActorId)) {
             this.loadOppgaver();
         }
         this.subscribeToOppgaveCreated();
@@ -167,10 +174,14 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         this.isLoading = true;
         this.offset = 0;
         this.visibleCount = INITIAL_VISIBLE;
+        this.sortField = this.isAssignedOnlyMode ? 'frist' : 'registrert';
 
         try {
             const oppgaver = (await this.fetchOppgaver()) || [];
             await this.waitForWires();
+            if (this.isAssignedOnlyMode) {
+                await this.fetchPersonInfo(oppgaver);
+            }
             this.serverHasMore = this.canPaginate && oppgaver.length === APEX_QUERY_LIMIT;
             this.offset = oppgaver.length;
             this.data = await this.buildRows(oppgaver);
@@ -182,6 +193,20 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         } finally {
             this.isLoading = false;
             this.hasLoaded = true;
+        }
+    }
+
+    async fetchPersonInfo(oppgaver) {
+        const idents = [...new Set(oppgaver.map((o) => o.bruker?.ident).filter(Boolean))];
+        if (idents.length === 0) {
+            this.personInfoMap = {};
+            return;
+        }
+        try {
+            const result = await getPersonInfo({ personIdents: idents });
+            this.personInfoMap = result || {};
+        } catch (e) {
+            this.personInfoMap = {};
         }
     }
 
@@ -259,7 +284,8 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
             registrert: this.formatDate(oppgave?.opprettetTidspunkt),
             frist: this.formatDate(oppgave?.fristFerdigstillelse),
             navEnhet: enhetsnr ? (enhetName ? `${enhetsnr} ${enhetName}` : enhetsnr) : '',
-            tilordnetRessurs: oppgave?.tilordnetRessurs
+            tilordnetRessurs: oppgave?.tilordnetRessurs,
+            personNavn: this.personInfoMap[oppgave?.bruker?.ident]?.CRM_FullName__c || ''
         };
     }
 
@@ -284,7 +310,8 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
             },
             state: {
                 c__oppgaveId: oppgaveId,
-                c__oppgavetype: oppgavetype
+                c__oppgavetype: oppgavetype,
+                c__fromOppgaveListHome: this.isAssignedOnlyMode
             }
         };
     }
@@ -457,8 +484,13 @@ export default class NksOppgaveTable extends NavigationMixin(LightningElement) {
         return this.filteredAndSortedData.slice(0, this.visibleCount);
     }
 
+    get noRowsColspan() {
+        return this.isAssignedOnlyMode ? 8 : 7;
+    }
+
     get sortableHeaders() {
-        return COLUMNS.map((col) => {
+        const cols = this.isAssignedOnlyMode ? [...COLUMNS, { field: 'personNavn', label: 'Person' }] : COLUMNS;
+        return cols.map((col) => {
             const isSorted = this.sortField === col.field;
             let iconName = 'utility:arrowdown';
             if (isSorted) {

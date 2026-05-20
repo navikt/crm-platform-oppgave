@@ -52,22 +52,6 @@ public with sharing class OppgaveManager {
     }
 
     @AuraEnabled
-    public static Map<String, Person__c> getPersonInfo(List<String> personIdents) {
-        Map<String, Person__c> result = new Map<String, Person__c>();
-        if (personIdents == null || personIdents.isEmpty()) {
-            return result;
-        }
-        for (Person__c p : [
-            SELECT Name, CRM_FullName__c, CRM_Age__c
-            FROM Person__c
-            WHERE Name IN :personIdents
-        ]) {
-            result.put(p.Name, p);
-        }
-        return result;
-    }
-
-    @AuraEnabled
     public static List<Oppgave> getOpenOppgaver(String personIdent, Integer offset, List<String> ytelser) {
         OppgaveService service = new OppgaveService();
         CRM_OppgaveQueryList query = new CRM_OppgaveQueryList();
@@ -341,6 +325,22 @@ public with sharing class OppgaveManager {
             return false;
         }
         return !persons.isEmpty();
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static Map<String, Person__c> getPersonInfo(List<String> personIdents) {
+        Map<String, Person__c> result = new Map<String, Person__c>();
+        if (personIdents == null || personIdents.isEmpty()) {
+            return result;
+        }
+        for (Person__c p : [
+            SELECT Name, CRM_FullName__c, CRM_Age__c, CRM_Account__c
+            FROM Person__c
+            WHERE Name IN :personIdents
+        ]) {
+            result.put(p.Name, p);
+        }
+        return result;
     }
 
     @AuraEnabled(cacheable=true)
