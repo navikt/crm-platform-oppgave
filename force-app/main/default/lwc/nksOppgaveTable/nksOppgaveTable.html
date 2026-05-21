@@ -100,10 +100,13 @@
                             <td><span class="task-table__cell" title={row.registrert}>{row.registrert}</span></td>
                             <td><span class="task-table__cell" title={row.frist}>{row.frist}</span></td>
                             <td><span class="task-table__cell" title={row.navEnhet}>{row.navEnhet}</span></td>
+                            <template if:true={isAssignedOnlyMode}>
+                                <td><span class="task-table__cell" title={row.personNavn}>{row.personNavn}</span></td>
+                            </template>
                         </tr>
                     </template>
                     <tr if:true={hasNoRows}>
-                        <td colspan="7">Ingen oppgaver funnet</td>
+                        <td colspan={noRowsColspan}>Ingen oppgaver funnet</td>
                     </tr>
                 </tbody>
             </table>
