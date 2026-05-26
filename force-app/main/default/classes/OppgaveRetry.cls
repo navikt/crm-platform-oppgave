@@ -94,13 +94,7 @@ public with sharing class OppgaveRetry {
                 logger.httpError('Error retrying oppgave', response, schRequest, CRM_ApplicationDomain.Domain.NKS);
                 schRequest.status__c = 'Failed';
             } else if (statusCode == 409) {
-                String payload =
-                    'Method: ' +
-                    method +
-                    ', Oppgave ID: ' +
-                    oppgaveId +
-                    ', Original Request ID: ' +
-                    schRequest.Id;
+                String payload = 'Method: ' + method + ', Original Request ID: ' + schRequest.Id;
                 logger.logMessage(
                     LoggerUtility.logLevel.Info,
                     schRequest.Id,
