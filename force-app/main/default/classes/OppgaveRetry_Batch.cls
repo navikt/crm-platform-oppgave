@@ -14,7 +14,7 @@ public with sharing class OppgaveRetry_Batch implements Database.Batchable<SObje
 
     public void execute(Database.BatchableContext BC, List<SObject> scope) {
         List<Scheduled_Request__c> oppgaveRequestList = (List<Scheduled_Request__c>) scope;
-        LoggerUtility logger = new LoggerUtility('OppgaveRetry_Batch');
+        LoggerUtility logger = new LoggerUtility('Oppgave Retry');
         try {
             OppgaveRetry.retryScheduledRequest(oppgaveRequestList);
         } catch (Exception ex) {
