@@ -10,7 +10,7 @@ public with sharing class OppgaveRetry {
             insert schRequest;
             return schRequest;
         } catch (Exception e) {
-            LoggerUtility logger = new LoggerUtility('Oppgave Retry Creation');
+            LoggerUtility logger = new LoggerUtility('Oppgave Retry');
             logger.error(
                 'Could not insert scheduled request for Oppgave. Method:' + methodName + ', payload: ' + payload,
                 null,
@@ -90,9 +90,27 @@ public with sharing class OppgaveRetry {
                 );
                 requestsToDelete.add(schRequest);
                 continue;
-            } else if (statusCode == 400 || statusCode == 401 || statusCode == 403 || statusCode == 409) {
+            } else if (statusCode == 400 || statusCode == 401 || statusCode == 403) {
                 logger.httpError('Error retrying oppgave', response, schRequest, CRM_ApplicationDomain.Domain.NKS);
                 schRequest.status__c = 'Failed';
+            } else if (statusCode == 409) {
+                String payload =
+                    'Method: ' +
+                    method +
+                    ', Oppgave ID: ' +
+                    oppgaveId +
+                    ', Original Request ID: ' +
+                    schRequest.Id;
+                logger.logMessage(
+                    LoggerUtility.logLevel.Info,
+                    schRequest.Id,
+                    schRequest.getSObjectType().getDescribe().getName(),
+                    'Deleting scheduled request after conflict error, assuming it was already processed successfully',
+                    payload,
+                    null,
+                    CRM_ApplicationDomain.Domain.NKS
+                );
+                requestsToDelete.add(schRequest);
             } else {
                 // Log error
                 if (schRequest.createdDate < System.now().addDays(-1)) {
