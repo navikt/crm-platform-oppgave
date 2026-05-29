@@ -243,6 +243,10 @@ public with sharing class OppgaveManager {
                 throw new IllegalArgumentException('Versjon is required for edit requests');
             }
 
+            if (String.isBlank(request.endretAvEnhetsnr)) {
+                request.endretAvEnhetsnr = [SELECT Department FROM User WHERE Id = :UserInfo.getUserId()]?.Department;
+            }
+
             Boolean systemContext = false;
             if (
                 request.POST_AS_SYSTEM == true ||
@@ -334,7 +338,7 @@ public with sharing class OppgaveManager {
             return result;
         }
         for (Person__c p : [
-            SELECT Name, CRM_FullName__c, CRM_Age__c, CRM_Account__c
+            SELECT Name, CRM_FullName__c, CRM_Age__c, CRM_Account__c, INT_DateOfBirth__c
             FROM Person__c
             WHERE Name IN :personIdents
         ]) {
