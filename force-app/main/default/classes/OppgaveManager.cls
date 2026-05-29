@@ -243,6 +243,10 @@ public with sharing class OppgaveManager {
                 throw new IllegalArgumentException('Versjon is required for edit requests');
             }
 
+            if (String.isBlank(request.endretAvEnhetsnr)) {
+                request.endretAvEnhetsnr = [SELECT Department FROM User WHERE Id = :UserInfo.getUserId()]?.Department;
+            }
+
             Boolean systemContext = false;
             if (
                 request.POST_AS_SYSTEM == true ||
