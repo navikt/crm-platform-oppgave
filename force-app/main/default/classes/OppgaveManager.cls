@@ -334,7 +334,7 @@ public with sharing class OppgaveManager {
             return result;
         }
         for (Person__c p : [
-            SELECT Name, CRM_FullName__c, CRM_Age__c, CRM_Account__c
+            SELECT Name, CRM_FullName__c, CRM_Age__c, CRM_Account__c, INT_DateOfBirth__c
             FROM Person__c
             WHERE Name IN :personIdents
         ]) {
