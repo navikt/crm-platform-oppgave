@@ -14,7 +14,11 @@ import OPPGAVE_CREATED_CHANNEL from '@salesforce/messageChannel/oppgaveCreated__
 
 const PERSON_FIELDS_BY_OBJECT = {
     Case: ['Case.Account.CRM_Person__r.Name', 'Case.Account.CRM_Person__r.INT_ActorId__c'],
-    Account: ['Account.CRM_Person__r.Name', 'Account.CRM_Person__r.INT_ActorId__c']
+    Account: ['Account.CRM_Person__r.Name', 'Account.CRM_Person__r.INT_ActorId__c'],
+    MessagingSession: [
+        'MessagingSession.EndUserAccount.CRM_Person__r.Name',
+        'MessagingSession.EndUserAccount.CRM_Person__r.INT_ActorId__c'
+    ]
 };
 
 const STATUS_LABELS = {
