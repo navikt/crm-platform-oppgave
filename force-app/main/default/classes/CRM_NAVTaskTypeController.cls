@@ -3,7 +3,10 @@ public with sharing class CRM_NAVTaskTypeController {
     public static List<CommonCode> getTaskTypes(String themeCode) {
         List<CommonCode> commoncodes = new List<CommonCode>();
         List<String> validtasktypecodes = new List<String>{ 'VUR_KONS_YTE', 'VURD_HENV', 'KONT_BRUK' };
-
+        // add extra task type for HJE (Hjelpemidler - Servicetjenesten) theme
+        if (themeCode == 'HJE') {
+            validtasktypecodes.add('HJELP_UTPROV');
+        }
         CRM_NavTaskManager.NavTaskTypeResponse response = new CRM_NavTaskManager.NavTaskTypeResponse();
         if (String.isBlank(themeCode)) {
             response.success = false;

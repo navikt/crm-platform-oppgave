@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <label>POST_CREATE_OPPGAVE</label>
     <protected>false</protected>
     <values>
@@ -20,10 +22,90 @@
 &quot;200&quot;: {
 &quot;headers&quot;: null,
 &quot;body&quot;: {
-&quot;id&quot;:null,
-&quot;tildeltEnhetsnr&quot;: &quot;4100&quot;,
+&quot;aktivDato&quot;: &quot;2026-05-08&quot;,
+&quot;aktoerId&quot;: &quot;1000096233942&quot;,
+&quot;behandlesAvApplikasjon&quot;: null,
+&quot;behandlingstema&quot;: null,
+&quot;behandlingstype&quot;: null,
+&quot;beskrivelse&quot;: &quot;testBeskrivelse&quot;,
+&quot;beskrivelseAvOppgaven&quot;: &quot;testBeskrivelse&quot;,
+&quot;bruker&quot;: {
+&quot;ident&quot;: &quot;10108000398&quot;,
+&quot;type&quot;: &quot;PERSON&quot;
+},
+&quot;endretAvEnhetsnr&quot;: null,
+&quot;fristFerdigstillelse&quot;: &quot;2026-05-08&quot;,
+&quot;id&quot;: 398498,
+&quot;ident&quot;: null,
+&quot;identer&quot;: [
+{ &quot;gruppe&quot;: &quot;FOLKEREGISTERIDENT&quot;, &quot;ident&quot;: &quot;10108000398&quot; },
+{ &quot;gruppe&quot;: &quot;AKTOERID&quot;, &quot;ident&quot;: &quot;1000096233942&quot; }
+],
+&quot;journalpostId&quot;: null,
+&quot;journalpostkilde&quot;: null,
+&quot;kommentar&quot;: null,
+&quot;metadata&quot;: {
+&quot;EKSTERN_HENVENDELSE_ID&quot;: null
+},
+&quot;oppgavetype&quot;: &quot;VURD_HENV&quot;,
+&quot;opprettetAvEnhetsnr&quot;: null,
+&quot;opprettetTidspunkt&quot;: &quot;2026-05-08T13:54:34.581+02:00&quot;,
+&quot;orgnr&quot;: null,
+&quot;personident&quot;: null,
+&quot;prioritet&quot;: &quot;LAV&quot;,
+&quot;saksreferanse&quot;: null,
+&quot;status&quot;: &quot;OPPRETTET&quot;,
+&quot;tema&quot;: &quot;AAP&quot;,
+&quot;tildeltEnhetsnr&quot;: &quot;4863&quot;,
+&quot;tilordnetRessurs&quot;: null,
 &quot;versjon&quot;: 1
 }
+},
+&quot;201&quot;: {
+&quot;headers&quot;: null,
+&quot;body&quot;: {
+&quot;aktivDato&quot;: &quot;2026-05-08&quot;,
+&quot;aktoerId&quot;: &quot;1000096233942&quot;,
+&quot;behandlesAvApplikasjon&quot;: null,
+&quot;behandlingstema&quot;: null,
+&quot;behandlingstype&quot;: null,
+&quot;beskrivelse&quot;: &quot;testBeskrivelse&quot;,
+&quot;beskrivelseAvOppgaven&quot;: &quot;testBeskrivelse&quot;,
+&quot;bruker&quot;: {
+&quot;ident&quot;: &quot;10108000398&quot;,
+&quot;type&quot;: &quot;PERSON&quot;
+},
+&quot;endretAvEnhetsnr&quot;: null,
+&quot;fristFerdigstillelse&quot;: &quot;2026-05-08&quot;,
+&quot;id&quot;: 398498,
+&quot;ident&quot;: null,
+&quot;identer&quot;: [
+{ &quot;gruppe&quot;: &quot;FOLKEREGISTERIDENT&quot;, &quot;ident&quot;: &quot;10108000398&quot; },
+{ &quot;gruppe&quot;: &quot;AKTOERID&quot;, &quot;ident&quot;: &quot;1000096233942&quot; }
+],
+&quot;journalpostId&quot;: null,
+&quot;journalpostkilde&quot;: null,
+&quot;kommentar&quot;: null,
+&quot;metadata&quot;: {
+&quot;EKSTERN_HENVENDELSE_ID&quot;: null
+},
+&quot;oppgavetype&quot;: &quot;VURD_HENV&quot;,
+&quot;opprettetAvEnhetsnr&quot;: null,
+&quot;opprettetTidspunkt&quot;: &quot;2026-05-08T13:54:34.581+02:00&quot;,
+&quot;orgnr&quot;: null,
+&quot;personident&quot;: null,
+&quot;prioritet&quot;: &quot;LAV&quot;,
+&quot;saksreferanse&quot;: null,
+&quot;status&quot;: &quot;OPPRETTET&quot;,
+&quot;tema&quot;: &quot;AAP&quot;,
+&quot;tildeltEnhetsnr&quot;: &quot;4863&quot;,
+&quot;tilordnetRessurs&quot;: null,
+&quot;versjon&quot;: 1
+}
+},
+&quot;400&quot;: {
+&quot;headers&quot;: null,
+&quot;body&quot;: null
 },
 &quot;401&quot;: {
 &quot;headers&quot;: null,

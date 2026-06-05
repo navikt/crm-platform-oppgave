@@ -1,0 +1,136 @@
+<template>
+    <article class="slds-card task-card">
+        <header class="task-card__header">
+            <h3 class="slds-card__header-title">
+                <lightning-icon
+                    class="slds-var-m-right_medium slds-icon-custom-custom-45 slds-icon_container"
+                    icon-name="custom:custom45"
+                    size="small"
+                ></lightning-icon>
+                Oppgaver ({oppgaveCount})
+            </h3>
+
+            <div class="task-card__actions">
+                <template if:true={showControls}>
+                    <div class="task-card__controls">
+                        <label class="task-table__option">
+                            <input type="checkbox" checked={ownedByRunningUser} onchange={handleMineToggle} />
+                            <span>Vis bare mine oppgaver</span>
+                        </label>
+
+                        <label class="task-table__option">
+                            <input
+                                type="radio"
+                                name="taskScope"
+                                value="open"
+                                checked={isOpenScope}
+                                onchange={handleScopeChange}
+                            />
+                            <span>Åpne oppgaver</span>
+                        </label>
+
+                        <label class="task-table__option">
+                            <input
+                                type="radio"
+                                name="taskScope"
+                                value="all"
+                                checked={isAllScope}
+                                onchange={handleScopeChange}
+                            />
+                            <span>Alle oppgaver</span>
+                        </label>
+                    </div>
+                </template>
+                <lightning-button-icon
+                    class="task-card__refresh"
+                    icon-name="utility:refresh"
+                    alternative-text="Oppdater"
+                    title="Oppdater"
+                    onclick={handleRefresh}
+                    disabled={isRefreshing}
+                ></lightning-button-icon>
+            </div>
+        </header>
+
+        <div class="task-table__wrapper slds-p-horizontal_medium slds-p-bottom_medium">
+            <table class="task-table">
+                <thead>
+                    <tr>
+                        <template for:each={sortableHeaders} for:item="header">
+                            <th key={header.field} scope="col">
+                                <button
+                                    type="button"
+                                    class={header.buttonClass}
+                                    data-field={header.field}
+                                    onclick={handleSort}
+                                >
+                                    <span>{header.label}</span>
+                                    <lightning-icon
+                                        icon-name={header.iconName}
+                                        size="xx-small"
+                                        alternative-text="Sorter"
+                                    ></lightning-icon>
+                                </button>
+                            </th>
+                        </template>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={displayData} for:item="row">
+                        <tr key={row.id}>
+                            <td>
+                                <a
+                                    href={row.oppgaveHref}
+                                    data-oppgaveid={row.id}
+                                    data-oppgavetype={row.oppgavetype}
+                                    onclick={handleRecordClick}
+                                    title={row.oppgavetype}
+                                >
+                                    {row.oppgavetype}
+                                </a>
+                            </td>
+                            <td><span class="task-table__cell" title={row.tema}>{row.tema}</span></td>
+                            <td><span class="task-table__cell" title={row.gjelder}>{row.gjelder}</span></td>
+                            <td>
+                                <span class="task-table__cell task-table__status" title={row.status}>
+                                    <span class={row.statusIconClass}></span>
+                                    <span>{row.status}</span>
+                                </span>
+                            </td>
+                            <td><span class="task-table__cell" title={row.registrert}>{row.registrert}</span></td>
+                            <td><span class="task-table__cell" title={row.frist}>{row.frist}</span></td>
+                            <td><span class="task-table__cell" title={row.navEnhet}>{row.navEnhet}</span></td>
+                            <template if:true={isAssignedOnlyMode}>
+                                <td><span class="task-table__cell" title={row.personNavn}>{row.personNavn}</span></td>
+                            </template>
+                        </tr>
+                    </template>
+                    <tr if:true={hasNoRows}>
+                        <td colspan={noRowsColspan}>Ingen oppgaver funnet</td>
+                    </tr>
+                </tbody>
+            </table>
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Laster oppgaver" size="small"></lightning-spinner>
+            </template>
+            <template if:true={hasMore}>
+                <div class="task-table__load-more">
+                    <button
+                        type="button"
+                        class="task-table__load-more-button"
+                        onclick={handleLoadMore}
+                        disabled={isLoadMoreDisabled}
+                    >
+                        <template if:true={isLoadingMore}>
+                            <lightning-spinner alternative-text="Laster" size="x-small"></lightning-spinner>
+                        </template>
+                        Last flere
+                    </button>
+                </div>
+            </template>
+        </div>
+        <div if:true={error} class="slds-text-color_error slds-p-horizontal_small slds-p-bottom_small">
+            {errorMessage}
+        </div>
+    </article>
+</template>

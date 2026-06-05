@@ -37,16 +37,17 @@ public without sharing class CRM_DueDateUtility {
 
     private static List<Date> holidays {
         get {
-            List<Holiday> holidayList = [SELECT ActivityDate, RecurrenceType FROM Holiday];
-            List<Date> retList = new List<Date>();
-            for (Holiday h : holidayList) {
-                if (h.RecurrenceType == 'RecursYearly') {
-                    retList.add(getNextOccurance(h));
-                } else {
-                    retList.add(h.ActivityDate);
+            if (holidays == null) {
+                holidays = new List<Date>();
+                for (Holiday h : [SELECT ActivityDate, RecurrenceType FROM Holiday]) {
+                    if (h.RecurrenceType == 'RecursYearly') {
+                        holidays.add(getNextOccurance(h));
+                    } else {
+                        holidays.add(h.ActivityDate);
+                    }
                 }
             }
-            return retList;
+            return holidays;
         }
         private set {
         }
@@ -79,6 +80,20 @@ public without sharing class CRM_DueDateUtility {
             dateList.add(addBusinessDays(numberofBusinessdays));
         }
         return dateList;
+    }
+
+    public static Date setDueDate(OppgaveRequest taskRequest) {
+        String theme = taskRequest.tema;
+        String taskType = taskRequest.oppgavetype;
+        NAV_Task_Due_Date__mdt duedateRecord;
+        if (dueDateMap.containsKey(theme + '_' + taskType)) {
+            duedateRecord = dueDateMap.get(theme + '_' + taskType);
+        }
+
+        //Number of business days defaults to 2 if nothing else is defined
+        Integer numberofBusinessdays = duedateRecord != null ? Integer.valueOf(duedateRecord.CRM_Business_Days__c) : 2;
+
+        return addBusinessDays(numberofBusinessdays);
     }
 
     private static Date getNextOccurance(Holiday h) {

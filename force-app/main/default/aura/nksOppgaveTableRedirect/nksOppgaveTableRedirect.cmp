@@ -1,0 +1,6 @@
+<aura:component implements="lightning:isUrlAddressable" access="global">
+    <aura:attribute name="pageReference" type="Object" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <lightning:workspaceAPI aura:id="workspace" />
+    <c:nksOppgaveTable aura:id="oppgaveTable" />
+</aura:component>

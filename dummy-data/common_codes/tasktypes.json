@@ -39,6 +39,16 @@
             "CRM_Code__c": "VURD_HENV",
             "CRM_Active__c": true,
             "CRM_Code_Set__c": "Oppgavetyper"
+        },
+        {
+            "attributes": {
+                "type": "Common_Code__c",
+                "referenceId": "HJELPUTPOVRef"
+            },
+            "Name": "Hjelp til utprøving",
+            "CRM_Code__c": "HJELP_UTPROV",
+            "CRM_Active__c": true,
+            "CRM_Code_Set__c": "Oppgavetyper"
         }
     ]
 }

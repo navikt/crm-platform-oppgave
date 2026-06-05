@@ -15,6 +15,13 @@ public with sharing class CRM_NAVTaskTypeControllerTest {
         CRM_OPPGAVE_TestDataFactory.createRecord(
             new Common_Code__c(CRM_Code__c = 'KONT_BRUK', Name = 'Kontakt bruker', CRM_Code_Set__c = 'Oppgavetyper')
         );
+        CRM_OPPGAVE_TestDataFactory.createRecord(
+            new Common_Code__c(
+                CRM_Code__c = 'HJELP_UTPROV',
+                Name = 'Hjelpemiddel utprøving',
+                CRM_Code_Set__c = 'Oppgavetyper'
+            )
+        );
     }
     @isTest
     static void testGetTaskTypes() {
@@ -31,5 +38,13 @@ public with sharing class CRM_NAVTaskTypeControllerTest {
         Test.stopTest();
 
         System.assertEquals(3, tasktypes.size());
+    }
+    @IsTest
+    static void testGetTaskTypesHJETheme() {
+        Test.startTest();
+        List<CRM_NAVTaskTypeController.CommonCode> tasktypes = CRM_NAVTaskTypeController.getTaskTypes('HJE');
+        Test.stopTest();
+
+        System.assertEquals(4, tasktypes.size());
     }
 }
