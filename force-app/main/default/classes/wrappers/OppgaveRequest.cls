@@ -89,13 +89,13 @@ public class OppgaveRequest {
     public Oppgave toOppgave() {
         Oppgave o = new Oppgave();
         o.id = this.id;
-        o.tildeltEnhetsnr = this.tildeltEnhetsnr;
-        o.opprettetAvEnhetsnr = this.opprettetAvEnhetsnr;
+        o.tildeltEnhetsnr = String.isNotBlank(this.tildeltEnhetsnr) ? this.tildeltEnhetsnr : null;
+        o.opprettetAvEnhetsnr = String.isNotBlank(this.opprettetAvEnhetsnr) ? this.opprettetAvEnhetsnr : null;
         o.journalpostId = this.journalpostId;
         o.journalpostkilde = this.journalpostkilde;
         o.behandlesAvApplikasjon = this.behandlesAvApplikasjon;
-        o.tilordnetRessurs = this.tilordnetRessurs;
-        o.endretAvEnhetsnr = this.endretAvEnhetsnr;
+        o.tilordnetRessurs = String.isNotBlank(this.tilordnetRessurs) ? this.tilordnetRessurs : null;
+        o.endretAvEnhetsnr = String.isNotBlank(this.endretAvEnhetsnr) ? this.endretAvEnhetsnr : null;
         o.beskrivelse = this.beskrivelse;
         o.saksreferanse = this.saksreferanse;
         o.tema = this.tema;
