@@ -89,29 +89,29 @@ public class OppgaveRequest {
     public Oppgave toOppgave() {
         Oppgave o = new Oppgave();
         o.id = this.id;
-        o.tildeltEnhetsnr = String.isNotBlank(this.tildeltEnhetsnr) ? this.tildeltEnhetsnr : null;
-        o.opprettetAvEnhetsnr = String.isNotBlank(this.opprettetAvEnhetsnr) ? this.opprettetAvEnhetsnr : null;
-        o.journalpostId = this.journalpostId;
-        o.journalpostkilde = this.journalpostkilde;
-        o.behandlesAvApplikasjon = this.behandlesAvApplikasjon;
-        o.tilordnetRessurs = String.isNotBlank(this.tilordnetRessurs) ? this.tilordnetRessurs : null;
-        o.endretAvEnhetsnr = String.isNotBlank(this.endretAvEnhetsnr) ? this.endretAvEnhetsnr : null;
-        o.beskrivelse = this.beskrivelse;
-        o.saksreferanse = this.saksreferanse;
-        o.tema = this.tema;
-        o.behandlingstema = this.behandlingstema;
-        o.oppgavetype = this.oppgavetype;
-        o.behandlingstype = this.behandlingstype;
+        o.tildeltEnhetsnr = blankToNull(this.tildeltEnhetsnr);
+        o.opprettetAvEnhetsnr = blankToNull(this.opprettetAvEnhetsnr);
+        o.journalpostId = blankToNull(this.journalpostId);
+        o.journalpostkilde = blankToNull(this.journalpostkilde);
+        o.behandlesAvApplikasjon = blankToNull(this.behandlesAvApplikasjon);
+        o.tilordnetRessurs = blankToNull(this.tilordnetRessurs);
+        o.endretAvEnhetsnr = blankToNull(this.endretAvEnhetsnr);
+        o.beskrivelse = blankToNull(this.beskrivelse);
+        o.saksreferanse = blankToNull(this.saksreferanse);
+        o.tema = blankToNull(this.tema);
+        o.behandlingstema = blankToNull(this.behandlingstema);
+        o.oppgavetype = blankToNull(this.oppgavetype);
+        o.behandlingstype = blankToNull(this.behandlingstype);
         o.aktivDato = Datetime.now().format('yyyy-MM-dd');
         o.fristFerdigstillelse = String.isNotBlank(this.fristFerdigstillelse)
             ? this.fristFerdigstillelse
             : String.valueOf(CRM_DueDateUtility.setDueDate(this));
-        o.prioritet = this.prioritet;
-        o.status = String.isNotBlank(this.status) ? this.status : null;
+        o.prioritet = blankToNull(this.prioritet);
+        o.status = blankToNull(this.status);
         o.versjon = this.versjon;
-        o.personident = this.personident;
-        o.aktoerId = this.aktoerId;
-        o.orgnr = this.orgnr;
+        o.personident = blankToNull(this.personident);
+        o.aktoerId = blankToNull(this.aktoerId);
+        o.orgnr = blankToNull(this.orgnr);
         if (String.isNotBlank(this.eksternHenvendelseId)) {
             o.metadata = new Oppgave.OppgaveMetadata();
             o.metadata.EKSTERN_HENVENDELSE_ID = this.eksternHenvendelseId;
@@ -122,5 +122,10 @@ public class OppgaveRequest {
             o.kommentar.automatiskGenerert = this.kommentarAutomatiskGenerert;
         }
         return o;
+    }
+
+    // Prevent serializing empty string values to the API, as this can cause validation errors for certain fields
+    private String blankToNull(String value) {
+        return String.isNotBlank(value) ? value : null;
     }
 }
