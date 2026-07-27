@@ -589,6 +589,22 @@ public with sharing class OppgaveManager_Test {
     }
 
     @IsTest
+    static void postTaskFromLwc_Success() {
+        ApiMock.setTestMock('POST_OPPGAVE', 200, 'OK');
+        OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.personIdent = '12345678902';
+        taskRequest.id = 12345;
+        taskRequest.versjon = 2;
+        taskRequest.methodType = 'POST';
+
+        Test.startTest();
+        OppgaveResponse result = OppgaveManager.postTaskFromLwc(JSON.serialize(taskRequest));
+        Test.stopTest();
+
+        Assert.isTrue(result.isSuccess);
+    }
+
+    @IsTest
     static void getCommonCodeNames_ReturnsMatchingCodeSets() {
         insert new List<Common_Code__c>{
             new Common_Code__c(Name = 'Sykepenger', CRM_Code__c = 'SYK', CRM_Code_Set__c = 'Tema'),

@@ -159,6 +159,7 @@ public with sharing class OppgaveManager {
         return responses;
     }
 
+    @AuraEnabled
     public static OppgaveResponse postTask(OppgaveRequest request) {
         LoggerUtility postLogger = String.isNotBlank(request.logCategory)
             ? new LoggerUtility(request.logCategory)
@@ -222,6 +223,12 @@ public with sharing class OppgaveManager {
             postLogger.publish();
         }
         return result;
+    }
+
+    @AuraEnabled
+    public static OppgaveResponse postTaskFromLwc(String requestJson) {
+        OppgaveRequest request = (OppgaveRequest) JSON.deserialize(requestJson, OppgaveRequest.class);
+        return postTask(request);
     }
 
     @AuraEnabled
