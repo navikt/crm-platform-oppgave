@@ -590,7 +590,7 @@ public with sharing class OppgaveManager_Test {
 
     @IsTest
     static void postTaskFromLwc_Success() {
-        ApiMock.setTestMock('POST_OPPGAVE', 200, 'OK');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 200, 'OK');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678902';
         taskRequest.id = 12345;
