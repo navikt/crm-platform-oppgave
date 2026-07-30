@@ -281,15 +281,6 @@ public with sharing class OppgaveManager {
                 systemContext
             );
             HttpResponse response = oppgaveService.editTask(request.toOppgave());
-            logger.logMessage(
-                LoggerUtility.LogLevel.INFO,
-                null,
-                null,
-                'Oppgave PATCH response log (status ' + response.getStatusCode() + ')',
-                response.getBody(),
-                null,
-                CRM_ApplicationDomain.Domain.NKS
-            );
             Integer statusCode = response.getStatusCode();
 
             if (statusCode == 200 || statusCode == 201) {
