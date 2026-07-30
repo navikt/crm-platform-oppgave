@@ -4,7 +4,7 @@ public with sharing class OppgaveRetry_Test {
 
     @IsTest
     static void retryScheduledRequest_Post_200_Success() {
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 201, 'Created');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 201, 'Created');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         String payload = JSON.serialize(taskRequest);
@@ -39,7 +39,7 @@ public with sharing class OppgaveRetry_Test {
 
     @IsTest
     static void retryScheduledRequest_Post_400_Error() {
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 400, 'Bad Request');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 400, 'Bad Request');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = 'Geir';
         String payload = JSON.serialize(taskRequest);
@@ -79,7 +79,7 @@ public with sharing class OppgaveRetry_Test {
 
     @IsTest
     static void retryScheduledRequest_Post_500_Error() {
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 500, 'Internal Server Error');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 500, 'Internal Server Error');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         String payload = JSON.serialize(taskRequest);
@@ -119,7 +119,7 @@ public with sharing class OppgaveRetry_Test {
 
     @IsTest
     static void retryScheduledRequest_Post_500_OldRequest_Error() {
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 500, 'Internal Server Error');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 500, 'Internal Server Error');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         String payload = JSON.serialize(taskRequest);
@@ -135,7 +135,7 @@ public with sharing class OppgaveRetry_Test {
 
         // We fetch the record agin to get the updated CreatedDate after Test.setCreatedDate
         Scheduled_Request__c realSchRequest = [
-            SELECT Id, Method__c, Status__c, Payload__c, CreatedDate
+            SELECT Id, Method__c, Status__c, Payload__c, Idempotency_Key__c, CreatedDate
             FROM Scheduled_Request__c
             WHERE Id = :schRequest.Id
         ];
@@ -406,7 +406,7 @@ public with sharing class OppgaveRetry_Test {
 
     @IsTest
     static void OppgaveRetry_Batch() {
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 201, 'Created');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 201, 'Created');
         List<Scheduled_Request__c> requests = new List<Scheduled_Request__c>();
         OppgaveRequest oppgReq1 = new OppgaveRequest();
         oppgReq1.personIdent = '12345678901';
@@ -419,6 +419,7 @@ public with sharing class OppgaveRetry_Test {
                 Method__c = 'Post',
                 Status__c = 'Scheduled',
                 Payload__c = JSON.serialize(oppgReq1),
+                Api__c = 'Oppgave',
                 Domain__c = 'NKS'
             )
         );
@@ -427,6 +428,7 @@ public with sharing class OppgaveRetry_Test {
                 Method__c = 'Post',
                 Status__c = 'Scheduled',
                 Payload__c = JSON.serialize(oppgReq2),
+                Api__c = 'Oppgave',
                 Domain__c = 'NKS'
             )
         );

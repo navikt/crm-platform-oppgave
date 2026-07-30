@@ -2,7 +2,7 @@ public with sharing class OppgaveRetry_Batch implements Database.Batchable<SObje
     private String query;
 
     public OppgaveRetry_Batch() {
-        this.query = 'SELECT Id, Method__c, Status__c, Payload__c, CreatedDate FROM Scheduled_Request__c WHERE Status__c = \'Scheduled\' and Domain__c = \'NKS\'';
+        this.query = 'SELECT Id, Method__c, Status__c, Payload__c, Idempotency_Key__c, CreatedDate FROM Scheduled_Request__c WHERE Status__c = \'Scheduled\' AND Domain__c = \'NKS\' AND Api__c = \'Oppgave\'';
     }
     public OppgaveRetry_Batch(String query) {
         this.query = query;
