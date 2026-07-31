@@ -180,11 +180,6 @@ public class OppgaveRequest {
             o.arkivreferanse.saksnr = blankToNull(this.saksreferanse);
         }
 
-        /*if (String.isNotBlank(this.eksternHenvendelseId)) {
-            o.metadata = new OppgaveV2.OppgaveMetadata();
-            o.metadata.EKSTERN_HENVENDELSE_ID = this.eksternHenvendelseId;
-        }*/
-
         if (String.isNotBlank(this.kommentarTekst) || String.isNotBlank(this.opprettetAvEnhetsnr)) {
             o.meta = new OppgaveV2.PostMeta();
             o.meta.kommentar = blankToNull(this.kommentarTekst);
@@ -193,6 +188,11 @@ public class OppgaveRequest {
                 o.meta.representerer.enhet = new OppgaveV2.Enhet();
                 o.meta.representerer.enhet.nr = this.opprettetAvEnhetsnr;
             }
+        }
+
+        if (String.isNotBlank(this.eksternHenvendelseId)) {
+            o.utvidelser = new OppgaveV2.Utvidelser();
+            o.utvidelser.henvendelseId = this.eksternHenvendelseId;
         }
 
         return o;
