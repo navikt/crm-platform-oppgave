@@ -159,7 +159,6 @@ public with sharing class OppgaveManager {
         return responses;
     }
 
-    @AuraEnabled
     public static OppgaveResponse postTask(OppgaveRequest request) {
         LoggerUtility postLogger = String.isNotBlank(request.logCategory)
             ? new LoggerUtility(request.logCategory)
