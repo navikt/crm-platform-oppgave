@@ -113,11 +113,6 @@ input {
     gap: 0.5rem 1rem;
 }
 
-.task-table a {
-    color: #0067c5;
-    text-decoration: underline;
-}
-
 .task-table a:hover {
     text-decoration-thickness: 2px;
 }
