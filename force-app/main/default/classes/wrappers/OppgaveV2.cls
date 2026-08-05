@@ -28,11 +28,15 @@ public class OppgaveV2 {
     @AuraEnabled
     public Tidspunkt endret;
     @AuraEnabled
-    public Tidspunkt avsluttet;
+    public Tidspunkt lukket;
     @AuraEnabled
     public List<Kommentar> kommentarer;
     @AuraEnabled
     public Utvidelser utvidelser;
+    @AuraEnabled
+    public List<String> nokkelord;
+    @AuraEnabled
+    public PostMeta meta;
 
     public class Kategorisering {
         @AuraEnabled
@@ -110,5 +114,17 @@ public class OppgaveV2 {
         public String saksnr;
         @AuraEnabled
         public String journalpostId;
+    }
+
+    public class PostMeta {
+        @AuraEnabled
+        public Representerer representerer;
+        @AuraEnabled
+        public String kommentar;
+    }
+
+    public class Representerer {
+        @AuraEnabled
+        public Enhet enhet;
     }
 }

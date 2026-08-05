@@ -192,7 +192,7 @@ public with sharing class OppgaveManager_Test {
 
     @IsTest
     static void postTask_Success() {
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 201, 'Created');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 201, 'Created');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.methodType = 'POST';
@@ -200,12 +200,12 @@ public with sharing class OppgaveManager_Test {
         OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
         Assert.isTrue(taskResponse.isSuccess);
-        Assert.isNotNull(taskResponse.oppgave.tildeltEnhetsnr);
+        Assert.isNotNull(taskResponse.oppgaveV2.fordeling.enhet.nr);
     }
 
     @IsTest
     static void postTask_System_Success() {
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 201, 'Created');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 201, 'Created');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.POST_AS_SYSTEM = true;
@@ -214,24 +214,24 @@ public with sharing class OppgaveManager_Test {
         OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
         Assert.isTrue(taskResponse.isSuccess);
-        Assert.isNotNull(taskResponse.oppgave.tildeltEnhetsnr);
+        Assert.isNotNull(taskResponse.oppgaveV2.fordeling.enhet.nr);
     }
 
     @IsTest
     static void postTask_NoIdent_Success() {
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 201, 'Created');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 201, 'Created');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.methodType = 'POST';
         Test.startTest();
         OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
         Assert.isTrue(taskResponse.isSuccess);
-        Assert.isNotNull(taskResponse.oppgave.tildeltEnhetsnr);
+        Assert.isNotNull(taskResponse.oppgaveV2.fordeling.enhet.nr);
     }
 
     @IsTest
     static void postTask_Metadata_Success() {
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 201, 'Created');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 201, 'Created');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.eksternHenvendelseId = '12345';
         taskRequest.methodType = 'POST';
@@ -239,12 +239,12 @@ public with sharing class OppgaveManager_Test {
         OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
         Assert.isTrue(taskResponse.isSuccess);
-        Assert.isNotNull(taskResponse.oppgave.tildeltEnhetsnr);
+        Assert.isNotNull(taskResponse.oppgaveV2.fordeling.enhet.nr);
     }
 
     @IsTest
     static void postTask_KommentarTekst_Success() {
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 201, 'Created');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 201, 'Created');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.kommentarTekst = 'This is a test';
         taskRequest.methodType = 'POST';
@@ -252,12 +252,12 @@ public with sharing class OppgaveManager_Test {
         OppgaveResponse taskResponse = OppgaveManager.executeOppgave(new List<OppgaveRequest>{ taskRequest })[0];
         Test.stopTest();
         Assert.isTrue(taskResponse.isSuccess);
-        Assert.isNotNull(taskResponse.oppgave.tildeltEnhetsnr);
+        Assert.isNotNull(taskResponse.oppgaveV2.fordeling.enhet.nr);
     }
 
     @IsTest
     static void postTask_Error() {
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 500, 'Error');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 500, 'Error');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.POST_AS_SYSTEM = true;
@@ -277,7 +277,7 @@ public with sharing class OppgaveManager_Test {
 
     @IsTest
     static void postTask_400_Error() {
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 400, 'Bad Request');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 400, 'Bad Request');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.POST_AS_SYSTEM = true;
@@ -299,7 +299,7 @@ public with sharing class OppgaveManager_Test {
     static void postTask_LogCategory_Error() {
         String testLogCategory = 'TestLog';
 
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 500, 'Error');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 500, 'Error');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.POST_AS_SYSTEM = true;
@@ -323,7 +323,7 @@ public with sharing class OppgaveManager_Test {
 
     @IsTest
     static void postTask_ScheduledRequest_Error() {
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 500, 'Error');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 500, 'Error');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.methodType = 'POST';
@@ -348,7 +348,7 @@ public with sharing class OppgaveManager_Test {
 
     @IsTest
     static void postTask_No_ScheduledRequest_Error() {
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 400, 'Bad Request');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 400, 'Bad Request');
         OppgaveRequest taskRequest = new OppgaveRequest();
         taskRequest.personIdent = '12345678901';
         taskRequest.methodType = 'POST';
@@ -583,6 +583,22 @@ public with sharing class OppgaveManager_Test {
 
         Test.startTest();
         OppgaveResponse result = OppgaveManager.patchEditTaskFromLwc(JSON.serialize(taskRequest));
+        Test.stopTest();
+
+        Assert.isTrue(result.isSuccess);
+    }
+
+    @IsTest
+    static void postTaskFromLwc_Success() {
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 200, 'OK');
+        OppgaveRequest taskRequest = new OppgaveRequest();
+        taskRequest.personIdent = '12345678902';
+        taskRequest.id = 12345;
+        taskRequest.versjon = 2;
+        taskRequest.methodType = 'POST';
+
+        Test.startTest();
+        OppgaveResponse result = OppgaveManager.postTaskFromLwc(JSON.serialize(taskRequest));
         Test.stopTest();
 
         Assert.isTrue(result.isSuccess);

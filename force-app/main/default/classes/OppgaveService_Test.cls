@@ -90,9 +90,9 @@ public with sharing class OppgaveService_Test {
 
     @IsTest
     static void postTask_UserContext_Success() {
-        Oppgave request = new Oppgave();
+        OppgaveV2 request = new OppgaveV2();
         OppgaveService service = new OppgaveService();
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 200, 'OK');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 200, 'OK');
         Test.startTest();
         HttpResponse res = service.postTask(request);
         Test.stopTest();
@@ -103,8 +103,8 @@ public with sharing class OppgaveService_Test {
     static void postTask_SystemContext_Success() {
         OppgaveService service = new OppgaveService();
         service.setSystemContext();
-        Oppgave request = new Oppgave();
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 200, 'OK');
+        OppgaveV2 request = new OppgaveV2();
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 200, 'OK');
         Test.startTest();
         HttpResponse res = service.postTask(request);
         Test.stopTest();
@@ -113,9 +113,9 @@ public with sharing class OppgaveService_Test {
 
     @IsTest
     static void postTask_Error() {
-        Oppgave request = new Oppgave();
+        OppgaveV2 request = new OppgaveV2();
         OppgaveService service = new OppgaveService();
-        ApiMock.setTestMock('POST_CREATE_OPPGAVE', 500, 'Error');
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 500, 'Error');
         Test.startTest();
         HttpResponse res = service.postTask(request);
         Test.stopTest();

@@ -19,6 +19,10 @@ public class OppgaveResponse {
     @AuraEnabled
     public Oppgave oppgave;
 
+    @invocableVariable(label='Oppgave V2')
+    @AuraEnabled
+    public OppgaveV2 oppgaveV2;
+
     public static OppgaveResponse success(Oppgave oppgave) {
         OppgaveResponse resp = new OppgaveResponse();
         resp.isSuccess = true;
@@ -26,26 +30,35 @@ public class OppgaveResponse {
         return resp;
     }
 
+    public static OppgaveResponse success(OppgaveV2 oppgave) {
+        OppgaveResponse resp = new OppgaveResponse();
+        resp.isSuccess = true;
+        resp.oppgaveV2 = oppgave;
+        return resp;
+    }
+
     public static OppgaveResponse failure(String responseBody, Boolean isRetry) {
         OppgaveResponse resp = new OppgaveResponse();
         resp.isSuccess = false;
+        resp.isRetry = isRetry;
         try {
             OppgaveErrorResponse err = (OppgaveErrorResponse) JSON.deserialize(
                 responseBody,
                 OppgaveErrorResponse.class
             );
-            resp.errorMessage = err.feilmelding;
-            resp.errorUuid = err.uuid;
-            resp.isRetry = isRetry;
+            resp.errorMessage = err.detail != null ? err.detail : err.feilmelding;
+            resp.errorUuid = err.traceId != null ? err.traceId : err.uuid;
         } catch (Exception e) {
             resp.errorMessage = responseBody;
-            resp.isRetry = isRetry;
         }
         return resp;
     }
 
+    // Covers both the v1 error shape and the v2 shape
     private class OppgaveErrorResponse {
         public String uuid;
         public String feilmelding;
+        public String detail;
+        public String traceId;
     }
 }
