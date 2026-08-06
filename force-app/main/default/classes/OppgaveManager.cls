@@ -183,7 +183,9 @@ public with sharing class OppgaveManager {
 
             // meta.representerer.enhet.nr must be set when created by a veileder (OBO), and must not be set
             // when performed by system (CCF)
-            if (!systemContext && String.isBlank(request.opprettetAvEnhetsnr)) {
+            if (systemContext) {
+                request.opprettetAvEnhetsnr = null;
+            } else if (String.isBlank(request.opprettetAvEnhetsnr)) {
                 request.opprettetAvEnhetsnr = [SELECT Department FROM User WHERE Id = :UserInfo.getUserId()]
                 ?.Department;
             }
