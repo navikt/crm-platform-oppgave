@@ -48,6 +48,9 @@ public with sharing class OppgaveRetry {
             try {
                 switch on method {
                     when 'Post' {
+                        // Retries always run in system context (batch has no user session), so
+                        // meta.representerer.enhet.nr must not be sent
+                        taskRequest.opprettetAvEnhetsnr = null;
                         OppgaveService oppgaveService = new OppgaveService(
                             'Oppgave Retry',
                             CRM_ApplicationDomain.Domain.NKS,
@@ -56,6 +59,9 @@ public with sharing class OppgaveRetry {
                         response = oppgaveService.postTask(taskRequest.toOppgaveV2(), schRequest.Idempotency_Key__c);
                     }
                     when 'Patch' {
+                        // Retries always run in system context (batch has no user session), so
+                        // meta.utfortAv.enhet.nr must not be sent
+                        taskRequest.endretAvEnhetsnr = null;
                         OppgaveService oppgaveService = new OppgaveService(
                             'Oppgave Retry',
                             CRM_ApplicationDomain.Domain.NKS,
