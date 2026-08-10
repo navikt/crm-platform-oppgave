@@ -1,10 +1,22 @@
 public with sharing class OppgaveRetry {
+    private static final String API_NAME = 'Oppgave';
+
     public static Scheduled_Request__c createScheduledRequest(String methodName, String payload) {
+        return createScheduledRequest(methodName, payload, null);
+    }
+
+    public static Scheduled_Request__c createScheduledRequest(
+        String methodName,
+        String payload,
+        String idempotencyKey
+    ) {
         try {
             Scheduled_Request__c schRequest = new Scheduled_Request__c(
                 Status__c = 'Scheduled',
                 Method__c = methodName,
                 Payload__c = payload,
+                Idempotency_Key__c = idempotencyKey,
+                Api__c = API_NAME,
                 Domain__c = 'NKS'
             );
             insert schRequest;
@@ -36,14 +48,20 @@ public with sharing class OppgaveRetry {
             try {
                 switch on method {
                     when 'Post' {
+                        // Retries always run in system context (batch has no user session), so
+                        // meta.representerer.enhet.nr must not be sent
+                        taskRequest.opprettetAvEnhetsnr = null;
                         OppgaveService oppgaveService = new OppgaveService(
                             'Oppgave Retry',
                             CRM_ApplicationDomain.Domain.NKS,
                             true
                         );
-                        response = oppgaveService.postTask(taskRequest.toOppgave());
+                        response = oppgaveService.postTask(taskRequest.toOppgaveV2(), schRequest.Idempotency_Key__c);
                     }
                     when 'Patch' {
+                        // Retries always run in system context (batch has no user session), so
+                        // meta.utfortAv.enhet.nr must not be sent
+                        taskRequest.endretAvEnhetsnr = null;
                         OppgaveService oppgaveService = new OppgaveService(
                             'Oppgave Retry',
                             CRM_ApplicationDomain.Domain.NKS,
@@ -71,7 +89,9 @@ public with sharing class OppgaveRetry {
             Integer statusCode = response.getStatusCode();
             if (statusCode == 200 || statusCode == 201) {
                 // This copies the info method of LoggerUtility, without logging the request itself
-                Integer oppgaveId = ((Oppgave) JSON.deserialize(response.getBody(), Oppgave.class))?.id;
+                Integer oppgaveId = method == 'Post'
+                    ? ((OppgaveV2) JSON.deserialize(response.getBody(), OppgaveV2.class))?.id
+                    : ((Oppgave) JSON.deserialize(response.getBody(), Oppgave.class))?.id;
                 String payload =
                     'Method: ' +
                     method +

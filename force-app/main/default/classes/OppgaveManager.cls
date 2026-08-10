@@ -1,14 +1,18 @@
 public with sharing class OppgaveManager {
     static LoggerUtility logger = new LoggerUtility('Oppgave');
 
+    // 'system' is a reserved identifier in Apex, so the API's "system" property is mapped to
+    // OppgaveV2.TidspunktAv.systemKilde before deserializing.
+    private static OppgaveV2 deserializeOppgaveV2(String body) {
+        return (OppgaveV2) JSON.deserialize(body.replace('"system":', '"systemKilde":'), OppgaveV2.class);
+    }
+
     @AuraEnabled
     public static OppgaveV2 getOppgaveById(String oppgaveId) {
         OppgaveService service = new OppgaveService();
         HttpResponse response = service.getOppgaveById(oppgaveId);
         if (response.getStatusCode() == 200) {
-            String body = response.getBody().replace('"system":', '"systemKilde":');
-            OppgaveV2 oppgave = (OppgaveV2) JSON.deserialize(body, OppgaveV2.class);
-            return oppgave;
+            return deserializeOppgaveV2(response.getBody());
         } else {
             logger.httpError(
                 'Error getting oppgave by ID',
@@ -166,6 +170,7 @@ public with sharing class OppgaveManager {
 
         Boolean retry = true;
         OppgaveResponse result;
+        String idempotencyKey = new Uuid().getValue();
         try {
             Boolean systemContext = false;
             if (
@@ -176,17 +181,26 @@ public with sharing class OppgaveManager {
                 systemContext = true;
             }
 
+            // meta.representerer.enhet.nr must be set when created by a veileder (OBO), and must not be set
+            // when performed by system (CCF)
+            if (systemContext) {
+                request.opprettetAvEnhetsnr = null;
+            } else if (String.isBlank(request.opprettetAvEnhetsnr)) {
+                request.opprettetAvEnhetsnr = [SELECT Department FROM User WHERE Id = :UserInfo.getUserId()]
+                ?.Department;
+            }
+
             OppgaveService oppgaveService = new OppgaveService(
                 request.logCategory,
                 CRM_ApplicationDomain.Domain.NKS,
                 systemContext
             );
-            HttpResponse response = oppgaveService.postTask(request.toOppgave());
+            HttpResponse response = oppgaveService.postTask(request.toOppgaveV2(), idempotencyKey);
             Integer statusCode = response.getStatusCode();
             if (statusCode == 200 || statusCode == 201) {
                 retry = false;
-                result = OppgaveResponse.success((Oppgave) JSON.deserialize(response.getBody(), Oppgave.class));
-            } else if (statusCode == 400 || statusCode == 401 || statusCode == 403) {
+                result = OppgaveResponse.success(deserializeOppgaveV2(response.getBody()));
+            } else if (statusCode == 400 || statusCode == 401 || statusCode == 403 || statusCode == 422) {
                 // No retry
                 retry = false;
                 postLogger.httpError(
@@ -217,7 +231,7 @@ public with sharing class OppgaveManager {
         } finally {
             if (retry) {
                 String scheduledRequest = JSON.serialize(request);
-                OppgaveRetry.createScheduledRequest('Post', scheduledRequest);
+                OppgaveRetry.createScheduledRequest('Post', scheduledRequest, idempotencyKey);
             }
             postLogger.publish();
         }

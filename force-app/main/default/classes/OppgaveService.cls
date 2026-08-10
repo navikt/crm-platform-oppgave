@@ -53,9 +53,14 @@ public without sharing class OppgaveService extends ApiController {
         return getResponse();
     }
 
-    public HttpResponse postTask(Oppgave request) {
-        initRequest('Oppgave_API', 'POST_CREATE_OPPGAVE');
+    public HttpResponse postTask(OppgaveV2 request) {
+        return postTask(request, new Uuid().getValue());
+    }
+
+    public HttpResponse postTask(OppgaveV2 request, String idempotencyKey) {
+        initRequest('Oppgave_API', 'POST_CREATE_OPPGAVE_V2');
         addSaasProxyServiceAuthHeader();
+        addHeader('Idempotency-Key', String.isNotBlank(idempotencyKey) ? idempotencyKey : new Uuid().getValue());
         setBody(JSON.serialize(request, true));
         addXCorrelation();
         doCallout();
