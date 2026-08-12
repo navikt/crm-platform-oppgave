@@ -147,23 +147,29 @@ public with sharing class OppgaveManager {
     @invocableMethod(label='Execute Oppgave' category='Oppgave')
     public static List<OppgaveResponse> executeOppgave(List<OppgaveRequest> taskRequest) {
         List<OppgaveResponse> responses = new List<OppgaveResponse>();
+        List<Scheduled_Request__c> pendingRetries = new List<Scheduled_Request__c>();
         for (OppgaveRequest request : taskRequest) {
             switch on request.methodType {
                 when 'POST' {
-                    responses.add(postTask(request));
+                    responses.add(postTask(request, pendingRetries));
                 }
                 when 'PATCH' {
-                    responses.add(patchEditTask(request));
+                    responses.add(patchEditTask(request, pendingRetries));
                 }
                 when else {
                     throw new IllegalArgumentException('Unknown methodType: ' + request.methodType);
                 }
             }
         }
+        OppgaveRetry.insertScheduledRequests(pendingRetries);
         return responses;
     }
 
     public static OppgaveResponse postTask(OppgaveRequest request) {
+        return postTask(request, null);
+    }
+
+    private static OppgaveResponse postTask(OppgaveRequest request, List<Scheduled_Request__c> pendingRetries) {
         LoggerUtility postLogger = String.isNotBlank(request.logCategory)
             ? new LoggerUtility(request.logCategory)
             : logger;
@@ -230,8 +236,16 @@ public with sharing class OppgaveManager {
             return OppgaveResponse.failure(ex.getMessage(), retry);
         } finally {
             if (retry) {
-                String scheduledRequest = JSON.serialize(request);
-                OppgaveRetry.createScheduledRequest('Post', scheduledRequest, idempotencyKey);
+                Scheduled_Request__c schRequest = OppgaveRetry.buildScheduledRequest(
+                    'Post',
+                    JSON.serialize(request),
+                    idempotencyKey
+                );
+                if (pendingRetries != null) {
+                    pendingRetries.add(schRequest);
+                } else {
+                    OppgaveRetry.insertScheduledRequests(new List<Scheduled_Request__c>{ schRequest });
+                }
             }
             postLogger.publish();
         }
@@ -252,6 +266,10 @@ public with sharing class OppgaveManager {
 
     @AuraEnabled
     public static OppgaveResponse patchEditTask(OppgaveRequest request) {
+        return patchEditTask(request, null);
+    }
+
+    private static OppgaveResponse patchEditTask(OppgaveRequest request, List<Scheduled_Request__c> pendingRetries) {
         LoggerUtility patchLogger = String.isNotBlank(request.logCategory)
             ? new LoggerUtility(request.logCategory)
             : logger;
@@ -318,8 +336,16 @@ public with sharing class OppgaveManager {
         } finally {
             if (retry) {
                 try {
-                    String scheduledRequest = JSON.serialize(request);
-                    OppgaveRetry.createScheduledRequest('Patch', scheduledRequest);
+                    Scheduled_Request__c schRequest = OppgaveRetry.buildScheduledRequest(
+                        'Patch',
+                        JSON.serialize(request),
+                        null
+                    );
+                    if (pendingRetries != null) {
+                        pendingRetries.add(schRequest);
+                    } else {
+                        OppgaveRetry.insertScheduledRequests(new List<Scheduled_Request__c>{ schRequest });
+                    }
                 } catch (Exception except) {
                     patchLogger.exception(except, null, CRM_ApplicationDomain.Domain.NKS);
                 }
