@@ -10,27 +10,37 @@ public with sharing class OppgaveRetry {
         String payload,
         String idempotencyKey
     ) {
+        Scheduled_Request__c schRequest = buildScheduledRequest(methodName, payload, idempotencyKey);
+        insertScheduledRequests(new List<Scheduled_Request__c>{ schRequest });
+        return schRequest;
+    }
+
+    public static Scheduled_Request__c buildScheduledRequest(String methodName, String payload, String idempotencyKey) {
+        return new Scheduled_Request__c(
+            Status__c = 'Scheduled',
+            Method__c = methodName,
+            Payload__c = payload,
+            Idempotency_Key__c = idempotencyKey,
+            Api__c = API_NAME,
+            Domain__c = 'NKS'
+        );
+    }
+
+    public static void insertScheduledRequests(List<Scheduled_Request__c> schRequests) {
+        if (schRequests == null || schRequests.isEmpty()) {
+            return;
+        }
         try {
-            Scheduled_Request__c schRequest = new Scheduled_Request__c(
-                Status__c = 'Scheduled',
-                Method__c = methodName,
-                Payload__c = payload,
-                Idempotency_Key__c = idempotencyKey,
-                Api__c = API_NAME,
-                Domain__c = 'NKS'
-            );
-            insert schRequest;
-            return schRequest;
+            insert schRequests;
         } catch (Exception e) {
             LoggerUtility logger = new LoggerUtility('Oppgave Retry');
             logger.error(
-                'Could not insert scheduled request for Oppgave. Method:' + methodName + ', payload: ' + payload,
+                'Could not insert ' + schRequests.size() + ' scheduled request(s) for Oppgave.',
                 null,
                 CRM_ApplicationDomain.Domain.NKS
             );
             logger.publish();
         }
-        return null;
     }
 
     public static void retryScheduledRequest(List<Scheduled_Request__c> schRequestList) {
