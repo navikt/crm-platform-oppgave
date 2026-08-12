@@ -15,9 +15,6 @@ public with sharing class OppgaveRetry {
         return schRequest;
     }
 
-    // Builds the record without inserting, so callers doing multiple callouts in a loop (e.g.
-    // OppgaveManager.executeOppgave) can defer the DML until after all callouts have completed,
-    // avoiding "uncommitted work pending" errors on subsequent callouts.
     public static Scheduled_Request__c buildScheduledRequest(String methodName, String payload, String idempotencyKey) {
         return new Scheduled_Request__c(
             Status__c = 'Scheduled',
