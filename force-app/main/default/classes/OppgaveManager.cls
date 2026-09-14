@@ -177,7 +177,11 @@ public with sharing class OppgaveManager {
         Boolean retry = true;
         Boolean invalid = false;
         OppgaveResponse result;
-        String idempotencyKey = new Uuid().getValue();
+        String idempotencyKey;
+        if (String.isBlank(request.idempotencyKey)) {
+            request.idempotencyKey = new Uuid().getValue();
+        }
+        idempotencyKey = request.idempotencyKey;
         try {
             Boolean systemContext = false;
             if (
@@ -210,7 +214,9 @@ public with sharing class OppgaveManager {
             } else if (statusCode == 400 || statusCode == 401 || statusCode == 403 || statusCode == 422) {
                 invalid = true;
                 // Retry if Oppgave was automatically created
-                retry = UserInfo.getUserType() == 'automatedprocess';
+                retry =
+                    UserInfo.getUserType() == 'automatedprocess' ||
+                    !UserInfo.getUserType().equalsIgnoreCase('Standard');
                 postLogger.httpError(
                     'Error posting oppgave',
                     response,
