@@ -21,6 +21,11 @@
                 <default>false</default>
                 <label>Failed</label>
             </value>
+            <value>
+                <fullName>Invalid</fullName>
+                <default>false</default>
+                <label>Invalid</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

@@ -175,6 +175,7 @@ public with sharing class OppgaveManager {
             : logger;
 
         Boolean retry = true;
+        Boolean invalid = false;
         OppgaveResponse result;
         String idempotencyKey = new Uuid().getValue();
         try {
@@ -207,8 +208,9 @@ public with sharing class OppgaveManager {
                 retry = false;
                 result = OppgaveResponse.success(deserializeOppgaveV2(response.getBody()));
             } else if (statusCode == 400 || statusCode == 401 || statusCode == 403 || statusCode == 422) {
-                // No retry
-                retry = false;
+                invalid = true;
+                // Retry if Oppgave was automatically created
+                retry = UserInfo.getUserType() == 'automatedprocess';
                 postLogger.httpError(
                     'Error posting oppgave',
                     response,
@@ -241,6 +243,12 @@ public with sharing class OppgaveManager {
                     JSON.serialize(request),
                     idempotencyKey
                 );
+                if (invalid) {
+                    schRequest.Status__c = 'Invalid';
+                    Application_Event__e errorLog = postLogger.peek();
+                    errorLog.Log_Level__c = 'Critical';
+                    errorLog.Log_Messages__c = 'Error posting automated Oppgave, idempotencyKey: ' + idempotencyKey;
+                }
                 if (pendingRetries != null) {
                     pendingRetries.add(schRequest);
                 } else {
