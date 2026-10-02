@@ -148,13 +148,17 @@ public with sharing class OppgaveManager {
     public static List<OppgaveResponse> executeOppgave(List<OppgaveRequest> taskRequest) {
         List<OppgaveResponse> responses = new List<OppgaveResponse>();
         List<Scheduled_Request__c> pendingRetries = new List<Scheduled_Request__c>();
+
+        String userDepartment = getUserDepartment();
+        AccessCache accessCache = buildAccessCache(taskRequest);
+
         for (OppgaveRequest request : taskRequest) {
             switch on request.methodType {
                 when 'POST' {
-                    responses.add(postTask(request, pendingRetries));
+                    responses.add(postTask(request, pendingRetries, userDepartment, accessCache));
                 }
                 when 'PATCH' {
-                    responses.add(patchEditTask(request, pendingRetries));
+                    responses.add(patchEditTask(request, pendingRetries, userDepartment, accessCache));
                 }
                 when else {
                     throw new IllegalArgumentException('Unknown methodType: ' + request.methodType);
@@ -166,10 +170,17 @@ public with sharing class OppgaveManager {
     }
 
     public static OppgaveResponse postTask(OppgaveRequest request) {
-        return postTask(request, null);
+        String userDepartment = getUserDepartment();
+        AccessCache accessCache = buildAccessCache(new List<OppgaveRequest>{ request });
+        return postTask(request, null, userDepartment, accessCache);
     }
 
-    private static OppgaveResponse postTask(OppgaveRequest request, List<Scheduled_Request__c> pendingRetries) {
+    private static OppgaveResponse postTask(
+        OppgaveRequest request,
+        List<Scheduled_Request__c> pendingRetries,
+        String userDepartment,
+        AccessCache accessCache
+    ) {
         LoggerUtility postLogger = String.isNotBlank(request.logCategory)
             ? new LoggerUtility(request.logCategory)
             : logger;
@@ -181,7 +192,7 @@ public with sharing class OppgaveManager {
             Boolean systemContext = false;
             if (
                 request.POST_AS_SYSTEM == true ||
-                !hasPersonAccess(request) ||
+                !hasPersonAccess(request, accessCache) ||
                 !UserInfo.getUserType().equalsIgnoreCase('Standard')
             ) {
                 systemContext = true;
@@ -192,8 +203,7 @@ public with sharing class OppgaveManager {
             if (systemContext) {
                 request.opprettetAvEnhetsnr = null;
             } else if (String.isBlank(request.opprettetAvEnhetsnr)) {
-                request.opprettetAvEnhetsnr = [SELECT Department FROM User WHERE Id = :UserInfo.getUserId()]
-                ?.Department;
+                request.opprettetAvEnhetsnr = userDepartment;
             }
 
             OppgaveService oppgaveService = new OppgaveService(
@@ -266,10 +276,17 @@ public with sharing class OppgaveManager {
 
     @AuraEnabled
     public static OppgaveResponse patchEditTask(OppgaveRequest request) {
-        return patchEditTask(request, null);
+        String userDepartment = getUserDepartment();
+        AccessCache accessCache = buildAccessCache(new List<OppgaveRequest>{ request });
+        return patchEditTask(request, null, userDepartment, accessCache);
     }
 
-    private static OppgaveResponse patchEditTask(OppgaveRequest request, List<Scheduled_Request__c> pendingRetries) {
+    private static OppgaveResponse patchEditTask(
+        OppgaveRequest request,
+        List<Scheduled_Request__c> pendingRetries,
+        String userDepartment,
+        AccessCache accessCache
+    ) {
         LoggerUtility patchLogger = String.isNotBlank(request.logCategory)
             ? new LoggerUtility(request.logCategory)
             : logger;
@@ -282,13 +299,13 @@ public with sharing class OppgaveManager {
             }
 
             if (String.isBlank(request.endretAvEnhetsnr)) {
-                request.endretAvEnhetsnr = [SELECT Department FROM User WHERE Id = :UserInfo.getUserId()]?.Department;
+                request.endretAvEnhetsnr = userDepartment;
             }
 
             Boolean systemContext = false;
             if (
                 request.POST_AS_SYSTEM == true ||
-                !hasPersonAccess(request) ||
+                !hasPersonAccess(request, accessCache) ||
                 !UserInfo.getUserType().equalsIgnoreCase('Standard')
             ) {
                 systemContext = true;
@@ -355,26 +372,14 @@ public with sharing class OppgaveManager {
         return result;
     }
 
-    private static Boolean hasPersonAccess(OppgaveRequest taskRequest) {
-        list<Person__c> persons;
+    private static Boolean hasPersonAccess(OppgaveRequest taskRequest, AccessCache cache) {
         if (!String.isBlank(taskRequest.personIdent)) {
-            persons = [
-                SELECT Id
-                FROM Person__c
-                WHERE Name = :taskRequest.personIdent
-                LIMIT 1
-            ];
-        } else if (!String.isBlank(taskRequest.aktoerId)) {
-            persons = [
-                SELECT Id
-                FROM Person__c
-                WHERE INT_ActorId__c = :taskRequest.aktoerId
-                LIMIT 1
-            ];
-        } else {
-            return false;
+            return cache.personIdents.contains(taskRequest.personIdent);
         }
-        return !persons.isEmpty();
+        if (!String.isBlank(taskRequest.aktoerId)) {
+            return cache.actorIds.contains(taskRequest.aktoerId);
+        }
+        return false;
     }
 
     @AuraEnabled(cacheable=true)
@@ -409,6 +414,9 @@ public with sharing class OppgaveManager {
     @AuraEnabled(cacheable=true)
     public static Map<String, String> getNavUnitNames() {
         Map<String, String> result = new Map<String, String>();
+
+        // Load all NAV units to build the complete unit-number-to-name lookup.
+        // A LIMIT would omit units and leave some unit numbers without a name.
         for (NavUnit__c nu : [SELECT Name, INT_UnitNumber__c FROM NavUnit__c]) {
             result.put(nu.INT_UnitNumber__c, nu.Name);
         }
@@ -428,6 +436,58 @@ public with sharing class OppgaveManager {
             codes.add(cc.CRM_Code__c);
         }
         return codes.isEmpty() ? null : codes;
+    }
+
+    private static AccessCache buildAccessCache(List<OppgaveRequest> requests) {
+        AccessCache cache = new AccessCache();
+
+        Set<String> personIdents = new Set<String>();
+        Set<String> actorIds = new Set<String>();
+
+        for (OppgaveRequest r : requests) {
+            if (String.isNotBlank(r.personIdent)) {
+                personIdents.add(r.personIdent);
+            } else if (String.isNotBlank(r.aktoerId)) {
+                actorIds.add(r.aktoerId);
+            }
+        }
+
+        if (!personIdents.isEmpty()) {
+            for (Person__c p : [
+                SELECT Name
+                FROM Person__c
+                WHERE Name IN :personIdents
+            ]) {
+                cache.personIdents.add(p.Name);
+            }
+        }
+
+        if (!actorIds.isEmpty()) {
+            for (Person__c p : [
+                SELECT INT_ActorId__c
+                FROM Person__c
+                WHERE INT_ActorId__c IN :actorIds
+            ]) {
+                cache.actorIds.add(p.INT_ActorId__c);
+            }
+        }
+
+        return cache;
+    }
+
+    private static String getUserDepartment() {
+        return [
+            SELECT Department
+            FROM User
+            WHERE Id = :UserInfo.getUserId()
+            LIMIT 1
+        ]
+        ?.Department;
+    }
+
+    private class AccessCache {
+        Set<String> personIdents = new Set<String>();
+        Set<String> actorIds = new Set<String>();
     }
 
     private class OppgaveListResponse {

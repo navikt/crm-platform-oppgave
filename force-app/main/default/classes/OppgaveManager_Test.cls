@@ -681,4 +681,124 @@ public with sharing class OppgaveManager_Test {
 
         Assert.areNotEqual(0, oppgaver.size(), 'Should call API even when ytelser is empty');
     }
+
+    @IsTest
+    static void executeOppgave_BulkPost_QueryCountDoesNotGrow() {
+        assertBulkQueryCount('POST', 'POST_CREATE_OPPGAVE_V2', 201);
+    }
+
+    @IsTest
+    static void executeOppgave_BulkPatch_QueryCountDoesNotGrow() {
+        assertBulkQueryCount('PATCH', 'PATCH_EDIT_OPPGAVE', 200);
+    }
+
+    private static void assertBulkQueryCount(String methodType, String mockName, Integer statusCode) {
+        ApiMock.setTestMock(mockName, statusCode, 'OK');
+
+        List<OppgaveRequest> smallBatch = buildRequests(methodType, 2);
+        List<OppgaveRequest> largeBatch = buildRequests(methodType, 20);
+
+        Test.startTest();
+
+        Integer queriesBefore = Limits.getQueries();
+        List<OppgaveResponse> smallResponses = OppgaveManager.executeOppgave(smallBatch);
+        Integer smallBatchQueries = Limits.getQueries() - queriesBefore;
+
+        queriesBefore = Limits.getQueries();
+        List<OppgaveResponse> largeResponses = OppgaveManager.executeOppgave(largeBatch);
+        Integer largeBatchQueries = Limits.getQueries() - queriesBefore;
+
+        Test.stopTest();
+
+        Assert.areEqual(2, smallResponses.size(), 'Should return one response per request');
+        Assert.areEqual(20, largeResponses.size(), 'Should return one response per request');
+
+        for (OppgaveResponse response : smallResponses) {
+            Assert.isTrue(response.isSuccess, 'Small batch requests should succeed');
+        }
+        for (OppgaveResponse response : largeResponses) {
+            Assert.isTrue(response.isSuccess, 'Large batch requests should succeed');
+        }
+
+        Assert.isTrue(
+            largeBatchQueries <= smallBatchQueries,
+            'SOQL count should not grow with batch size. Small batch: ' +
+                smallBatchQueries +
+                ', large batch: ' +
+                largeBatchQueries
+        );
+    }
+
+    private static List<OppgaveRequest> buildRequests(String methodType, Integer count) {
+        List<OppgaveRequest> requests = new List<OppgaveRequest>();
+
+        for (Integer i = 0; i < count; i++) {
+            OppgaveRequest request = new OppgaveRequest();
+            request.methodType = methodType;
+
+            if (Math.mod(i, 2) == 0) {
+                request.personIdent = '12345678901';
+            } else {
+                request.aktoerId = '123456789';
+            }
+
+            if (methodType == 'PATCH') {
+                request.id = 12345;
+                request.versjon = 2;
+            }
+
+            requests.add(request);
+        }
+
+        return requests;
+    }
+
+    @IsTest
+    static void executeOppgave_Post_AccessCachePreservesIdentifierPrecedence() {
+        ApiMock.setTestMock('POST_CREATE_OPPGAVE_V2', 201, 'Created');
+
+        OppgaveRequest personRequest = new OppgaveRequest();
+        personRequest.methodType = 'POST';
+        personRequest.personIdent = '12345678901';
+        personRequest.opprettetAvEnhetsnr = '4100';
+
+        OppgaveRequest actorRequest = new OppgaveRequest();
+        actorRequest.methodType = 'POST';
+        actorRequest.aktoerId = '123456789';
+        actorRequest.opprettetAvEnhetsnr = '4100';
+
+        OppgaveRequest missingPersonRequest = new OppgaveRequest();
+        missingPersonRequest.methodType = 'POST';
+        missingPersonRequest.personIdent = '12345678902';
+        missingPersonRequest.aktoerId = '123456789';
+        missingPersonRequest.opprettetAvEnhetsnr = '4100';
+
+        Test.startTest();
+        List<OppgaveResponse> responses = OppgaveManager.executeOppgave(
+            new List<OppgaveRequest>{ personRequest, actorRequest, missingPersonRequest }
+        );
+        Test.stopTest();
+
+        Assert.areEqual(3, responses.size());
+        for (OppgaveResponse response : responses) {
+            Assert.isTrue(response.isSuccess, 'Each request should succeed');
+        }
+
+        String expectedUnit = UserInfo.getUserType().equalsIgnoreCase('Standard') ? '4100' : null;
+
+        Assert.areEqual(
+            expectedUnit,
+            personRequest.opprettetAvEnhetsnr,
+            'Accessible person should preserve the supplied unit for a Standard user'
+        );
+        Assert.areEqual(
+            expectedUnit,
+            actorRequest.opprettetAvEnhetsnr,
+            'Accessible actor should preserve the supplied unit for a Standard user'
+        );
+        Assert.isNull(
+            missingPersonRequest.opprettetAvEnhetsnr,
+            'An inaccessible personIdent should use system context even when aktoerId exists'
+        );
+    }
 }
