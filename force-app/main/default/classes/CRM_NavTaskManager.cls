@@ -173,9 +173,7 @@ public without sharing class CRM_NavTaskManager {
     public static Boolean getPersonAccess(String personId) {
         Boolean access = personId != null
             ? [
-                  SELECT RecordId, HasReadAccess
-                  FROM UserRecordAccess
-                  WHERE UserId = :UserInfo.getUserId() AND RecordId = :personId
+                  SELECT HasReadAccess FROM UserRecordAccess WHERE UserId = :UserInfo.getUserId() AND RecordId = :personId
               ]
               .HasReadAccess
             : false;
@@ -274,16 +272,6 @@ public without sharing class CRM_NavTaskManager {
         }
 
         return response;
-    }
-
-    /**
-     * @description: Converts the NavTask to a serialized oppgave request
-     * @author Stian Ruud Schikora | 11-27-2020
-     * @param task
-     * @return String
-     **/
-    private static String createOppgaveJsonRequest(NavTaskRequest taskRequest) {
-        return JSON.serialize(new CRM_OppgaveRequest(taskRequest), true);
     }
 
     /**

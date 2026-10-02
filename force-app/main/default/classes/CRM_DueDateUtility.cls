@@ -39,7 +39,14 @@ public without sharing class CRM_DueDateUtility {
         get {
             if (holidays == null) {
                 holidays = new List<Date>();
-                for (Holiday h : [SELECT ActivityDate, RecurrenceType FROM Holiday]) {
+
+                // Keep future one-time holidays and yearly recurring holidays.
+                // RecursYearly means the holiday repeats every year; getNextOccurance() converts it to the next upcoming date.
+                for (Holiday h : [
+                    SELECT ActivityDate, RecurrenceType
+                    FROM Holiday
+                    WHERE ActivityDate >= TODAY OR RecurrenceType = 'RecursYearly'
+                ]) {
                     if (h.RecurrenceType == 'RecursYearly') {
                         holidays.add(getNextOccurance(h));
                     } else {
