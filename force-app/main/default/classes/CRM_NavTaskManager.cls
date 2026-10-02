@@ -20,7 +20,7 @@ public without sharing class CRM_NavTaskManager {
 
             if (response.success && String.isNotBlank(response.tildeltEnhetsnr)) {
                 unitNumbers.add(response.tildeltEnhetsnr);
-            }  
+            }
         }
         Map<String, Id> unitIdByUnitNumber = new Map<String, Id>();
         if (!unitNumbers.isEmpty()) {
@@ -38,7 +38,7 @@ public without sharing class CRM_NavTaskManager {
                 response.task.CRM_NavUnit__c = unitIdByUnitNumber.get(response.tildeltEnhetsnr);
             }
         }
-        
+
         return responseList;
     }
 
@@ -173,7 +173,9 @@ public without sharing class CRM_NavTaskManager {
     public static Boolean getPersonAccess(String personId) {
         Boolean access = personId != null
             ? [
-                  SELECT HasReadAccess FROM UserRecordAccess WHERE UserId = :UserInfo.getUserId() AND RecordId = :personId
+                  SELECT RecordId, HasReadAccess
+                  FROM UserRecordAccess
+                  WHERE UserId = :UserInfo.getUserId() AND RecordId = :personId
               ]
               .HasReadAccess
             : false;
@@ -313,9 +315,7 @@ public without sharing class CRM_NavTaskManager {
             label='Default POST is done in user context as long as user has person record access, this value allows to force system-system post'
         )
         public Boolean POST_AS_SYSTEM = false;
-        @invocableVariable(
-            label='Optional log category override for webhook filtering'
-        )
+        @invocableVariable(label='Optional log category override for webhook filtering')
         public String logCategory;
 
         public NavTaskRequest() {
