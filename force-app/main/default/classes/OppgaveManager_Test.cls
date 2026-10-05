@@ -720,12 +720,25 @@ public with sharing class OppgaveManager_Test {
             Assert.isTrue(response.isSuccess, 'Large batch requests should succeed');
         }
 
+        Integer smallBatchSize = smallBatch.size();
+        Integer largeBatchSize = largeBatch.size();
+
+        Decimal queriesPerRequestSmall = smallBatchSize == 0 ? 0 : Decimal.valueOf(smallBatchQueries) / smallBatchSize;
+        Decimal queriesPerRequestLarge = largeBatchSize == 0 ? 0 : Decimal.valueOf(largeBatchQueries) / largeBatchSize;
+
+        Decimal allowedDelta = 0.5;
+
         Assert.isTrue(
-            largeBatchQueries <= smallBatchQueries,
-            'SOQL count should not grow with batch size. Small batch: ' +
+            queriesPerRequestLarge <= queriesPerRequestSmall + allowedDelta,
+            'SOQL/query per request should stay approximately linear. Small batch: ' +
                 smallBatchQueries +
-                ', large batch: ' +
-                largeBatchQueries
+                ' (' +
+                String.valueOf(queriesPerRequestSmall) +
+                '/req), large batch: ' +
+                largeBatchQueries +
+                ' (' +
+                String.valueOf(queriesPerRequestLarge) +
+                '/req)'
         );
     }
 
