@@ -85,6 +85,9 @@ public class OppgaveRequest {
     @AuraEnabled
     @invocableVariable(label='Optional log category override for webhook filtering')
     public String logCategory;
+    @AuraEnabled
+    @invocableVariable(label='Idempotency Key for the request')
+    public String idempotencyKey;
 
     public Oppgave toOppgave() {
         Oppgave o = new Oppgave();
